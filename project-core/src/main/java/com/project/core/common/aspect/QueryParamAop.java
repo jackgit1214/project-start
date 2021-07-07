@@ -25,12 +25,6 @@ public class QueryParamAop {
     public Object actionAopAround(ProceedingJoinPoint joinPoint)
             throws Throwable {
 
-//		if (pageNum == null || pageNum == 0) {
-//			pageNum = SysConstant.SYSDEFAULTROWNUM;
-//		}
-//		if (pageNo == null || pageNo == 1) {
-//			pageNo = 1;
-//		}
         Object[] arguments = joinPoint.getArgs();
 
         for (Object o : arguments) {
