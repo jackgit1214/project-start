@@ -1,0 +1,50 @@
+server:
+  port: 7002
+  servlet:
+    context-path: /sec
+
+spring:
+  application:
+    name: sso-client
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/commondb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+  freemarker:
+    request-context-attribute: req
+    suffix: .html
+    content-type: text/html
+    enabled: true
+    template-loader-path: classpath:/templates/
+    charset: utf-8
+
+security:
+  oauth2:
+    client:
+      client-id: test123123
+      client-secret: user123
+      access-token-uri: http://localhost:9001/oauth/token
+      user-authorization-uri: http://localhost:9001/oauth/authorize
+    resource:
+      user-info-uri: http://localhost:9001/user
+      token-info-uri: http://localhost:9001/oauth/check_token
+      prefer-token-info: true
+      jwt:
+        key-uri: http://localhost:9001/oauth/token_key
+
+#      user-info-uri:
+#        key-value: testA
+#    sso:
+#      login-path: /login # 默认单点登录页
+
+
+#logging:
+#  level:
+#    root: INFO
+#    org.springframework.web: INFO
+#    org.springframework.security: INFO
+#    org.springframework.security.oauth2: INFO
+#    org.springframework.boot.autoconfigure: DEBUG
