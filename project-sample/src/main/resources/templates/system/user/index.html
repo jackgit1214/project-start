@@ -1,0 +1,334 @@
+<div id="userList" data-refresh="false" class="layui-col-space4">
+
+    <div class="layui-row ">
+        <div class="layui-col-md2">
+            <div style="overflow: auto;" class="layui-tree-box">
+                <div id="departmentTree" data-id="xxx"></div>
+            </div>
+        </div>
+
+        <div class="layui-col-md10" style="padding-left:5px">
+            <div class="layui-panel" style="border:1px solid silver;">
+                <div style="padding:5px;">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item" style="margin-bottom: 0px">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">登录名：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="userName" lay-verify="title" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <label class="layui-form-label">姓名：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="name" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="userSearch">查询
+                                    </button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table id="user" lay-filter="user"></table>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="userBar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon">&#xe654;</i>添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="update"><i class="layui-icon">&#xe642;</i>编辑</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delete"><i class="layui-icon">&#xe640;</i>删除</button>
+    </div>
+</script>
+
+<script type="text/html" id="genderTpl">
+    <div style="text-align:center">{{ d.gender == 1 ? '男' : '女' }}</div>
+</script>
+
+<script type="text/html" id="operTpl">
+    <div>
+        <input type="checkbox" name="userStatus" value="{{d}}" lay-skin="switch" data-data="{{d}}" lay-text="解锁|锁定"
+               lay-filter="lock" {{ d.userStatus==1?'checked':''}} >
+        <input type="checkbox" name="valid" value="{{d}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="active" {{
+               d.valid==1?'checked':'' }} >
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="resetPwd"
+                lay-filter="resetPwd"
+                style="border:none;color:darkred;padding:0 5px;height:20px;line-height: 20px">
+            <i class="layui-icon layui-icon-password" lay-tips="密码重置"></i>
+        </button>
+    </div>
+
+</script>
+
+<script>
+    {
+        const header = $("meta[name='_csrf_header']").attr("content");
+        const token = $("meta[name='_csrf']").attr("content");
+        layui.use(['dtree', 'util', 'table', 'fwAdmin'], function () {
+            let dtree = layui.dtree, util = layui.util, $=layui.$,
+                table = layui.table, userTable = null,
+                fwAdmin = layui.fwAdmin,
+                form = layui.form, tableData = null, curPage = 1;
+            let pageH = fwAdmin.pageAreaHeight();
+            //监听用户工具栏事件
+            table.on('toolbar(user)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id)
+                    , data = checkStatus.data; //获取选中的数据
+                switch (obj.event) {
+                    case 'add':
+                        showEditWin("");
+                        break;
+                    case 'update':
+                        if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else if (data.length > 1) {
+                            layer.msg('只能同时编辑一个');
+                        } else {
+                            showEditWin(checkStatus.data[0].userId);
+                        }
+                        break;
+                    case 'delete':
+                        if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else {
+                            layer.confirm('确定要删除数据吗?', {icon: 3, title: '提示'}, function (index) {
+                                delUser(checkStatus.data)
+                                layer.close(index);
+                            });
+                        }
+                        break;
+                }
+                ;
+            });
+
+            table.on('tool(user)', function (obj) {
+                handleRowOper("3", obj.data, "密码重置成功！");
+            });
+
+            form.on("submit(userSearch)", function (obj) {
+                userTable.reload({
+                    where: {
+                        param: {
+                            logincode: obj.field.userName,
+                            username: obj.field.name,
+                        }
+                    }
+                });
+                return false;
+            });
+            form.on("switch(active)", function (obj) {
+                let rowIndex = obj.othis.parents('tr').attr("data-index");
+                let data = tableData[rowIndex];
+                data.valid = obj.elem.checked ? 1 : 0;
+                if (obj.elem.checked) {
+                    handleRowOper("1", data, "激活成功！");
+                } else {
+                    handleRowOper("1", data, "禁用成功！");
+                }
+            });
+            form.on("switch(lock)", function (obj) {
+                let rowIndex = obj.othis.parents('tr').attr("data-index");
+                let data = tableData[rowIndex];
+                data.userStatus = obj.elem.checked ? 1 : 0;
+                if (obj.elem.checked) {
+                    handleRowOper("2", data, "解锁成功！");
+                } else {
+                    handleRowOper("2", data, "锁定成功！");
+                }
+            });
+
+            let departmentTree = dtree.render({
+                elem: "#departmentTree"
+                , height: pageH - 5 //去除5个像素，上下有个边框
+                , url: "/dept/getDepartment"
+                , beforeSend(ajax, xhr, self) {
+                    if (header!="" && token != "")
+                        xhr.setRequestHeader(header, token);
+                }
+                // , async: false
+                , success: function (data, obj, first) {
+                    // console.log(data);
+                }
+                , dataFormat: "list"
+                , record: true
+                , icon: "2"  //修改二级图标样式
+                , ficon: ["1", "-1"]  // 设置一级图标样式，[非叶子节点，叶子节点]
+            });
+
+            // 绑定节点点击
+            dtree.on("node('departmentTree')", function (obj) {
+                let recordData = obj.param.recordData;
+                tableLoad(recordData.deptId);
+                // userTable.reload({
+                //     where:{
+                //         param:{
+                //             logincode:obj.field.userName,
+                //             username:obj.field.name,
+                //         }
+                //     }
+                // });
+            });
+
+            /**
+             * 处理状态操作，如启用、锁定、密码重置，等简单操作。
+             * @param type 1 为启用禁用，2为锁定解锁，3为密码重置
+             * @param user 处理的用户对象
+             */
+            function handleRowOper(type, user, msg) {
+                let load = layer.load(0, {shade: false});
+                $.ajax({
+                    type: 'POST',
+                    //contentType: 'application/x-www-form-urlencoded',
+                    contentType: "application/json;charset=UTF-8",
+                    url: "/user/status",
+                    data: JSON.stringify({
+                        type: type,
+                        user: user
+                    }),
+                    success: function (result) {
+                        layer.close(load);
+                        if (result.status.code === 1) {
+                            layer.msg(msg, {icon: 1, time: 3000});
+                        } else {
+                            layer.msg(result.message, {icon: 2, time: 3000});
+                        }
+                    },
+                    error: function (e) {
+                        layer.close(load);
+                        layer.msg('网络错误', {icon: 2});
+                    }
+                });
+            }
+
+            function delUser(users) {
+                let ids = [];
+                try {
+                    users.forEach(function (user, index) {
+                        ids.push(user.userId);
+                    });
+                } catch (e) {
+                    console.log(e)
+                    return;
+                }
+                let load = layer.load(0, {shade: false});
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded',
+                    url: "/user/delete",
+                    traditional: true, //指定序列化
+                    data: {
+                        userIds: ids, //后台数组接收
+                    },
+                    success: function (result) {
+                        layer.close(load);
+                        if (result.status.code === 1) {
+                            layer.msg('删除成功!,共删除' + result.status.data + "条数据！", {icon: 1, time: 3000});
+                            userTable.reload();
+                        } else {
+                            layer.msg(result.message, {icon: 2, time: 3000});
+                        }
+                    },
+                    error: function (e) {
+                        layer.msg('网络错误', {icon: 2});
+                    }
+                });
+            }
+
+            function tableLoad(depId) {
+                userTable = table.render({
+                    id: "userTable"
+                    , elem: '#user'
+                    , url: '/user/users' //数据接口
+                    , height: pageH - 60  //查询区域高度，单行Input高度以及边距
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        let result = res.status;
+                        return {
+                            "code": result.code, //解析接口状态
+                            "msg": result.message, //解析提示文本
+                            "count": result.data.totalSize, //解析数据长度
+                            "data": result.data.pageDatas //解析数据列表
+                        };
+                    }
+                    , response: {
+                        statusCode: 1
+                    }
+                    , where: {
+                        depId: depId
+                    }
+                    , toolbar: '#userBar' //开启工具栏，此处显示默认图标，自定义模板，默认为default,图标形式
+                    , totalRow: false //开启合计行
+                    , page: true //开启分页
+                    , done: function (res, curr, count) {
+                        //表格数据
+                        tableData = table.cache.userTable;
+                        curPage = curr;
+                        $('*[lay-tips]').on('mouseenter', function () {
+                            var content = $(this).attr('lay-tips');
+                            this.index = layer.tips('<div style="padding: 2px; font-size: 2px; color: #eee;">' + content + '</div>', this, {
+                                time: -1
+                                , maxWidth: 280
+                                , tips: [3, '#3A3D49']
+                            });
+                        }).on('mouseleave', function () {
+                            layer.close(this.index);
+                        });
+                    }
+                    , cols: [[ //表头
+                        {type: 'checkbox', width: 30}
+                        , {field: 'xh', width: 40, title: '序号', type: 'numbers'}
+                        , {field: 'userName', title: '登录ID', width: 100, align: "center"}
+                        , {field: 'name', title: '姓名', width: 100, sort: true, align: "center"}
+                        , {field: 'gender', title: '性别', width: 60, templet: "#genderTpl"}
+                        , {field: 'age', title: '年龄', width: 60, align: "center"}
+                        //,{field: 'birthday', title: '出生日期',width:100, align:"center"}
+                        , {field: 'phone', title: '电话', width: 120, align: "center"}
+                        , {field: 'userOrder', title: '顺序', width: 60, align: "center"}
+                        , {field: 'address', title: '<div style="text-align:center">地址</div>', align: "left"}
+                        , {title: '操作', width: 260, align: "center", toolbar: "#operTpl"}
+                    ]]
+                });
+            }
+
+            function showEditWin(userId) {
+                let treeNode = dtree.getNowParam(departmentTree);
+                let superId = "";
+                if (treeNode.recordData != null)
+                    superId = treeNode.recordData.deptId;
+                $.get("/user/edit", {id: userId}, function (str) {
+                    layer.open({
+                        type: 1,
+                        title: "用户编辑",
+                        scrollbar: false,
+                        area: ['700px'],
+                        content: str, //注意，如果str是object，那么需要字符拼接。
+                        success: function (dom, index) {//父页面向子页面传值
+                            $("#user-win").data("index", index);
+                        },
+                        end: function () { //窗口关闭
+                            let refresh = $("#userList").data("refresh");
+                            //弹窗关闭后是否刷新窗口
+                            if (refresh) {
+                                $("#userList").data("refresh", false);
+                                userTable.reload({
+                                    page: {
+                                        curr: curPage
+                                    }
+                                });
+                                departmentTree.reload();
+                            }
+
+                        }
+                    });
+                });
+            }
+
+            //表格初始
+            tableLoad("");
+
+
+        });
+    }
+</script>

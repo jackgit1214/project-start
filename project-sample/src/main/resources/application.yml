@@ -1,0 +1,40 @@
+server:
+  port: 9001
+  servlet:
+    context-path: /
+    session:
+      timeout: 200000s
+  tomcat:
+    uri-encoding: UTF-8
+
+
+spring:
+  application:
+    name: project-sample
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/commondb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+  freemarker:
+    settings:
+      autoImport: /common/common.html as pub
+
+
+#mybatis
+#项目配置
+project:
+  configure:
+    moduleName: project_sample
+    project-name: 基础平台
+    project-short-name: system
+    csrf: true
+
+#  code:
+#    isGenerator :
+#    jdbcConnect-driverClass :
+#    jdbcConnect-connectionURL :
+#    jdbcConnect-userId :
+#    jdbcConnect-password :

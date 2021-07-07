@@ -1,0 +1,42 @@
+<#macro header title="管理平台" keywords="默认文字" description="默认文字">
+<head>
+    <meta charset="utf-8"/>
+    <title>${title}</title>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=0.7, minimum-scale=0.7,maximum-scale=0.7, user-scalable=yes"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <#assign _token='' _headerName='' />
+    <#if (_csrf)??>
+        <#assign _token=_csrf.token!''  _headerName=_csrf.headerName!'' />
+    </#if>
+    <meta name="_csrf" content="${_token}"/>
+    <meta name="_csrf_header" content="${_headerName}"/>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png"/>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/layui/extend/dtree/dtree.css" media="all"/>
+    <link rel="stylesheet" href="/layui/extend/dtree/font/dtreefont.css" media="all"/>
+    <link rel="stylesheet" href="/layui/css/icon.css" type="text/css"/>
+    <link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="/project/css/layuiadmin.css?v=1.0" media="all">
+    <link rel="stylesheet" href="/project/css/themes/default.css" media="all">
+    <link rel="stylesheet" href="/project/css/project.css" type="text/css"/>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style id="fw-bg-color">
+    </style>
+</head>
+</#macro>
+
+<#macro footer describe="XX ICP备19013873号">
+<footer class="layui-footer">
+    <!-- 底部固定区域 -->
+    <div class="layui-main" style="text-align: center">
+        <p>${describe}</p>
+    </div>
+</footer>
+</#macro>

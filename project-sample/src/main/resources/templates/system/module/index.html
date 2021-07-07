@@ -1,0 +1,301 @@
+<div id="moduleList" data-refresh="false" class="layui-col-space3">
+
+    <div class="layui-row ">
+        <div class="layui-col-md12" style="padding-left:5px">
+            <div class="layui-panel" style="border:1px solid silver;">
+                <div style="padding:5px;">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item" style="margin-bottom: 0px">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">模块名：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="funcName" lay-verify="title" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <label class="layui-form-label">上级模块：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="superModId" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="moduleSearch">查询
+                                    </button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div>
+                <table id="modules" lay-filter="modules"></table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/html" id="moduleBar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon">&#xe654;</i>添加</button>
+    </div>
+</script>
+
+<script type="text/html" id="operTpl">
+    <div>
+        <input type="checkbox" name="isUse" value="{{d.funId}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="active"
+               {{ d.isUse==1?'checked':'' }} >
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="add"
+                style="border:none;color:darkred;padding:0 2px;height:20px;line-height: 20px">
+            <i class="layui-icon layui-icon-addition" lay-tips="增加下级节点"></i>
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="edit"
+                style="border:none;color:darkred;padding:0 2px;height:20px;line-height: 20px;margin-left:2px;">
+            <i class="layui-icon layui-icon-edit" lay-tips="编辑"></i>
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="delete"
+                style="border:none;color:darkred;padding:0 2px;height:20px;line-height: 20px;margin-left:2px;">
+            <i class="layui-icon layui-icon-delete" lay-tips="删除"></i>
+        </button>
+    </div>
+
+</script>
+
+<script>
+    {
+         layui.use(['util', 'table', 'treeTable', 'fwAdmin'], function () {
+            let util = layui.util, moduleTable = null, treeTable = layui.treeTable, fwAdmin = layui.fwAdmin,
+                form = layui.form, curPage = 1, $ = layui.jquery;
+            ;
+
+            let pageH = fwAdmin.pageAreaHeight();
+            //监听用户工具栏事件
+            treeTable.on('toolbar(modules)', function (obj) {
+
+                let checkData = moduleTable.checkStatus(false);
+                switch (obj.event) {
+                    case 'add':
+                        showEditWin("", "0");
+                        break;
+                    case 'delete':
+
+                        break;
+                }
+                ;
+            });
+
+            treeTable.on('tool(modules)', function (obj) {
+                let tmpData = obj.data;
+                if (obj.event == "add")
+                    showEditWin("", tmpData.funId);
+                else if (obj.event == "edit")
+                    showEditWin(tmpData.funId, "");
+                else if (obj.event = "delete") {
+                    layer.confirm('确定要删除数据吗?', {icon: 3, title: '提示'}, function (index) {
+                        delModule(tmpData.funId);
+                        layer.close(index);
+                    });
+                }
+            });
+
+            // 监听单元格编辑事件
+            treeTable.on('edit(modules)', function (obj) {
+                console.log(obj);
+            });
+
+            form.on("submit(moduleSearch)", function (obj) {
+                moduleTable.reload({
+                    where: {
+                        param: {
+                            funcName: obj.field.funcName,
+                            superModId: obj.field.superModId,
+                        }
+                    }
+                });
+                return false;
+            });
+            form.on("switch(active)", function (obj) {
+                let data = moduleTable.findDataById(obj.value);
+                data.isUse = obj.elem.checked ? 1 : 0;
+                if (obj.elem.checked) {
+                    handleRowOper(data, "启用成功！");
+                } else {
+                    handleRowOper(data, "禁用成功！");
+                }
+            });
+
+            function handleRowOper(module, msg) {
+                let load = layer.load(0, {shade: false});
+                $.ajax({
+                    type: 'POST',
+                    contentType: "application/json;charset=UTF-8",
+                    url: "/module/status",
+                    data: JSON.stringify({
+                        module: module
+                    }),
+                    success: function (result) {
+                        layer.close(load);
+                        if (result.status.code === 1) {
+                            layer.msg(msg, {icon: 1, time: 3000});
+                        } else {
+                            layer.msg(result.message, {icon: 2, time: 3000});
+                        }
+                    },
+                    error: function (e) {
+                        layer.close(load);
+                        layer.msg('网络错误', {icon: 2});
+                    }
+                });
+            }
+
+            function delModule(modules) {
+                let ids = [];
+                ids.push(modules);
+                let load = layer.load(0, {shade: false});
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded',
+                    url: "/module/delete",
+                    traditional: true, //指定序列化
+                    data: {
+                        moduleIds: ids, //后台数组接收
+                    },
+                    success: function (result) {
+                        layer.close(load);
+                        if (result.status.code === 1) {
+                            layer.msg('删除成功!,共删除' + result.status.data + "条数据！", {icon: 1, time: 3000});
+                            moduleTable.reload();
+                        } else {
+                            layer.msg(result.message, {icon: 2, time: 3000});
+                        }
+                    },
+                    error: function (e) {
+                        layer.msg('网络错误', {icon: 2});
+                    }
+                });
+            }
+
+            function tableLoad(moduleId) {
+                let tmpH = parseInt(pageH - 170) + ""; //treeTable 原因，转换为字符串,高度去除查询区域60，按钮区域50，标题区域30，以及边距间隙20
+                moduleTable = treeTable.render({
+                    tree: {
+                        iconIndex: 1,
+                        isPidData: true,
+                        idName: 'funId',
+                        pidName: 'superModId',
+                    }
+                    , cellMinWidth: 60
+                    , id: "moduleTable"
+                    , elem: '#modules'
+                    , url: '/module/module' //数据接口
+                    , height: tmpH //
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        let result = res.status;
+                        return {
+                            "code": result.code, //解析接口状态
+                            "msg": result.message, //解析提示文本
+                            "count": result.data.totalSize, //解析数据长度
+                            "data": result.data.pageDatas //解析数据列表
+                        };
+                    }
+                    , response: {
+                        statusCode: 1
+                    }
+                    , where: {
+                        page: 1,
+                        limit: 10000
+                    }
+                    , toolbar: '#moduleBar' //开启工具栏，此处显示默认图标，自定义模板，默认为default,图标形式
+                    , totalRow: false //开启合计行
+                    , done: function (res, curr, count) {
+                        //表格数据
+                        curPage = curr;
+                        $('*[lay-tips]').on('mouseenter', function () {
+                            var content = $(this).attr('lay-tips');
+                            this.index = layer.tips('<div style="padding: 2px; font-size: 2px; color: #eee;">' + content + '</div>', this, {
+                                time: -1
+                                , maxWidth: 280
+                                , tips: [3, '#3A3D49']
+                            });
+                        }).on('mouseleave', function () {
+                            layer.close(this.index);
+                        });
+                    }
+                    , cols: [[ //表头
+                        {field: 'xh', width: 60, title: '序号', type: 'numbers'}
+                        // ,{type: 'checkbox'}
+                        , {
+                            field: 'funName',
+                            title: '<div style="text-align:center">功能名称</div>',
+                            width: 200,
+                            align: "left"
+                        }
+                        , {
+                            field: 'modDesc',
+                            title: '<div style="text-align:center">功能描述</div>',
+                            width: 200,
+                            align: "left"
+                        }
+                        , {field: 'funOrder', title: '顺序', width: 60, align: "center", singleLine: true}
+                        , {
+                            field: 'funType', width: 100, align: 'center', templet: function (d) {
+                                if (d.funType == 1) {
+                                    return '<span class="layui-badge layui-bg-gray">菜单</span>';
+                                }
+                                if (d.funType == 2) {
+                                    return '<span class="layui-badge layui-bg-blue">按钮</span>';
+                                } else {
+                                    return '<span class="layui-badge-rim">连接</span>';
+                                }
+                            }, singleLine: false, title: '类型'
+                        }
+                        , {
+                            field: 'funIcon', title: '图标', width: 60, align: "center", templet: function (d) {
+                                return '<i style="color:blue" class=" fa ' + d.funIcon + '"></i>';
+                            }
+                        }
+                        , {
+                            field: 'urlLink',
+                            singleLine: false,
+                            title: '<div style="text-align:center">模块地址</div>',
+                            align: "left"
+                        }
+                        , {title: '操作', singleLine: false, width: 220, align: "center", toolbar: "#operTpl"}
+                    ]]
+                });
+            }
+
+            function showEditWin(funId, superId) {
+
+                $.get("/module/edit", {id: funId, superId: superId}, function (pageContent) {
+                    layer.open({
+                        type: 1,
+                        title: "编辑",
+                        scrollbar: false,
+                        area: ['700px'],
+                        content: pageContent,
+                        success: function (dom, index) {//父页面向子页面传值
+                            $("#module-win").data("index", index);
+                        },
+                        end: function () { //窗口关闭
+                            let refresh = $("#moduleList").data("refresh");
+                            //弹窗关闭后是否刷新窗口
+                            if (refresh) {
+                                $("#moduleList").data("refresh", false);
+                                moduleTable.reload({
+                                    page: {
+                                        curr: curPage
+                                    }
+                                });
+                            }
+
+                        }
+                    });
+                });
+            }
+
+            //表格初始
+            tableLoad("");
+
+
+        });
+    }
+</script>

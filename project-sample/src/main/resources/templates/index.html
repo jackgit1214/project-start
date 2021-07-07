@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<@pub.header title="管理平台"/>
+<body class="layui-layout-body fw-all">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header header">
+        <div class="layui-logo fw-logo"></div>
+
+        <div class="fw-header-content">
+            <a>
+                <div class="fw-tool"><i title="展开" class="fa fa-outdent" data-side-fold="1"></i></div>
+            </a>
+
+            <!--电脑端头部菜单-->
+            <ul class="layui-nav layui-layout-left fw-header-menu fw-menu-header-pc fw-pc-show">
+            </ul>
+
+            <ul class="layui-nav layui-layout-right">
+
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;" page-refresh="刷新"><i class="fa fa-refresh"></i></a>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;" data-clear="清理" class="fw-clear"><i class="fa fa-trash-o"></i></a>
+                </li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;" data-test="test" class="fw-clear"><i class="fa fa-weibo"></i></a>
+                </li>
+                <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
+                    <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
+                </li>
+                <li class="layui-nav-item fw-setting">
+                    <a href="javascript:;"><img id="userAvatar" class="layui-nav-img" alt="amdin"></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="javascript:;" fw-slide-href="/project/preview.html" userPreview
+                               data-title="基本资料"><i style="width:20px;"
+                                                    class="fa fa-user-plus"></i><span>基本资料</span></a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" fw-slide-href="/project/password.html" editPassword
+                               data-title="修改密码"><i style="width:20px;" class="fa fa-key"></i><span>修改密码</span></a>
+                        </dd>
+                        <dd>
+                            <hr>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" class="login-out">退出登录</a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item fw-select-bgcolor" lay-unselect>
+                    <a href="javascript:;" data-bgcolor="配色主题"><i class="fa fa-ellipsis-v"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!--无限极左侧菜单-->
+    <div class="layui-side layui-bg-black fw-menu-left">
+    </div>
+
+    <!--初始化加载层-->
+    <div class="fw-loader">
+        <div class="fw-loader-inner"></div>
+    </div>
+
+    <div class="layui-body">
+        <div class="fw-tab" lay-filter="fwTab" lay-allowclose="true">
+
+        </div>
+    </div>
+    <@pub.footer describe="${project.configure.footerDescribe}"/>
+</div>
+<!-- JavaScript -->
+<script src="layui/layui.js" charset="utf-8"></script>
+<script src="jquery/jquery-3.2.1.min.js" charset="utf-8"></script>
+<script src="layui/lay-config.js" charset="utf-8"></script>
+
+<script>
+    layui.use(['jquery', 'layer', 'fwAdmin'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            fwAdmin = layui.fwAdmin;
+        fwAdmin.render();
+    });
+</script>
+</body>
+</html>

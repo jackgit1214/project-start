@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.system.dao.SysRoleMapper">
+    <cache eviction="LRU" readOnly="true" size="1024"></cache>
+    <resultMap id="BaseResultMap" type="com.project.system.model.SystemRole">
+
+        <id column="ROLEID" jdbcType="VARCHAR" property="roleId"/>
+        <result column="ROLENAME" jdbcType="VARCHAR" property="roleName"/>
+        <result column="roleDesc" jdbcType="VARCHAR" property="roleDesc"/>
+        <result column="isSystem" jdbcType="VARCHAR" property="isSystem"/>
+    </resultMap>
+
+    <resultMap id="ResultMapIncludeFunc" type="com.project.system.model.SystemRole">
+
+        <id column="ROLEID" jdbcType="VARCHAR" property="roleId"/>
+        <result column="ROLENAME" jdbcType="VARCHAR" property="roleName"/>
+        <result column="roleDesc" jdbcType="VARCHAR" property="roleDesc"/>
+        <result column="isSystem" jdbcType="VARCHAR" property="isSystem"/>
+        <collection property="modules" resultMap="com.project.system.dao.SysModuleMapper.BaseResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+
+        ROLEID, ROLENAME, roleDesc, isSystem
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        where ROLEID = #{roleId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByPrimaryKeyPlus" parameterType="java.lang.String" resultMap="ResultMapIncludeFunc">
+        select a.ROLEID,
+               a.ROLENAME,
+               a.roleDesc,
+               a.isSystem,
+               c.funcid,
+               c.funcname,
+               c.funtype,
+               c.moddesc,
+               c.IsInUse,
+               c.SuperModID,
+               c.funicon,
+               c.funorder,
+               c.urllink,
+               c.targetdiv,
+               c.SYSTEM
+        from sys_role a
+                 left join sys_role_func b on a.ROLEID = b.roleId
+                 left join sys_module c on b.funcid = c.funcid
+        where a.ROLEID = #{roleId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+
+        delete
+        from sys_role
+        where ROLEID = #{roleId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.project.system.model.SystemRole">
+
+        insert into sys_role (ROLEID, ROLENAME, roleDesc,
+                              isSystem)
+        values (#{roleId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{roleDesc,jdbcType=VARCHAR},
+                #{isSystem,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.project.system.model.SystemRole">
+
+        insert into sys_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                ROLEID,
+            </if>
+            <if test="roleName != null">
+                ROLENAME,
+            </if>
+            <if test="roleDesc != null">
+                roleDesc,
+            </if>
+            <if test="isSystem != null">
+                isSystem,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                #{roleId,jdbcType=VARCHAR},
+            </if>
+            <if test="roleName != null">
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleDesc != null">
+                #{roleDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="isSystem != null">
+                #{isSystem,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.project.system.model.SystemRole">
+
+        update sys_role
+        <set>
+            <if test="roleName != null">
+                ROLENAME = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleDesc != null">
+                roleDesc = #{roleDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="isSystem != null">
+                isSystem = #{isSystem,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ROLEID = #{roleId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.project.system.model.SystemRole">
+
+        update sys_role
+        set ROLENAME = #{roleName,jdbcType=VARCHAR},
+            roleDesc = #{roleDesc,jdbcType=VARCHAR},
+            isSystem = #{isSystem,jdbcType=VARCHAR}
+        where ROLEID = #{roleId,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByCondition" resultMap="BaseResultMap" flushCache="true">
+
+        select
+        <if test="queryModel != null and queryModel.distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from sys_role
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+        <if test="queryModel != null and queryModel.orderByClause != null">
+            order by ${queryModel.orderByClause}
+        </if>
+    </select>
+    <delete id="deleteByCondition">
+
+        delete from sys_role
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+    </delete>
+    <select id="countByCondition" resultType="java.lang.Integer">
+
+        select count(*) from sys_role
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByConditionSelective">
+
+        update sys_role
+        <set>
+            <if test="record.roleId != null">
+                ROLEID = #{record.roleId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.roleName != null">
+                ROLENAME = #{record.roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.roleDesc != null">
+                roleDesc = #{record.roleDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="record.isSystem != null">
+                isSystem = #{record.isSystem,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="queryModel != null">
+            <include refid="public.Update_By_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByCondition">
+
+        update sys_role
+        set ROLEID = #{record.roleId,jdbcType=VARCHAR},
+        ROLENAME = #{record.roleName,jdbcType=VARCHAR},
+        roleDesc = #{record.roleDesc,jdbcType=VARCHAR},
+        isSystem = #{record.isSystem,jdbcType=VARCHAR}
+        <if test="queryModel != null">
+            <include refid="public.Update_By_Where_Clause"/>
+        </if>
+    </update>
+</mapper>

@@ -1,0 +1,127 @@
+<div style="padding: 10px;" id="client-win" data-index="" data-edit="false">
+    <form class="layui-form" action="" lay-filter="client">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">客户端：</label>
+            <div class="layui-input-block">
+                <input type="text" name="clientId" lay-verify="required" autocomplete="off" placeholder="请输入客户端ID"
+                       class="layui-input" value="${data.clientId!''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密钥码：</label>
+            <div class="layui-input-block">
+                <input type="text" name="clientSecret" lay-verify="required" autocomplete="off" placeholder="密钥码"
+                       class="layui-input" value="${data.clientSecret!''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">授权类型：</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="authorizedGrantTypes" autocomplete="off"
+                       class="layui-input" value="${data.authorizedGrantTypes!''}">
+                <input type="text" name="authorizedGrantTypes" disabled autocomplete="off" placeholder="请选择授权类型"
+                       class="layui-input" value="${data.authorizedGrantTypes!''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">定向url：</label>
+            <div class="layui-input-block">
+                <input type="text" name="webServerRedirectUri" placeholder="请输入URL"
+                       class="layui-input" value="${data.webServerRedirectUri!''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">有效时间：</label>
+            <div class="layui-input-block">
+                <input type="text" name="accessTokenValidity"
+                       class="layui-input" value="${(data.accessTokenValidity!0)?string('####')}">
+            </div>
+        </div>
+
+        <div class="layui-btn-container" style="text-align: center;margin-bottom: 0px">
+            <div class="layui-inline">
+                <button class="layui-btn" lay-submit="" lay-filter="addClient">保存</button>
+                <button class="layui-btn" type="reset">重置</button>
+                <button class="layui-btn" id="clientWinClose">关闭</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form,
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            clientId: function (value) {
+                var uPattern = /^[a-zA-Z0-9_-]{4,16}$/;
+                if (value.length < 1) {
+                    return '请输入客户端授权ID,！';
+                }
+                if (!uPattern.test(value)){
+                    return '客户端授权ID必须以字母开头，长度不小于4位！';
+                }
+            },
+            clientSecret: function (value) {
+                //密码强度正则，最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符
+                var pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/;
+                if (value.length < 1) {
+                    return '请输入密钥！';
+                }
+                if (!pPattern.test(value)){
+                    return '客户端密钥长度不小于6位！且包含数字，字母，大小写以及特殊字符！';
+                }
+            }
+        });
+
+        $(".layui-input").on("input", function (ele) {
+            $("#client-win").data("edit", true);
+        })
+
+        //监听提交
+        form.on('submit(addClient)', function (data) {
+            let load = layer.load(0, {shade: false});
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                url: "/client/save",
+                data: data.field,
+                success: function (result) {
+                    layer.close(load);
+                    $("#clientList").data("refresh", true);
+                    let winIndex = $("#client-win").data("index");
+                    if (result.status.code === 1) {
+                        $("#client-win").data("edit", false);
+                        layer.close(winIndex);//关闭当前页
+                        layer.msg('保存成功', {icon: 1, time: 3000});
+                        return false;
+                    } else {
+                        layer.msg(result.status.message, {icon: 2, time: 3000});
+                    }
+                    return false;
+                }
+            });
+            return false;
+        });
+
+        $("#clientWinClose").click(function () {
+            let winIndex = $("#client-win").data("index");
+            let editStatus = $("#client-win").data("edit");
+            if (editStatus === false) {
+                layer.close(winIndex);//关闭当前页
+                return false;
+            } else {
+                layer.confirm('数据已经修改，是否确认关闭?', {icon: 3, title: '提示'}, function (index) {
+                    layer.close(index);
+                    layer.close(winIndex);//关闭当前页
+                });
+                return false;
+            }
+        });
+    });
+
+</script>

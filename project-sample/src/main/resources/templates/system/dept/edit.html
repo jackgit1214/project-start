@@ -1,0 +1,114 @@
+<div style="padding: 10px;" id="department-win" data-index="" data-edit="false">
+    <form class="layui-form" action="" lay-filter="department">
+        <input type="hidden" name="deptId" class="layui-input" value="${data.deptId!''}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门名称：</label>
+            <div class="layui-input-block">
+                <input type="text" name="deptName" lay-verify="required" autocomplete="off" placeholder="请输入部门名称"
+                       class="layui-input" value="${data.deptName!''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级部门：</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="superId" autocomplete="off" placeholder="请选择上级部门"
+                       class="layui-input" value="${data.superId!''}">
+                <input type="text" name="superDeptName" disabled autocomplete="off" placeholder="请选择上级部门"
+                       class="layui-input" value="${data.superDeptName!''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">顺序号：</label>
+            <div class="layui-input-block">
+                <input type="text" name="sequence" placeholder="请输入排序号"
+                       class="layui-input" value="${data.sequence?string('')}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门描述：</label>
+            <div class="layui-input-block">
+				<textarea placeholder="请输入内容" name="deptDesc" onkeyup='$("#department-win").data("edit",true);'
+                          class="layui-textarea">${data.deptDesc!''}</textarea>
+            </div>
+        </div>
+        <div class="layui-btn-container" style="text-align: center;margin-bottom: 0px">
+            <div class="layui-inline">
+                <button class="layui-btn" lay-submit="" lay-filter="addDepartment">保存</button>
+                <button class="layui-btn" type="reset">重置</button>
+                <button class="layui-btn" id="deptWinClose">关闭</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form,
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            deptName: function (value) {
+                if (value.length < 1) {
+                    return '请输入部门名称！';
+                }
+            },
+            sequence: function (value) {
+                if ((!/^[1-9]+[0-9]*]*$/.test(value))) {
+                    return '顺序号必须是数字';
+                }
+            }
+        });
+
+        $(".layui-input").on("input", function (ele) {
+            $("#department-win").data("edit", true);
+        })
+
+        //监听提交
+        form.on('submit(addDepartment)', function (data) {
+            let load = layer.load(0, {shade: false});
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                url: "/dept/save",
+                data: data.field,
+                success: function (result) {
+                    layer.close(load);
+                    $("#departmentList").data("refresh", true);
+                    let winIndex = $("#department-win").data("index");
+                    if (result.status.code === 1) {
+                        $("#department-win").data("edit", false);
+                        layer.close(winIndex);//关闭当前页
+                        layer.msg('保存成功', {icon: 1, time: 3000});
+                        return false;
+                    } else {
+                        layer.msg(result.status.message, {icon: 2, time: 3000});
+                    }
+                    return false;
+                },
+                error: function (e) {
+                    layer.msg('网络错误', {icon: 2});
+                }
+            });
+            return false;
+        });
+
+        $("#deptWinClose").click(function () {
+            let winIndex = $("#department-win").data("index");
+            let editStatus = $("#department-win").data("edit");
+            if (editStatus === false) {
+                layer.close(winIndex);//关闭当前页
+                return false;
+            } else {
+                layer.confirm('数据已经修改，是否确认关闭?', {icon: 3, title: '提示'}, function (index) {
+                    layer.close(index);
+                    layer.close(winIndex);//关闭当前页
+                });
+                return false;
+            }
+        });
+    });
+
+</script>

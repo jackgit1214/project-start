@@ -1,0 +1,265 @@
+<div id="roleList" data-refresh="false" class="layui-col-space3">
+
+    <div class="layui-row ">
+        <div class="layui-col-md12" style="padding-left:5px">
+            <div class="layui-panel" style="border:1px solid silver;">
+                <div style="padding:5px;">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item" style="margin-bottom: 0px">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">角色：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="roleName" lay-verify="title" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <label class="layui-form-label">权限：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="funName" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="roleSearch">查询
+                                    </button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table id="roleTable" lay-filter="roleTable"></table>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="roleBar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon">&#xe654;</i>添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="update"><i class="layui-icon">&#xe642;</i>编辑</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delete"><i class="layui-icon">&#xe640;</i>删除</button>
+    </div>
+</script>
+
+<script type="text/html" id="sysTpl">
+    <div style="text-align:center">{{ d.isSystem == 1 ? '是' : '否' }}</div>
+</script>
+
+<script type="text/html" id="operTpl">
+
+    <div>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="edit" lay-filter="editRole"
+                style="border:none;color:darkred;padding:0 5px;height:20px;line-height: 20px">
+            <i class="layui-icon layui-icon-edit" lay-tips="编辑"></i>
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="funAut" lay-filter="funAut"
+                style="border:none;color:darkred;padding:0 5px;height:20px;line-height: 20px">
+            <i class="layui-icon layui-icon-auz" lay-tips="功能授权"></i>
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="dataAut" lay-filter="dataAut"
+                style="border:none;color:darkred;padding:0 5px;height:20px;line-height: 20px">
+            <i class="layui-icon layui-icon-form" lay-tips="数据授权"></i>
+        </button>
+    </div>
+
+</script>
+
+<script>
+
+    {
+        layui.use(['dtree', 'util', 'table', 'fwAdmin'], function () {
+            let dtree = layui.dtree, util = layui.util,
+                table = layui.table, roleTable = null,
+                fwAdmin = layui.fwAdmin,
+                form = layui.form, tableData = null, curPage = 1;
+            //监听用户工具栏事件
+            let pageH = fwAdmin.pageAreaHeight();
+            table.on('toolbar(roleTable)', function (obj) {
+                let checkStatus = table.checkStatus(obj.config.id)
+                    , data = checkStatus.data; //获取选中的数据
+                switch (obj.event) {
+                    case 'add':
+                        showEditWin("");
+                        break;
+                    case 'update':
+                        if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else if (data.length > 1) {
+                            layer.msg('只能同时编辑一个');
+                        } else {
+                            showEditWin(checkStatus.data[0].roleId);
+                        }
+                        break;
+                    case 'delete':
+                        if (data.length === 0) {
+                            layer.msg('请选择一行');
+                        } else {
+                            layer.confirm('确定要删除数据吗?', {icon: 3, title: '提示'}, function (index) {
+                                delRole(checkStatus.data)
+                                layer.close(index);
+                            });
+                        }
+                        break;
+                }
+                ;
+            });
+
+            table.on('tool(roleTable)', function (obj) {
+                //obj 当前行对象
+                if (obj.event == "funAut")
+                    layer.msg("进行功能授权！");
+                if (obj.event == "dataAut")
+                    layer.msg("进行部门数据授权！");
+
+                if (obj.event == "edit") {
+                    showEditWin(obj.data.roleId, obj);
+                }
+            });
+
+            form.on("submit(roleSearch)", function (obj) {
+                roleTable.reload({
+                    where: {
+                        param: {
+                            roleName: obj.field.roleName,
+                        }
+                    }
+                });
+                return false;
+            });
+
+
+            table.on('checkbox(roleTable)', function (obj) {
+                if (obj.type == 'one')
+                    return;
+                //disabled 的不能选中。
+                $(".layui-table input[type='checkbox']:disabled").each(function (index, obj) {
+                    $(obj).prop('checked', false);
+                });
+                form.render("checkbox")
+            });
+
+            function delRole(roles) {
+                let ids = [];
+                try {
+                    roles.forEach(function (role, index) {
+                        ids.push(role.roleId);
+                    });
+                } catch (e) {
+                    console.log(e)
+                    return;
+                }
+                let load = layer.load(0, {shade: false});
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded',
+                    url: "/role/delete",
+                    traditional: true, //指定序列化
+                    data: {
+                        roleIds: ids, //后台数组接收
+                    },
+                    success: function (result) {
+                        layer.close(load);
+                        if (result.status.code === 1) {
+                            layer.msg('删除成功!,共删除' + result.status.data + "条数据！", {icon: 1, time: 3000});
+                            roleTable.reload();
+                        } else {
+                            layer.msg(result.message, {icon: 2, time: 3000});
+                        }
+                    },
+                    error: function (e) {
+                        layer.msg('网络错误', {icon: 2});
+                    }
+                });
+            }
+
+            function tableLoad() {
+                roleTable = table.render({
+                    id: "roleTable"
+                    , elem: '#roleTable'
+                    , url: '/role/roles' //数据接口
+                    , height: pageH - 60  //
+                    , beforeSend(ajax, xhr, self) {
+
+                    }
+                    , parseData: function (res) { //res 即为原始返回的数据
+                        let result = res.status;
+                        return {
+                            "code": result.code, //解析接口状态
+                            "msg": result.message, //解析提示文本
+                            "count": result.data.totalSize, //解析数据长度
+                            "data": result.data.pageDatas //解析数据列表
+                        };
+                    }
+                    , response: {
+                        statusCode: 1
+                    }
+                    , toolbar: '#roleBar' //开启工具栏，此处显示默认图标，自定义模板，默认为default,图标形式
+                    , totalRow: false //开启合计行
+                    , page: true //开启分页
+                    , done: function (res, curr, count) {
+                        //表格数据
+                        tableData = table.cache.roleTable;
+                        curPage = curr;
+                        $('*[lay-tips]').on('mouseenter', function () {
+                            var content = $(this).attr('lay-tips');
+                            this.index = layer.tips('<div style="padding: 2px; font-size: 2px; color: #eee;">' + content + '</div>', this, {
+                                time: -1
+                                , maxWidth: 280
+                                , tips: [3, '#3A3D49']
+                            });
+                        }).on('mouseleave', function () {
+                            layer.close(this.index);
+                        });
+
+                        //处理isSystem，isSystem不能选中。
+                        for (let i = 0; i < res.data.length; i++) {
+                            let state = res.data[i].isSystem;
+                            if (state == 1) {
+                                let index = res.data[i]['LAY_TABLE_INDEX'];
+                                $(".layui-table tr[data-index=" + index + "] input[type='checkbox']").prop('disabled', true);
+                                //$(".layui-table tr[data-index="+index+"] input[type='checkbox']").next().addClass('layui-btn-disabled');
+                            }
+                        }
+                    }
+                    , cols: [[ //表头
+                        {type: 'checkbox', width: 30}
+                        , {field: 'xh', width: 40, title: '序号', type: 'numbers'}
+                        , {field: 'roleName', title: '角色名称', width: 160, align: "center"}
+                        , {field: 'isSystem', title: '内置角色', width: 100, templet: "#sysTpl"}
+                        , {field: 'roleDesc', title: '<div style="text-align:center">描述</div>', align: "left"}
+                        , {title: '操作', align: "center", width: 160, toolbar: "#operTpl"}
+                    ]]
+                });
+            }
+
+            //rowObj，不为空时，为编辑的行对象
+            function showEditWin(roleId, rowObj) {
+                $.get("/role/edit", {id: roleId}, function (str) {
+                    layer.open({
+                        type: 1,
+                        title: "角色编辑",
+                        scrollbar: false,
+                        area: ['700px'],
+                        content: str, //注意，如果str是object，那么需要字符拼接。
+                        success: function (dom, index) {//父页面向子页面传值
+                            $("#role-win").data("index", index);
+                        },
+                        end: function () { //窗口关闭
+                            let refresh = $("#roleList").data("refresh");
+                            //弹窗关闭后是否刷新窗口
+                            if (refresh) {
+                                $("#roleList").data("refresh", false);
+                                roleTable.reload({
+                                    page: {
+                                        curr: curPage
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+
+            //表格初始
+            tableLoad("");
+
+        });
+    }
+</script>

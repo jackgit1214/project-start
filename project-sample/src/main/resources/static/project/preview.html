@@ -1,0 +1,90 @@
+<div class="fw-color">
+    <div class="color-content layui-form" id="userPreviewWin" lay-filter="userPreview">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label required">登录名：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="userName" autocomplete="off" class="layui-input " value=""/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label required">姓名：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">性别：</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="gender" lay-filter="gender" value="1" title="男"/>
+                    <input type="radio" name="gender" lay-filter="gender" value="0" title="女"/>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">出生日期：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="birthday" id="birthday" autocomplete="off" class="layui-input"
+                           value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label required">所属部门：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="department" id="department" autocomplete="off" class="layui-input"
+                           value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">电话：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="phone" lay-verify="phone" autocomplete="off" class="layui-input"
+                           value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">qq：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="qq" autocomplete="off" lay-verify="number" class="layui-input"
+                           value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">email：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="email" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">地址：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="address" style="width:500px;" autocomplete="off" class="layui-input"
+                           value="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['jquery', 'layer', 'form'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            form = layui.form;
+        form.render(null, "userPreview");
+        page_init();
+
+        function page_init() {
+            let userData = $("#userPreviewWin").data('userData');
+            if (userData != undefined) {
+                $("input[name='userName']").val(userData.userName);
+                $("input[name='name']").val(userData.name);
+                $("input[name='birthday']").val(userData.birthday);
+                $("input[name='department']").val(userData.departments[0].deptName);
+                $("input[name='phone']").val(userData.phone);
+                $("input[name='qq']").val(userData.qq);
+                $("input[name='email']").val(userData.email);
+                $("input[name='address']").val(userData.address);
+            }
+            $("#userPreviewWin").find("input").attr("readonly", true);
+        }
+    });
+</script>

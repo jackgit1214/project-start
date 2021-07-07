@@ -1,0 +1,379 @@
+/* layui 定制 */
+.layui-layout-admin .layui-footer {
+    /*display: none;*/
+}
+
+.layui-layout-admin .layui-body {
+    top: 55px;
+    margin-left: 3px;
+    margin-right: 3px;
+    bottom: 0
+}
+
+
+/* 解决头部导航栏动画不消失  */
+.layui-nav .layui-this:after {
+    display: none;
+}
+
+/* .layui-side-menu .layui-side-scroll {
+     width: 200px
+ }
+
+ .layui-side-menu .layui-nav {
+     width: 200px;
+   !*  margin-top: 50px;*!
+     !*background: 0 0*!
+ }*/
+
+.layui-side-menu .layui-nav .layui-nav-item a {
+    /* height: 40px;
+     line-height: 40px;*/
+    padding-left: 45px;
+    /*  padding-right: 30px*/
+}
+
+.layui-side-menu .layui-nav .layui-nav-item > a {
+    /* padding-top: 8px;
+     padding-bottom: 8px*/
+}
+
+.layui-side-menu .layui-nav .layui-nav-item a:hover {
+    /* background: 0 0*/
+}
+
+.layui-side-menu .layui-nav .layui-nav-itemed > .layui-nav-child {
+    padding: 5px 0;
+}
+
+.layui-side-menu .layui-nav .layui-nav-itemed > .layui-nav-child .child-link {
+    margin-left: 10px
+}
+
+.layui-side-menu .layui-nav .layui-nav-item .layui-icon {
+    position: absolute;
+    /*//  top: 30%;*/
+    left: 20px;
+    /*  margin-top: -19px*/
+}
+
+.layui-side-menu .layui-nav .layui-nav-child .layui-nav-child {
+    /* background: 0 0 !important*/
+
+}
+
+.layui-side-menu .layui-nav .layui-nav-child .layui-nav-child a {
+    padding-left: 60px
+}
+
+.layui-side-menu .layui-nav .layui-nav-more {
+    /* right: 15px*/
+}
+
+
+/* admin  */
+/*-------------------admin---轮播-------------------------*/
+.layadmin-carousel {
+    height: 185px !important;
+    background-color: #fff;
+}
+
+/* -------轮播提示器----- */
+.layadmin-carousel .layui-carousel-ind {
+    position: absolute;
+    top: -41px;
+    text-align: right;
+}
+
+.layadmin-carousel .layui-carousel-ind ul {
+    background: 0 0;
+}
+
+.layadmin-carousel .layui-carousel-ind li {
+    background-color: #e2e2e2
+}
+
+.layadmin-carousel .layui-carousel-ind li:hover {
+    background-color: #c2c2c2
+}
+
+.layadmin-carousel .layui-carousel-ind li.layui-this {
+    background-color: #999
+}
+
+/* -------轮播单位---------- */
+.layadmin-carousel .layui-carousel, .layadmin-carousel > [carousel-item] > * {
+    background-color: #fff
+}
+
+/* -------轮播栅栏列---------- */
+.layadmin-carousel .layui-col-space10 {
+    margin: 0
+}
+
+/*--------快捷方式--------*/
+.layadmin-shortcut li {
+    text-align: center
+}
+
+.layadmin-shortcut li .layui-icon {
+    display: inline-block;
+    /* 融合行内于块级:
+                                       使元素变成行内元素，拥有行内元素的特性，即可以与其他行内元素共享一行，不会独占一行.
+                                       能够改变元素的height，width的值，可以设置padding，margin的各个属性值，
+                                       top，left，bottom，right都能够产生边距效果.*/
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    border-radius: 2px;
+    font-size: 30px;
+    background-color: #F8F8F8;
+    color: #333;
+    transition: all .3s;
+    -webkit-transition: all .3s
+}
+
+/*--------快捷方式 cite 引用标签--------*/
+.layadmin-shortcut li cite {
+    position: relative;
+    top: 2px;
+    display: block; /* 块级元素 */
+    color: #666;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 14px
+}
+
+.layadmin-shortcut li:hover .layui-icon {
+    background-color: #f2f2f2
+}
+
+/* -----待办事项--- */
+.layadmin-backlog .layadmin-backlog-body {
+    display: block;
+    padding: 10px 15px;
+    background-color: #f8f8f8;
+    color: #999;
+    border-radius: 2px;
+    transition: all .3s;
+    -webkit-transition: all .3s
+}
+
+.layadmin-backlog-body h3 {
+    padding-bottom: 10px;
+    font-size: 12px
+}
+
+.layadmin-backlog-body p cite {
+    font-style: normal;
+    font-size: 30px;
+    font-weight: 300;
+    color: #009688
+}
+
+.layadmin-backlog-body:hover {
+    background-color: #f2f2f2;
+    color: #888
+}
+
+
+.layui-table td {
+}
+
+/*   效果报告 */
+.layadmin-takerates {
+    padding-top: 5px
+}
+
+.layadmin-takerates .layui-progress {
+    margin: 40px 0 48px /*上外边距是 40px
+                                    右外边距和左外边距是 0px
+                                    下外边距是 60px
+                                    */
+}
+
+.layadmin-takerates .layui-progress:last-child {
+    margin-bottom: 10px
+}
+
+.layadmin-takerates .layui-progress h3 {
+    position: absolute;
+    right: 0;
+    top: -35px;
+    color: #999;
+    font-size: 14px
+}
+
+.layadmin-takerates .layui-progress-bar {
+    text-align: left
+}
+
+.layadmin-takerates .layui-progress-text {
+    top: -35px;
+    line-height: 26px;
+    font-size: 26px
+}
+
+
+[lay-href], [lay-tips], [layadmin-event] {
+    cursor: pointer
+}
+
+.layadmin-dataview {
+    height: 290px !important
+}
+
+.layadmin-dataview > [carousel-item]:before {
+    display: none
+}
+
+.layadmin-dataview > [carousel-item] > div {
+    height: 290px;
+}
+
+
+.layuiadmin-card-list {
+    padding: 15px
+}
+
+.layuiadmin-card-list p.layuiadmin-big-font {
+    font-size: 36px;
+    color: #666;
+    line-height: 36px;
+    padding: 5px 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap
+}
+
+.layuiadmin-card-list p.layuiadmin-normal-font {
+    padding-bottom: 10px;
+    font-size: 20px;
+    color: #666;
+    line-height: 24px
+}
+
+
+.layuiadmin-badge {
+    top: 50%;
+    margin-top: -9px;
+    color: #01AAED
+}
+
+.layuiadmin-badge, .layuiadmin-btn-group, .layuiadmin-span-color {
+    position: absolute;
+    right: 15px
+}
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+    width: 5px;
+    height: 15px;
+    background-color: #F5F5F5;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #BFBFBF;
+}
+
+/** 固定宽高卡片*/
+.custom-card {
+
+}
+
+/*.custom-card .layui-form-checkbox {*/
+/*    margin-top:0px;*/
+/*    height:20px;*/
+/*    line-height: 20px;*/
+/*    margin-right:5px;*/
+/*    padding-right:20px;*/
+/*}*/
+/*.custom-card .layui-form-checkbox span {*/
+/*   padding:0 5px;*/
+/*}*/
+/*.custom-card .layui-icon-ok {*/
+/*    height:18px;*/
+/*    width:20px;*/
+/*}*/
+
+.custom-card .layui-input {
+    height: 32px;
+    border: 0px;
+}
+
+.custom-card .layui-input {
+    height: 32px;
+    border-bottom: 1px solid rgba(211, 211, 211, 0.59);
+}
+
+.custom-card .layui-form-item {
+    margin-bottom: 5px;
+}
+
+.custom-card .layui-form-label {
+    width: 90px;
+    padding: 5px 10px;
+}
+
+.layui-card {
+    border: 1px solid #051f29;
+}
+
+.layui-card-header {
+    border-bottom: 1px solid #f6d57f;
+    height: 34px;
+    line-height: 34px;
+}
+
+.layui-card-body {
+    height: 45px;
+}
+
+.layui-card-footer {
+    position: relative;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 15px;
+    border-top: 1px solid #f6d57f;
+    color: #333;
+    border-radius: 2px 2px 0 0;
+    font-size: 14px
+}
+
+.layui-tree-box {
+    border: 1px solid silver;
+    min-width: 100px !important;
+}
+
+.layui-table-view {
+    margin: 3px;
+}
+
+.layui-col-space18 > * {
+    padding: 5px;
+}
+
+/* @media screen and (max-width: 1500px) {
+     .layui-col-md4 {
+         width: 100%
+     }
+     .layui-col-md6 {
+         width: 100%
+     }
+     .layui-col-md8 {
+         width: 100%
+     }
+ }*/

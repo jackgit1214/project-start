@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.system.dao.SysRoleFuncMapper">
+    <cache eviction="LRU" readOnly="true" size="1024"></cache>
+    <resultMap id="BaseResultMap" type="com.project.system.model.SysRoleFunc">
+
+        <id column="roleid" jdbcType="VARCHAR" property="roleid"/>
+        <id column="funcid" jdbcType="VARCHAR" property="funcid"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+
+        roleid, funcid
+    </sql>
+    <delete id="deleteByPrimaryKey" parameterType="map">
+
+        delete
+        from sys_role_func
+        where roleid = #{roleid,jdbcType=VARCHAR}
+          and funcid = #{funcid,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.project.system.model.SysRoleFunc">
+
+        insert into sys_role_func (roleid, funcid)
+        values (#{roleid,jdbcType=VARCHAR}, #{funcid,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.project.system.model.SysRoleFunc">
+
+        insert into sys_role_func
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleid != null">
+                roleid,
+            </if>
+            <if test="funcid != null">
+                funcid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleid != null">
+                #{roleid,jdbcType=VARCHAR},
+            </if>
+            <if test="funcid != null">
+                #{funcid,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        select
+        <if test="queryModel != null and queryModel.distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from sys_role_func
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+        <if test="queryModel != null and queryModel.orderByClause != null">
+            order by ${queryModel.orderByClause}
+        </if>
+    </select>
+
+    <delete id="deleteByCondition">
+        delete from sys_role_func
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+    </delete>
+    <select id="countByCondition" resultType="java.lang.Integer">
+
+        select count(*) from sys_role_func
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByConditionSelective">
+
+        update sys_role_func
+        <set>
+            <if test="record.roleid != null">
+                roleid = #{record.roleid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.funcid != null">
+                funcid = #{record.funcid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="queryModel != null">
+            <include refid="public.Update_By_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByCondition">
+
+        update sys_role_func
+        set roleid = #{record.roleid,jdbcType=VARCHAR},
+        funcid = #{record.funcid,jdbcType=VARCHAR}
+        <if test="queryModel != null">
+            <include refid="public.Update_By_Where_Clause"/>
+        </if>
+    </update>
+</mapper>
