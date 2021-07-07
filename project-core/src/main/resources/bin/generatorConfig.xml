@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+
+<generatorConfiguration>
+    <!--	<classPathEntry location="E:/mysql-connector-java-5.1.30.jar" />-->
+
+    <context id="context1">
+
+        <!--		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>-->
+        <!--		<plugin type="org.mybatis.generator.myplugins.CustomSelfModelPlugin"/>-->
+        <!--		<plugin type="org.mybatis.generator.myplugins.CustomMapperDaoPlugin"/>-->
+        <!--		&lt;!&ndash; 自动生成equals方法和hashcode方法 &ndash;&gt;-->
+        <!--		<plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>-->
+        <!--		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>-->
+
+
+        <!-- 	 生成service    -->
+        <!--		<plugin type="org.mybatis.generator.myplugins.CustomServicePlugin">-->
+
+        <!--			<property name="targetPackage" value="com.book.service"/>-->
+        <!--			<property name="implementationPackage" value="com.book.service.impl"/>-->
+        <!--			<property name="targetProject" value="src/main/java"/>-->
+
+        <!--			<property name="enabledUpdate" value="false"/>-->
+        <!--			<property name="enabledDelete" value="false"/>-->
+        <!--		</plugin>-->
+
+        <!-- 生成action控制类-->
+        <!--	     <plugin type="org.mybatis.generator.myplugins.CustomActionPlugin">-->
+        <!--	     	<property name="targetPackage" value="com.book.web"/>-->
+        <!--            <property name="servicePack" value="com.book.service"/>-->
+        <!--            <property name="isHandleDuplicateSubmission" value="true"/>-->
+        <!--            <property name="targetProject" value="src/main/java"/>-->
+        <!--			 <property name="enableUpdate" value="false"/>-->
+        <!--			 <property name="enableDelete" value="false"/>-->
+        <!--	     </plugin>-->
+
+        <!-- -生成页面代码   -->
+        <!--	     <plugin type="org.mybatis.generator.myplugins.CustomPagePlugin">-->
+        <!--	     	<property name="publicJsName" value="system"/>-->
+        <!--	     	<property name="jsDirectory" value="D:\workspace\framework-root\museum/src/main/webapp/resources/js"/>-->
+        <!--            <property name="targetDirectory" value="D:\workspace\framework-root\museum/src/main/webapp/WEB-INF"/>-->
+        <!--            <property name="templatePath" value="D:/workspace/mybatis-generator/src/test/resources/template"/>-->
+        <!--            <property name="templateJSFile" value="modulejs_simple.ftl"/>-->
+
+        <!--            <property name="jsPackage" value="$.SystemApp" />-->
+        <!--            <property name="isHandleDuplicateSubmission" value="true"/>-->
+        <!--	     </plugin>-->
+
+
+        <!--		<commentGenerator>-->
+        <!--			<property name="suppressAllComments" value="false"/>-->
+        <!--			<property name="suppressDate" value="false"/>-->
+        <!--			<property name="addRemarkComments" value="true"/>-->
+
+        <!--		</commentGenerator>-->
+
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/netbook?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;zeroDateTimeBehavior=convertToNull"
+
+                        userId="root"
+                        password="123456"/>
+
+
+        <javaModelGenerator targetPackage="com.book.model"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+            <property name="rootClass" value="com.project.core.mybatis.model.BaseModel"/>
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="context.mapper"
+                         targetProject="src/main/resources"/>
+
+        <!--		<javaClientGenerator targetPackage="com.book.dao"-->
+        <!--							 targetProject="src/main/java" type="XMLMAPPER"/>-->
+
+        <table tableName="netbook" enableCountByExample="false" modelType="flat"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <property name="useActualColumnNames" value="true"/>
+        </table>
+        <!--
+    <table schema="netbook" tableName="netbook" enableCountByExample="false"  enableUpdateByExample="false"
+     enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" >
+         <property name="useActualColumnNames" value="true"/>
+    </table>
+    <table schema="netbook" tableName="chapter" enableCountByExample="false"  enableUpdateByExample="false"
+         enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" >
+         <property name="useActualColumnNames" value="true"/>
+    </table>
+    <table schema="netbook" tableName="booktype" enableCountByExample="false"  enableUpdateByExample="false"
+        enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" >
+         <property name="useActualColumnNames" value="true"/>
+    </table>
+    <table schema="netbook" tableName="booktyperelation" enableCountByExample="false"  enableUpdateByExample="false"
+        enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" >
+         <property name="useActualColumnNames" value="true"/>
+    </table>
+    <table schema="netbook" tableName="crawlerlog" enableCountByExample="false"  enableUpdateByExample="false"
+        enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" >
+         <property name="useActualColumnNames" value="true"/>
+    </table>
+
+    <table schema="netbook" tableName="chaptercontent" enableCountByExample="false"  enableUpdateByExample="false"
+           enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" >
+        <property name="useActualColumnNames" value="true"/>
+    </table>-->
+        <!--
+        <table schema="museum"  tableName="comm_seq" enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+         -->
+        <!-- 鉴定信息
+        <table schema="museum"  tableName="appraisalinfo" enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table schema="museum"  tableName="tradingrecord" domainObjectName="TradingRecord" enableCreateAction="false"  enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" /> -->
+        <!--
+        <table schema="museum" tableName="cul_customdatadisp" domainObjectName="CulCustomDataDisp"  enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+
+         -->
+        <!-- 文物修改信息
+        <table schema="museum"  tableName="restorationinfo" enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table schema="museum"  tableName="restorationproject" enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table schema="museum" tableName="restorationreceipt" enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+        --><!-- 复制及复制品登记
+		<table schema="museum"  tableName="culturalreliccopy" enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+		<table schema="museum" tableName="duplicateinfoinfo" enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+ 		-->
+        <!--
+        <table schema="museum" tableName="sys_log" enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+        <table schema="museum" tableName="sys_code" enableCountByExample="false"  enableUpdateByExample="false"  enableDeleteByExample="false"  enableSelectByExample="false" selectByExampleQueryId="false" />
+              -->
+    </context>
+</generatorConfiguration>

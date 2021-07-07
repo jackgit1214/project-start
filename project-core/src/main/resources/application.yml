@@ -1,0 +1,19 @@
+server:
+  port: 8001
+  servlet:
+    context-path: /
+    session:
+      timeout: 400s
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/commondb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+
+
+  profiles:
+    active: dev
+

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--    <include resource="org/springframework/boot/logging/logback/base.xml"/>-->
+    <property name="LOG_HOME" value="/log"/>
+    <property name="APP_NAME" value="web"></property>
+    <property name="FILE_SIZE" value="1024kb"></property>
+    <property name="FILE_PATH_ERROR" value="${LOG_HOME}/error/${APP_NAME}-error.log"/>
+    <property name="FILE_PATH_WARN" value="${LOG_HOME}/warn/${APP_NAME}-warn.log"/>
+    <property name="FILE_PATH_INFO" value="${LOG_HOME}/info/${APP_NAME}-info.log"/>
+    <property name="FILE_PATH_DEBUG" value="${LOG_HOME}/debug/${APP_NAME}-debug.log"/>
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 按临界值过滤日志：低于INFO以下级别被抛弃 -->
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] %logger{50} - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>Info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件输出的文件名 -->
+        <File>${FILE_PATH_ERROR}</File>
+        <!--滚动日志 基于时间和文件大小-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 滚动日志文件保存格式 -->
+            <FileNamePattern>${FILE_PATH_ERROR}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <MaxFileSize>${FILE_SIZE}</MaxFileSize>
+            <totalSizeCap>5GB</totalSizeCap>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <!-- 按临界值过滤日志：低于ERROR以下级别被抛弃 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] %logger{50} - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="FILE-INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件输出的文件名 -->
+        <File>${FILE_PATH_INFO}</File>
+        <!--滚动日志 基于时间和文件大小-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 滚动日志文件保存格式 -->
+            <FileNamePattern>${FILE_PATH_INFO}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <MaxFileSize>${FILE_SIZE}</MaxFileSize>
+            <totalSizeCap>5GB</totalSizeCap>
+            <MaxHistory>10</MaxHistory>
+        </rollingPolicy>
+
+        <!-- 按临界值过滤日志：低于INFO以下级别被抛弃 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] %logger{50} - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件输出的文件名 -->
+        <File>${FILE_PATH_WARN}</File>
+        <!--滚动日志 基于时间和文件大小-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 滚动日志文件保存格式 -->
+            <FileNamePattern>${FILE_PATH_WARN}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <MaxFileSize>${FILE_SIZE}</MaxFileSize>
+            <totalSizeCap>5GB</totalSizeCap>
+            <MaxHistory>10</MaxHistory>
+        </rollingPolicy>
+        <!-- 按临界值过滤日志：低于WARN以下级别被抛弃 -->
+        <!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+        <!--            <level>WARN</level>-->
+
+        <!--        </filter>-->
+        <!-- 按指定规则过滤日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+            <!--            <onMatch>DENY</onMatch>&lt;!&ndash; ERROR级别被抛弃 &ndash;&gt;-->
+            <!--            <onMismatch>NEUTRAL</onMismatch>&lt;!&ndash; 其它级别继续处理 &ndash;&gt;-->
+        </filter>
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] %logger{50} - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="FILE-DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件输出的文件名 -->
+        <File>${FILE_PATH_DEBUG}</File>
+        <!--滚动日志 基于时间和文件大小-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 滚动日志文件保存格式 -->
+            <FileNamePattern>${FILE_PATH_DEBUG}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <MaxFileSize>${FILE_SIZE}</MaxFileSize>
+            <totalSizeCap>5GB</totalSizeCap>
+            <MaxHistory>10</MaxHistory>
+        </rollingPolicy>
+        <!-- 按临界值过滤日志：低于INFO以下级别被抛弃 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- 不过滤日志 -->
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%thread] %logger{50} - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <springProfile name="test,dev">
+        <!--        <logger name="com.project" level="INFO" additivity="false"/>-->
+        <!--        <logger name="org.apache" level="ERROR" additivity="false"/>-->
+        <!--        <logger name="org.springframework" level="INFO" additivity="false"/>-->
+        <!--        <logger name="org.mybatis.spring" level="ERROR" additivity="false"/>-->
+        <!--        <logger name="com.zaxxer.hikari" level="ERROR" additivity="false"/>-->
+        <!-- 日志输出级别 -->
+        <root level="debug">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="FILE-WARN"/>
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="FILE-DEBUG"/>
+        </root>
+    </springProfile>
+    <springProfile name="prod,default">
+
+        <!-- 日志级别排序为： TRACE 、DEBUG、 INFO、 WARN 、 ERROR -->
+        <!-- 配置打印的信息与系统自动抛出的异常无关
+            配置 error 打印 error
+            配置 warn  打印 warn、error
+            配置 info  打印 info、warn、 error
+            配置 debug 打印 info、warn、 error、debug
+            配置 trace 打印 info、warn、 error、debug、trace
+       -->
+        <logger name="com.project" level="INFO" additivity="false">
+            <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE-ERROR"/> <!-- 配置后才能写入文件 -->
+            <appender-ref ref="FILE-WARN"/>
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="FILE-DEBUG"/>
+        </logger>
+        <logger name="org.apache" level="ERROR" additivity="false"/>
+        <logger name="org.springframework" level="DEBUG" additivity="false">
+            <appender-ref ref="FILE-ERROR"/> <!-- 配置后才能写入文件 ,应根据logger级别按 级别配置文件输出 -->
+            <appender-ref ref="FILE-WARN"/>
+            <appender-ref ref="FILE-INFO"/>
+            <appender-ref ref="FILE-DEBUG"/>
+            <appender-ref ref="STDOUT"/>
+        </logger>
+        <logger name="org.mybatis.spring" level="ERROR" additivity="false"/>
+        <logger name="com.zaxxer.hikari" level="ERROR" additivity="false"/>
+        <!-- 日志输出级别 ,只配置控制台，其它信息输出到文件中-->
+        <root level="ERROR">
+            <appender-ref level="error" ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+</configuration>
+

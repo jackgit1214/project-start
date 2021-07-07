@@ -1,0 +1,227 @@
+<div style="padding: 5px; background-color: #FAFAFA;">
+    <form class="layui-form" action="">
+        <#if data?? >
+        <div class="layui-row layui-col-space4">
+            <div class="layui-col-md12">
+                <div class="layui-card custom-card" style="height:180px">
+                    <div class="layui-card-body">
+                        <div class="layui-col-md11">
+                            <div class="layui-form-item">
+                                <#-- <label class="layui-form-label">项目全路径</label>-->
+                                <#--
+                                <div>-->
+                                    <#-- <input type="text" name="projectPath" value="" style="width:80%" -->
+                                    <#-- lay-verify="required" autocomplete="off" class="layui-input">-->
+                                    <#--
+                                </div>
+                                -->
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">项目英文名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="projectName" id="projectName"
+                                               value="${modelP.projectName}"
+                                               lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">项目路径</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="targetProject"
+                                               value="${modelP.projectDirector!''}/${modelP.targetProject}"
+                                               autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">model包路径</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="modelPackage" value="${modelP.targetPackage}"
+                                               lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">DAO包</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="daoPath" value="${daoP.targetPackage}"
+                                               lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">xml路径</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="daoMapperPath"
+                                               value="${modelP.projectDirector!''}/${daoP.mapperTargetProject!''}"
+                                               lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">xml包</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="daoMapperPackage"
+                                               value="${daoP.mapperTargetPackage!''}"
+                                               lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">Service包</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="servicePackage"
+                                               value="${serviceP.targetPackage!''}"
+                                               lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">Service实现包</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="serviceImplPackage"
+                                               value="${serviceP.implementationPackage!''}"
+                                               lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">Action包路径</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="actionPackage" value="${actionP.targetPackage!''}"
+                                               lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md1">
+                            <button type="button" id="generator" lay-submit lay-filter="generator"
+                                    class="layui-btn layui-btn-normal">生成代码
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layui-card-footer layui-form-item" style="height:26px;">
+                        <input type="checkbox" name="codeType[dao]" id="codeType[dao]" lay-filter="codeType"
+                               title="DAO">
+                        <input type="checkbox" name="codeType[service]" id="codeType[service]" lay-filter="codeType"
+                               title="Service">
+                        <input type="checkbox" name="codeType[action]" id="codeType[action]" lay-filter="codeType"
+                               title="Action">
+                        <input type="checkbox" name="codeType[Page]" id="codeType[page]" lay-filter="codeType"
+                               title="Page">
+                    </div>
+                </div>
+            </div>
+            <#list data as table >
+            <div class="layui-col-md3">
+                <div class="layui-card custom-card">
+                    <div class="layui-card-header layui-inline">
+                        <label class="layui-form-label"
+                               style="width:130px;text-align:left">${table.tableName!''}</label>
+                        <input type="checkbox" class="layui-input-inline " switch-data="${table.tableName!''}"
+                               lay-filter="tableOpen" lay-skin="switch" lay-text="开|关">
+                        <#-- <input type="checkbox" name="${table.tableName!''}[Model]" disabled checked title="Model">-->
+                    </div>
+                    <div class="layui-card-body">
+                        ${table.tableComment!'无描述信息...'}
+                    </div>
+
+                </div>
+            </div>
+           </#list>
+        #list>
+</div>
+</#if>
+</form>
+</div>
+<script type="application/javascript">
+    { //使用Let 声名变量，增加{}，变为块级作用域，同一页面反复加载不会出现
+        //SyntaxError: Identifier 'a' has already been declared
+        let header = $("meta[name='_csrf_header']").attr("content");
+        let token = $("meta[name='_csrf']").attr("content");
+        let tables = [];
+        layui.use('form', function () {
+            let form = layui.form;
+            form.render();
+
+            form.on('submit(generator)', function (data) {
+                let index = layer.load(2);
+                let dataField = data.field;
+                let formData = {
+                    modelP: {
+                        projectName: dataField.projectName,
+                        targetPackage: dataField.modelPackage,
+                        targetProject: dataField.targetProject,
+                        generating: true,
+                        tableNames: tables,
+                    },
+                    daoP: {
+                        generating: $("#codeType\\[dao\\]").prop("checked"),
+                        targetProject: dataField.targetProject,
+                        projectName: dataField.projectName,
+                        targetPackage: dataField.daoPath,
+                        mapperTargetProject: dataField.daoMapperPath,
+                        mapperTargetPackage: dataField.daoMapperPackage,
+                    },
+                    serviceP: {
+                        generating: $("#codeType\\[service\\]").prop("checked"),
+                        projectName: dataField.projectName,
+                        targetPackage: dataField.servicePackage,
+                        targetProject: dataField.targetProject,
+                        implementationPackage: dataField.serviceImplPackage,
+                    },
+                    actionP: {
+                        generating: $("#codeType\\[action\\]").prop("checked"),
+                        targetPackage: dataField.actionPackage,
+                        targetProject: dataField.targetProject,
+                        servicePack: dataField.servicePackage,
+                        projectName: dataField.projectName,
+                    },
+                    pageP: {
+                        generating: $("#codeType\\[page\\]").prop("checked")
+                    }
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "code/generating",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify(formData),
+                    success: function (result) {
+                        console.log(result);
+                        if (result.code === 1) {
+                            layer.msg(result.message, {icon: 1});
+                        } else {
+                            layer.msg(result.message, {icon: 2});
+                            layer.msg(result.data, {icon: 2});
+                        }
+                        layer.close(index);
+                    },
+                    error: function (e) {
+                        layer.msg('网络错误', {icon: 2});
+                    }
+                });
+                return false;
+            });
+
+            form.on('switch(tableOpen)', function (obj) {
+                let tableName = obj.elem.attributes['switch-data'].nodeValue;
+                if (obj.elem.checked) {
+                    tables.push(tableName);
+                } else {
+                    let ei = tables.indexOf(tableName);
+                    if (ei > -1)
+                        tables.splice(ei, 1);
+                }
+            })
+            form.on('checkbox(codeType)', function (data) {
+                // console.log(data.elem.checked);
+                // console.log(data.value);
+            });
+            $("#projectName").on("input", function (e) {
+                //获取input输入的值
+
+            });
+        });
+    }
+</script>
