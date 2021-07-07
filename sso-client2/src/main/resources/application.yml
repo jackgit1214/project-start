@@ -1,0 +1,49 @@
+server:
+  port: 7003
+  servlet:
+    context-path: /thir
+
+spring:
+  application:
+    name: sso-client2
+  profiles:
+    active: dev
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/commondb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+#    username: root
+#    password: 123456
+  freemarker:
+    request-context-attribute: req
+    suffix: .html
+    content-type: text/html
+    enabled: true
+    template-loader-path: classpath:/templates/
+    charset: utf-8
+  security:
+    oauth2:
+      client:
+        registration:
+          myclient:
+            provider: myProvider1
+            client-id: UserManagement
+            client-name: spring security5的客户端
+            client-secret: user123
+            client-authentication-method: post
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: all
+        provider:
+          myProvider1:
+            authorization-uri: http://localhost:9001/oauth/authorize
+            token-uri: http://localhost:9001/oauth/token
+            jwk-set-uri: http://localhost:9001/oauth/token_key
+            user-info-uri: http://localhost:9001/api/user
+#            http://localhost:9001/oauth/check_token
+            user-name-attribute: user_name
+            #user-info-authentication-method: header
+logging:
+  level:
+    root: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: debug
