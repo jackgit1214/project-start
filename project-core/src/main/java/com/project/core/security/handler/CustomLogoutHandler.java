@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CustomLogoutHandler implements LogoutHandler {
 
     @Override
-    @SystemLog(moduleId = "用户退出",description = "用户成功退出",opeType= SystemLog.OpeType.LOGOUT)
+    @SystemLog(moduleId = "退出",description = "用户成功退出",opeType= SystemLog.OpeType.LOGOUT)
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         log.info("用户正在退出.......................");
     }

@@ -29,6 +29,12 @@ import java.util.List;
 @Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private CustomLogoutHandler customLogoutHandler;
+
+    @Autowired
+    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
+
     private final LoginSuccessHandler successHandler;
     private final LoginFailureHandler failureHandler;
     private final VerifyCodeFilter verifyCodeFilter;
@@ -96,8 +102,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .addLogoutHandler(new CustomLogoutHandler())
-                .logoutSuccessHandler(new CustomLogoutSuccessHandler())
+                .addLogoutHandler(customLogoutHandler)
+//                .logoutSuccessHandler(customLogoutSuccessHandler)
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true);
 

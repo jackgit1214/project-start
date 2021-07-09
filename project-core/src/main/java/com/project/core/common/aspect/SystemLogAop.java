@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -77,9 +78,13 @@ public class SystemLogAop {
         SysLog sysLog = new SysLog();
         sysLog.setLogId(UUIDUtil.getUUID());
         //用户信息
-        UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        sysLog.setUserId(userInfo.getPrimaryKey().toString());
-        sysLog.setUserName(userInfo.getUsername());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication!=null){
+            UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+            sysLog.setUserId(userInfo.getPrimaryKey().toString());
+            sysLog.setUserName(userInfo.getUsername());
+        }
+
         sysLog.setLogTime(new Date(startTime));
         sysLog.setRequestIp(IpUtil.getIpAddr(request));
         sysLog.setRequestClassMethod(joinPoint.getTarget().getClass()+"."+methodSignature.getMethod().getName());
