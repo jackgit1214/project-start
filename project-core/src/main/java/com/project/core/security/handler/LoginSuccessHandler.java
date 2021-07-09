@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.core.common.anaotation.SystemLog;
 import com.project.core.common.response.BaseResult;
 import com.project.core.common.response.ReturnCode;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,9 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private final RequestCache cache = new HttpSessionRequestCache();
+
     @Override
+    @SystemLog(moduleId = "用户登录",description = "用户登录成功",opeType= SystemLog.OpeType.LOGIN)
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
 
         /// 会帮我们跳转到上一次请求的页面上

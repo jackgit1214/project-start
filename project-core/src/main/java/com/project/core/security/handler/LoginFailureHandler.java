@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.core.common.anaotation.SystemLog;
 import com.project.core.common.response.BaseResult;
 import com.project.core.common.response.ReturnCode;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
 
     @Override
+    @SystemLog(moduleId = "用户登录",description = "用户登录失败",opeType= SystemLog.OpeType.LOGIN)
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         // log.info(exception.toString());
         log.error("登录错误 [{}] ", exception.getMessage());

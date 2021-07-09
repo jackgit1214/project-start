@@ -22,12 +22,11 @@ spring:
     settings:
       autoImport: /common/common.html as pub
 
-
 #mybatis
 #项目配置
 project:
   configure:
-    moduleName: project_sample
+    moduleName: project-sample
     project-name: 基础平台
     project-short-name: system
     csrf: true

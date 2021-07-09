@@ -12,17 +12,15 @@ import java.lang.annotation.Target;
 public @interface SystemLog {
 
     String description() default "";
-
     String moduleId() default "";
+    OpeType opeType() default OpeType.DISPLAY;
 
-    String operId() default "";
-
-    enum LogAnnoDefi {
-
-        DESC(1), MODULE(2), OPER(3);
-
-        LogAnnoDefi(int value) {
+    enum OpeType {
+        DEL(2), DISPLAY(3), EDIT(1), LOGIN(4), LOGOUT(5);
+        OpeType(int value) {
 
         }
-    }
+    };
+
+
 }

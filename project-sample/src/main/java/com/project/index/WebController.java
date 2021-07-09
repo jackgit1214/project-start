@@ -1,5 +1,6 @@
 package com.project.index;
 
+import com.project.core.common.anaotation.SystemLog;
 import com.project.core.common.exception.BusinessException;
 import com.project.core.common.response.BaseResult;
 import com.project.core.common.response.ReturnCode;
@@ -54,7 +55,6 @@ public class WebController extends BaseController {
     @ResponseBody
     public Object userInfo(ModelMap map, HttpServletRequest request) throws BusinessException {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         return userInfo;
     }
 
@@ -62,7 +62,6 @@ public class WebController extends BaseController {
     @PostMapping("/checkUserPwd")
     @ResponseBody
     public Object checkUserOldPwd(String oldPwd) {
-
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(4);
         boolean isSample = encoder.matches(oldPwd, userInfo.getPassword());
@@ -72,6 +71,7 @@ public class WebController extends BaseController {
 
     @PostMapping("/editPwd")
     @ResponseBody
+    @SystemLog(moduleId = "首页用户管理",description = "修改了用户密码",opeType= SystemLog.OpeType.EDIT)
     public Object editPwd(String newPwd) {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int rows = userService.getUserService().editUserPwd(userInfo.getUsername(), newPwd);
@@ -82,7 +82,6 @@ public class WebController extends BaseController {
     @GetMapping("/userMenus")
     @ResponseBody
     public Object menus() {
-
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<FunModule> modules = new ArrayList<>();
         userInfo.getRoles().forEach(role -> {
@@ -94,17 +93,14 @@ public class WebController extends BaseController {
             if (FunModule.ROOT_SUPER_ID.equals(module.getSuperModId()))
                 permissionVOs.add(module);
         }
-
         List<FunModule> sysModule = permissionVOs.stream().sorted(Comparator.comparing(FunModule::getFunOrder))
                 .collect(Collectors.toList());
-
         return sysModule;
     }
 
     @GetMapping("/getCaptcha")
     @ResponseBody
     public Object getCaptcha(HttpServletRequest request) {
-
         /* 生成验证码字符串 */
         String verifyCode = VerifyCodeUtil.generateVerifyCode(4);
         String uuid = UUIDUtil.getUUID();

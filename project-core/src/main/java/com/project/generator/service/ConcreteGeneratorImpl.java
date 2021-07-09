@@ -61,6 +61,11 @@ public class ConcreteGeneratorImpl extends Generator {
 
         List<String> warnings = new ArrayList<String>();
         Configuration config = new Configuration();
+
+//        String classPath = (this.getClass()).getProtectionDomain().getCodeSource().getLocation().getFile();
+//		String classEntry = classPath+"bin/mysql-connector-java-5.1.30.jar";
+//		config.addClasspathEntry(classEntry);
+
         Context context = this.createContextConfigure(modelP);
         if (daoP.isGenerating()) {
             context.setJavaClientGeneratorConfiguration(this.getDaoConfiguration(daoP));

@@ -1,0 +1,116 @@
+<style>
+    .ew-tree-table {
+        margin: 0px 0px !important;
+    }
+
+    .layui-card-body {
+        padding: 2px 2px;
+    }
+
+    .dtree-nav-item {
+        padding-left: 5px;
+    }
+
+    .layui-form-label.required:after {
+        content: "*";
+        color: red;
+
+    }
+</style>
+<div id="log-win" data-index="" data-edit="false">
+    <form class="layui-form" action="" id="logForm" lay-filter="log">
+        <div class="layui-tab layui-tab-brief">
+            <div class="layui-tab-content" style="height:360px">
+                <input type="hidden" name="logId">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">登录用户：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="userName" lay-verify="required" autocomplete="off"
+                                   class="layui-input "/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">登录时间：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="#logTime" name="logTime" lay-verify="required" autocomplete="off"
+                                   class="layui-input"/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">ip：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="requestIp" lay-verify="required" autocomplete="off"
+                                   class="layui-input"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">模块名称：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="modelName" id="modelName" autocomplete="off"
+                                   class="layui-input" value=""/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">操作类型：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="opeType" id="opeType" autocomplete="off"
+                                   class="layui-input" value=""/>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">日志类型：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="logType" id="logType" autocomplete="off"
+                                   class="layui-input" value=""/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">描述信息：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="description" style="width:510px;" autocomplete="off"
+                               class="layui-input"/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">请求信息：</label>
+                    <div class="layui-input-inline">
+                        <textarea type="text" name="reqParam" style="width:510px;height:120px;"  autocomplete="off"
+                               class="layui-input"/>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-btn-container" style="text-align: center;margin-bottom: 0px">
+                <div class="layui-inline">
+                    <button class="layui-btn" id="logWinClose">关闭</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+    layui.use(['form', 'layer', 'laydate', 'treeTable', 'dtree', "jquery"], function () {
+        let form = layui.form, layDate = layui.laydate,
+            layer = layui.layer, $ = layui.$;
+
+        layDate.render({
+            elem: '#logTime' //指定元素
+        });
+        $("#logWinClose").click(function () {
+            let winIndex = $("#log-win").data("index");
+            layer.close(winIndex);//关闭当前页
+            return false;
+        });
+    });
+
+</script>

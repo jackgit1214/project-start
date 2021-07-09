@@ -1,0 +1,219 @@
+<div id="logList" data-refresh="false" class="layui-col-space4">
+
+    <div class="layui-row ">
+        <div class="layui-col-md12" style="padding-left:5px">
+            <div class="layui-panel" style="border:1px solid silver;">
+                <div style="padding:5px;">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item" style="margin-bottom: 0px">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">登录名：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="userName" lay-verify="title" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <label class="layui-form-label">模块名称：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="modelName" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="logSearch">查询
+                                    </button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table id="log" lay-filter="log"></table>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="logBar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="clear"><i class="layui-icon">&#xe642;</i>清除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delete"><i class="layui-icon">&#xe640;</i>删除</button>
+    </div>
+</script>
+
+<script type="text/html" id="opeTpl">
+    <#--    1 修改 2 删除 3 数据展示 4 登录 5 退出 6其它-->
+    <div style="text-align:center">{{ d.opeType == 1 ? '增加' : '删除s' }}</div>
+</script>
+
+<script type="text/html" id="operTpl">
+    <div>
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" lay-event="logDetail"
+                lay-filter="logDetail"
+                style="border:none;color:darkred;padding:0 5px;height:20px;line-height: 20px">
+            <i class="layui-icon layui-icon-log" lay-tips="详细信息"></i>
+        </button>
+    </div>
+
+</script>
+
+<script>
+
+    layui.use([ 'util', 'table', 'fwAdmin'], function () {
+        let util = layui.util, $ = layui.$,
+            table = layui.table, logTable = null,
+            fwAdmin = layui.fwAdmin,
+            form = layui.form, tableData = null, curPage = 1;
+        let pageH = fwAdmin.pageAreaHeight();
+        //监听用户工具栏事件,log为table的id
+        table.on('toolbar(log)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id)
+                , data = checkStatus.data; //获取选中的数据
+            switch (obj.event) {
+                case 'clear':
+                    //显示时间段，选择后一起删除
+                   // showEditWin("");
+                    layer.confirm('确定要删除所有数据吗?', {icon: 3, title: '提示'}, function (index) {
+                        delLog();
+                        layer.close(index);
+                    });
+                    break;
+                case 'delete':
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else {
+                        layer.confirm('确定要删除数据吗?', {icon: 3, title: '提示'}, function (index) {
+                            delLog(checkStatus.data)
+                            layer.close(index);
+                        });
+                    }
+                    break;
+            }
+        });
+
+        table.on('tool(log)', function (obj) {
+            $.get("/log/edit", function (str) {
+                layer.open({
+                    type: 1,
+                    title: "查看日志详细",
+                    scrollbar: false,
+                    area: ['660px'],
+                    content: str,
+                    success: function (dom, index) {
+                        let curWin = $("#log-win");
+                        curWin.data("index", index);
+                        $.each(obj.data,function(name,value) {
+                            curWin.find("input[name='"+name+"']").val(value);
+                        });
+                    },
+                    end: function () { //窗口关闭
+
+                    }
+                });
+            });
+        });
+        //查询按钮
+        form.on("submit(logSearch)", function (obj) {
+            logTable.reload({
+                where: {
+                    param: {
+                        userName: obj.field.userName,
+                        modelName: obj.field.modelName,
+                    }
+                }
+            });
+            return false;
+        });
+        function delLog(logs) {
+            let ids = [];
+            console.log(logs);
+            if (logs!=undefined && logs.length>0) {
+                logs.forEach(function (log, index) {
+                    ids.push(log.logId);
+                });
+            }
+            let load = layer.load(0, {shade: false});
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                url: "/log/delete",
+                traditional: true, //指定序列化
+                data: {
+                    logs: ids, //后台数组接收
+                },
+                success: function (result) {
+                    layer.close(load);
+                    if (result.status.code === 1) {
+                        layer.msg('删除成功!,共删除' + result.status.data + "条数据！", {icon: 1, time: 3000});
+                        logTable.reload();
+                    } else {
+                        layer.msg(result.message, {icon: 2, time: 3000});
+                    }
+                },
+                error: function (e) {
+                    layer.msg('网络错误', {icon: 2});
+                }
+            });
+        }
+        function tableLoad() {
+            logTable = table.render({
+                id: "logTable"
+                , elem: '#log'
+                , url: '/log/logs' //数据接口
+                , height: pageH - 60  //查询区域高度，单行Input高度以及边距
+                , parseData: function (res) { //res 即为原始返回的数据
+                    let result = res.status;
+                    return {
+                        "code": result.code, //解析接口状态
+                        "msg": result.message, //解析提示文本
+                        "count": result.data.totalSize, //解析数据长度
+                        "data": result.data.pageDatas //解析数据列表
+                    };
+                }
+                , response: {
+                    statusCode: 1
+                }
+                , toolbar: '#logBar' //开启工具栏，此处显示默认图标，自定义模板，默认为default,图标形式
+                , totalRow: false //开启合计行
+                , page: true //开启分页
+                , done: function (res, curr, count) {
+                    //表格数据
+                    tableData = table.cache.logTable;
+                    curPage = curr;
+                    $('*[lay-tips]').on('mouseenter', function () {
+                        var content = $(this).attr('lay-tips');
+                        this.index = layer.tips('<div style="padding: 2px; font-size: 2px; color: #eee;">' + content + '</div>', this, {
+                            time: -1
+                            , maxWidth: 280
+                            , tips: [3, '#3A3D49']
+                        });
+                    }).on('mouseleave', function () {
+                        layer.close(this.index);
+                    });
+                }
+                , cols: [[ //表头
+                    {type: 'checkbox', width: 30}
+                    , {field: 'xh', width: 40, title: '序号', type: 'numbers'}
+                    , {field: 'userName', title: '用户', width: 80, align: "center"}
+                    , {
+                        field: 'logTime',
+                        title: '时间',
+                        width: 160,
+                        align: "center",
+                        templet: '<div>{{ layui.util.toDateString(d.logTime, "yyyy-MM-dd HH:mm:ss") }}</div>'
+                    }
+                    , {field: 'requestIp', title: 'IP', width: 120, sort: true, align: "center"}
+                    , {field: 'operationType', title: '操作类型', width: 100,}
+                    , {field: 'modelName', title: '模块名称', width: 120, align: "center"}
+                    , {field: 'description', title: '<div style="text-align:center">描述</div>',align: "left"}
+                    , {title: '操作', width: 80, align: "center", toolbar: "#operTpl"}
+                ]]
+            });
+        }
+
+        function showEditWin(logId) {
+
+        }
+
+        //表格初始
+        tableLoad();
+
+
+    });
+</script>

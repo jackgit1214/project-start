@@ -59,12 +59,7 @@ public class CodeController extends BaseController {
 
     @RequestMapping("/index")
     public String index(ModelMap map) {
-        log.info(this.getClass().getResource("/").getPath());
-        log.info(this.getClass().getResource("").getPath());
-        log.info(this.getClass().getResource(".").getPath());
-        System.out.println(System.getProperty("user.dir"));
-
-
+        log.info(System.getProperty("user.dir"));
         List<MysqlTables> pageData = null;
         try {
             pageData = this.mysqlTablesServiceImpl.getDatabaseTables("");

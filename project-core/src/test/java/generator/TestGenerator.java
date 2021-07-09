@@ -32,7 +32,7 @@ import org.springframework.context.annotation.ComponentScan;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-//@SpringBootTest(classes = com.project.ProjectCoreApplication.class)
+@SpringBootTest(classes = com.project.ProjectCoreApplication.class)
 public class TestGenerator {
 
     @Autowired
@@ -42,7 +42,7 @@ public class TestGenerator {
     private Generator generator;
 
 
-//    @Test
+    @Test
     public void testGeneratorUtil() {
         try {
             generator.generateCode("comm_code", "TestProject");
@@ -62,9 +62,9 @@ public class TestGenerator {
         });
     }
 
-//    @Test
+    @Test
     public void test() throws Exception {
-        log.info(projectConfig.toString());
+       // log.info(projectConfig.toString());
         List<String> warnings = new ArrayList<String>();
         Configuration config = new Configuration();
         Context context = new Context(null);
@@ -172,7 +172,7 @@ public class TestGenerator {
         try {
             MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, shellCallback, warnings);
 
-            myBatisGenerator.generate(null, null, null, true);
+            myBatisGenerator.generate(null, null, null, false);
         } catch (InvalidConfigurationException e) {
             assertEquals(2, e.getErrors().size());
             throw e;

@@ -6,6 +6,8 @@ import com.project.core.security.component.CustomSessionExpiredStrategy;
 import com.project.core.security.component.DisableUrlSessionFilter;
 import com.project.core.security.component.UnauthorizedEntryPoint;
 import com.project.core.security.component.VerifyCodeFilter;
+import com.project.core.security.handler.CustomLogoutHandler;
+import com.project.core.security.handler.CustomLogoutSuccessHandler;
 import com.project.core.security.handler.LoginFailureHandler;
 import com.project.core.security.handler.LoginSuccessHandler;
 import com.project.core.web.config.ProjectConfig;
@@ -35,7 +37,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final ProjectConfig projectConfig;
     private final DisableUrlSessionFilter disableUrlSessionFilter;
 
-
     public WebSecurityConfig(LoginSuccessHandler successHandler, LoginFailureHandler failureHandler, VerifyCodeFilter verifyCodeFilter
             , ProjectUserDetailsService userDetailsService, UnauthorizedEntryPoint unauthorizedEntryPoint
             , ProjectConfig projectConfig, DisableUrlSessionFilter disableUrlSessionFilter) {
@@ -46,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.unauthorizedEntryPoint = unauthorizedEntryPoint;
         this.projectConfig = projectConfig;
         this.disableUrlSessionFilter = disableUrlSessionFilter;
-    }
+     }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -95,6 +96,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
+                .addLogoutHandler(new CustomLogoutHandler())
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler())
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true);
 
