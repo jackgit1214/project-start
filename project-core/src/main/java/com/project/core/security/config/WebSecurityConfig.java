@@ -60,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(4);
     }
 
+
     //
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

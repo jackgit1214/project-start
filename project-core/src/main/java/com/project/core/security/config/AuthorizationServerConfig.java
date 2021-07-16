@@ -37,9 +37,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.allowFormAuthenticationForClients();
-        security.tokenKeyAccess("isAuthenticated()");
-
+        security.allowFormAuthenticationForClients(); //允许客户端访问 OAuth2 授权接口，否则请求 token 会返回 401。
+        security.tokenKeyAccess("isAuthenticated()"); //允许已授权用户访问获取 token 接口
+        security.checkTokenAccess("isAuthenticated()");//允许已授权用户访问获取 checkToken 接口
+       // security.tokenKeyAccess("permitAll()").checkTokenAccess("permitAll()");
+       // security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
     }
 
     @Override
