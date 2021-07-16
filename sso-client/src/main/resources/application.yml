@@ -28,13 +28,15 @@ security:
       client-secret: user123
       access-token-uri: http://localhost:9001/oauth/token
       user-authorization-uri: http://localhost:9001/oauth/authorize
+
     resource:
       user-info-uri: http://localhost:9001/user
       token-info-uri: http://localhost:9001/oauth/check_token
       prefer-token-info: true
       jwt:
         key-uri: http://localhost:9001/oauth/token_key
-
+#    authorization:
+#      check-token-access: http://localhost:9001/oauth/check_token
 #      user-info-uri:
 #        key-value: testA
 #    sso:
