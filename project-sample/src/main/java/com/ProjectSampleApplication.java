@@ -5,6 +5,7 @@ import com.project.core.web.config.ResourcePathConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 @SpringBootApplication(exclude = {
         FlywayAutoConfiguration.class
 })
+@ServletComponentScan
 public class ProjectSampleApplication {
     private static ProjectConfig projectConfig;
     private static ResourcePathConfig resourcePathConfig;

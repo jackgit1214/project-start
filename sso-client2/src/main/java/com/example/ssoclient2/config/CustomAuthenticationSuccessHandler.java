@@ -1,4 +1,5 @@
-package com.example.ssoclient2.config;//package com.revengemission.sso.oauth2.client.config;
+//package com.example.ssoclient2.config;
+//
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import io.micrometer.core.instrument.util.StringUtils;

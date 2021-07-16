@@ -3,7 +3,9 @@ server:
   servlet:
     context-path: /
     session:
-      timeout: 200000s
+      timeout: 100000s
+      cookie:
+        max-age: -1s
   tomcat:
     uri-encoding: UTF-8
 

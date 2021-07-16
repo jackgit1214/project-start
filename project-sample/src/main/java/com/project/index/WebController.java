@@ -46,6 +46,11 @@ public class WebController extends BaseController {
     @Autowired
     private ProjectUserDetailsService userService;
 
+    @GetMapping("/jflh/index")
+    public String jflh(){
+        return "system/jflh/index";
+    }
+
     @GetMapping("/login")
     public String login(Authentication authentication, ModelMap map, HttpServletRequest request) {
         return "login";
