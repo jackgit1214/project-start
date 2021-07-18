@@ -51,7 +51,7 @@ public class DuplicateSubmissionInterceptor implements HandlerInterceptor {
             DuplicateSubmission annotation = method
                     .getAnnotation(DuplicateSubmission.class);
             if (annotation != null) {
-                log.info(request.getRequestURI().toString());
+                log.debug(request.getRequestURI().toString());
                 boolean needSaveSession = annotation.needSaveToken();
                 if (needSaveSession) {
                     RandomGUID token = new RandomGUID();

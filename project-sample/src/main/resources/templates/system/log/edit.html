@@ -33,7 +33,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">登录时间：</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="#logTime" name="logTime" lay-verify="required" autocomplete="off"
+                            <input type="text" id="logTime" name="logTime" lay-verify="required" autocomplete="off"
                                    class="layui-input"/>
                         </div>
                     </div>
@@ -83,8 +83,9 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">请求信息：</label>
                     <div class="layui-input-inline">
-                        <textarea type="text" name="reqParam" style="width:510px;height:120px;"  autocomplete="off"
+                        <textarea type="text" id="reqParam" name="reqParam" style="width:510px;height:120px;"  autocomplete="off"
                                class="layui-input"/>
+
                     </div>
                 </div>
             </div>
@@ -99,18 +100,37 @@
 </div>
 
 <script>
+
+    loadLogData = function(data){
+        let curWin = $("#log-win");
+
+        $.each(data,function(name,value) {
+            curWin.find("input[name='"+name+"']").val(value);
+        });
+        $("textarea[name='reqParam']").val(data.reqParam);
+    }
+
     layui.use(['form', 'layer', 'laydate', 'treeTable', 'dtree', "jquery"], function () {
         let form = layui.form, layDate = layui.laydate,
             layer = layui.layer, $ = layui.$;
 
         layDate.render({
             elem: '#logTime' //指定元素
+            ,value: layui.util.toDateString($("#logTime").val(), "yyyy-MM-dd HH:mm:ss")
         });
+
+        layui.code({
+            elem: '#reqParam' //默认值为.layui-code
+        });
+        $("#log-win").find("input").attr("disabled",true);
+        $("#reqParam").attr("disabled",true);
         $("#logWinClose").click(function () {
             let winIndex = $("#log-win").data("index");
             layer.close(winIndex);//关闭当前页
             return false;
         });
     });
+
+
 
 </script>

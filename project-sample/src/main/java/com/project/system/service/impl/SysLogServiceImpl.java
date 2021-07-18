@@ -55,7 +55,7 @@ public class SysLogServiceImpl extends AbstractBusinessService<SysLog> implement
     public int saveLogInfo(SysLog record) {
         int rows= this.sysLogMapper.insert(record);
         ObjectMapper mapper = new ObjectMapper();
-        log.info(mapper.writeValueAsString(record));
+        log.debug(mapper.writeValueAsString(record));
         log.debug("rows: {}",rows);
         return rows;
     }

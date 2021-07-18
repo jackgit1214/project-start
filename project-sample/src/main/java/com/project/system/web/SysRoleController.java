@@ -7,6 +7,7 @@ import java.util.Map;
 import com.project.core.common.SysConstant;
 import com.project.core.common.anaotation.DuplicateSubmission;
 import com.project.core.common.anaotation.QueryModelParam;
+import com.project.core.common.anaotation.SystemLog;
 import com.project.core.common.response.BaseResult;
 import com.project.core.common.response.ReturnCode;
 import com.project.core.mybatis.model.QueryModel;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/role")
+@SystemLog(moduleId = "角色管理")
 public class SysRoleController extends BaseController {
     private final SysRoleService sysRoleServiceImpl;
     public static final String UUID_TOKEN = "role_token";
@@ -45,8 +47,9 @@ public class SysRoleController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping("/roles")
     @QueryModelParam
+    @RequestMapping("/roles")
+    @SystemLog(description = "查阅角色数据，显示首页",opeType= SystemLog.OpeType.DISPLAY)
     public Object getRoles(
             QueryModel queryModel, int page, int limit) {
         ModelMap map = new ModelMap();
@@ -63,6 +66,7 @@ public class SysRoleController extends BaseController {
 
 
     @RequestMapping("/edit")
+    @SystemLog(description = "查阅角色数据，打开角色编辑页面",opeType= SystemLog.OpeType.DISPLAY)
     @DuplicateSubmission(needSaveToken = true, tokenName = UUID_TOKEN)
     public String edit(String id, ModelMap map) {
         SystemRole role = sysRoleServiceImpl.getRolePlusById(id);
@@ -77,6 +81,7 @@ public class SysRoleController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/delete")
+    @SystemLog(description = "删除角色数据",opeType= SystemLog.OpeType.DEL)
     public Object deleteRole(String[] roleIds) {
         ModelMap map = new ModelMap();
         int rows = this.sysRoleServiceImpl.delete(roleIds);
@@ -87,6 +92,7 @@ public class SysRoleController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/save")
+    @SystemLog(description = "保存角色数据",opeType= SystemLog.OpeType.EDIT)
     @DuplicateSubmission(needRemoveToken = true, tokenName = UUID_TOKEN)
     public ModelMap addOrUpdate(SystemRole record, String[] rolesFun) {
         ModelMap modelMap = new ModelMap();

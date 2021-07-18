@@ -39,7 +39,12 @@
 
 <script type="text/html" id="opeTpl">
     <#--    1 修改 2 删除 3 数据展示 4 登录 5 退出 6其它-->
-    <div style="text-align:center">{{ d.opeType == 1 ? '增加' : '删除s' }}</div>
+    {{#
+        var opeType = ['','修改','删除','数据展示','登录','退出','6其它'];
+        <div style="text-align:center">
+            {{opeType[d.opeType]}}
+        </div>
+    }}
 </script>
 
 <script type="text/html" id="operTpl">
@@ -98,9 +103,7 @@
                     success: function (dom, index) {
                         let curWin = $("#log-win");
                         curWin.data("index", index);
-                        $.each(obj.data,function(name,value) {
-                            curWin.find("input[name='"+name+"']").val(value);
-                        });
+                        loadLogData(obj.data);
                     },
                     end: function () { //窗口关闭
 

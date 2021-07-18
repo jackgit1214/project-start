@@ -7,6 +7,7 @@ import java.util.Set;
 import com.project.core.common.SysConstant;
 import com.project.core.common.anaotation.DuplicateSubmission;
 import com.project.core.common.anaotation.QueryModelParam;
+import com.project.core.common.anaotation.SystemLog;
 import com.project.core.common.response.BaseResult;
 import com.project.core.common.response.ReturnCode;
 import com.project.core.mybatis.model.QueryModel;
@@ -33,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/user")
+@SystemLog(moduleId = "用户管理")
 public class SysUserController extends BaseController {
 
     private final SysUserService sysUserServiceImpl;
@@ -58,8 +60,9 @@ public class SysUserController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping("/users")
     @QueryModelParam
+    @RequestMapping("/users")
+     @SystemLog(description = "查询用户数据",opeType= SystemLog.OpeType.DISPLAY)
     public Object getUsers(
             QueryModel queryModel, int page, int limit, String depId) {
         ModelMap map = new ModelMap();
@@ -76,6 +79,7 @@ public class SysUserController extends BaseController {
 
 
     @RequestMapping("/edit")
+    @SystemLog(description = "查询用户数据,打开编辑页面",opeType= SystemLog.OpeType.DISPLAY)
     @DuplicateSubmission(needSaveToken = true, tokenName = UUID_TOKEN)
     public String edit(String id, ModelMap map) {
         SysUser sysUser = this.sysUserServiceImpl.findObjectById(id);
@@ -97,6 +101,7 @@ public class SysUserController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/delete")
+    @SystemLog(description = "删除用户数据",opeType= SystemLog.OpeType.DEL)
     public Object deleteUser(String[] userIds) {
         ModelMap map = new ModelMap();
         int rows = this.sysUserServiceImpl.delete(userIds);
@@ -107,6 +112,7 @@ public class SysUserController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/save")
+    @SystemLog(description = "修改用户数据",opeType= SystemLog.OpeType.EDIT)
     @DuplicateSubmission(needRemoveToken = true, tokenName = UUID_TOKEN)
     public ModelMap addOrUpdate(SysUser record, String[] userRoles, String[] departmentIds, @RequestParam("avatarFile") MultipartFile file) {
         ModelMap modelMap = new ModelMap();
@@ -128,6 +134,7 @@ public class SysUserController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/status")
+    @SystemLog(description = "激活或禁用用户数据，修改密码等，",opeType= SystemLog.OpeType.EDIT)
     public ModelMap handleSimpleOperation(@RequestBody UserRequestParam param) {
 
         SysUser user = param.getUser();

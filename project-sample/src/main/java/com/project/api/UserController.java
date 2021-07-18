@@ -25,4 +25,5 @@ public class UserController {
     public Principal principal1(ModelMap map, Principal principal, Authentication authentication) throws BusinessException {
         return principal;
     }
+
 }

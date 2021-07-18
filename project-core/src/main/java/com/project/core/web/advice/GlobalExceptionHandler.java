@@ -66,6 +66,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public String handlerException(BusinessException e, HttpServletRequest request) {
         BaseResult result = new BaseResult(e.getErrorCode(), e.getErrorMsg());
+        log.info(e.getMessage());
         result.setData(e.getMessage());
         request.setAttribute("javax.servlet.error.status_code", result.getCode());
         request.setAttribute("res", result);
@@ -75,6 +76,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public String defaultErrorHandler(HttpServletRequest req, Exception e, HttpServletResponse response) throws Exception {
 
+        log.info(e.getMessage());
         BaseResult result = new BaseResult(9999, e.toString());
         result.setData(objectMapper
                 .writeValueAsString(e));

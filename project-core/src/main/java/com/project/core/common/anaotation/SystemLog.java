@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.PARAMETER, ElementType.METHOD})
+@Target({ElementType.PARAMETER, ElementType.METHOD,ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface SystemLog {
@@ -16,7 +16,7 @@ public @interface SystemLog {
     OpeType opeType() default OpeType.DISPLAY;
 
     enum OpeType {
-        DEL(2), DISPLAY(3), EDIT(1), LOGIN(4), LOGOUT(5);
+        SPACE(0),EDIT(1),DEL(2), DISPLAY(3),LOGIN(4), LOGOUT(5),OTHER(6);
         OpeType(int value) {
 
         }

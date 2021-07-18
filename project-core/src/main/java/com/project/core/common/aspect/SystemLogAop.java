@@ -19,9 +19,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -93,10 +95,17 @@ public class SystemLogAop {
 
         //注解下的信息
         SystemLog annotation = methodSignature.getMethod().getAnnotation(SystemLog.class);
-        sysLog.setModelName(annotation.moduleId());
-        sysLog.setOpeType(String.valueOf(annotation.opeType().ordinal()));
+        String moduleName = annotation.moduleId();
+        if (!StringUtils.hasText(moduleName)){
+            SystemLog annClass =  joinPoint.getTarget().getClass().getAnnotation(SystemLog.class);
+            if (annClass == null)
+                moduleName = "未定义模块";
+            else
+                moduleName = annClass.moduleId();
+        }
+        sysLog.setModelName(moduleName);
         sysLog.setDescription(annotation.description());
-
+        sysLog.setOpeType(String.valueOf(annotation.opeType().ordinal()));
         Map<String, Object> paramsJson = new HashMap<>();
         try {
             String queryString = request.getQueryString();
@@ -105,14 +114,18 @@ public class SystemLogAop {
 
             for (int i = 0; i < parameterNames.length; i++) {
 
-                //request与response不处理
+                //request 、response、Authentication不处理
                 if (params[i] instanceof HttpServletRequest) continue;
                 if (params[i] instanceof HttpServletResponse) continue;
                 if (params[i] instanceof Authentication) continue;
+                if (params[i] instanceof MultipartFile){
+                    MultipartFile file = (MultipartFile)params[i];
+                    paramsJson.put(parameterNames[i], file.getOriginalFilename());
+                    continue;
+                }
                 paramsJson.put(parameterNames[i], params[i]);
             }
             sysLog.setReqParam(objectMapper.writeValueAsString(paramsJson));
-
             rs = joinPoint.proceed();
         } finally {
             long exeT = System.currentTimeMillis() - startTime;

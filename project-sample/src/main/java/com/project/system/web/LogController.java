@@ -44,7 +44,9 @@ public class LogController extends BaseController {
             QueryModel queryModel, int page, int limit) {
         ModelMap map = new ModelMap();
         PageResult pageResult = new PageResult<SysLog>(page, limit);
+
         try {
+            queryModel.setOrderByClause(" logtime desc");
             this.sysLogServiceImpl.findObjectsByPage(queryModel, pageResult);
         } catch (Exception e) {
             e.printStackTrace();

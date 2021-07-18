@@ -8,6 +8,7 @@ import com.project.core.web.controller.BaseController;
 import com.project.system.model.SysDept;
 import com.project.system.service.SysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/dept")
+@SystemLog(moduleId = "组织结构管理")
 public class SysDeptController extends BaseController {
 
     @Autowired
@@ -30,7 +32,7 @@ public class SysDeptController extends BaseController {
     }
 
     @RequestMapping("/edit")
-    @SystemLog(moduleId = "组织结构管理",description = "查阅组织结构数据，打开编辑页",opeType= SystemLog.OpeType.EDIT)
+    @SystemLog(description = "查阅组织结构数据，打开编辑页",opeType= SystemLog.OpeType.DISPLAY)
     public String edit(String deptId, String superId, ModelMap map) {
         String path = "system/dept/edit";
         SysDept department = null;
