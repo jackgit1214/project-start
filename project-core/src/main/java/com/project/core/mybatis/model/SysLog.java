@@ -23,6 +23,17 @@ public class SysLog {
     private String errorCode;
     private String errDescription;
 
+    public String getLogTypeDecode(){
+        switch (this.logType){
+            case 1:
+                return "模块操作";
+            case 2:
+                return "单点登录";
+            default:
+                return "其它";
+
+        }
+    }
 
     public String getOperationType(){
 //        1 修改 2 删除 3 数据展示 4 登录 5 退出 6其它
