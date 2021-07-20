@@ -31,12 +31,19 @@ layui.define(["jquery", "element", "theme", "menu", "menuTab"], function (export
                 ,btn: ['关闭']
                 ,btnAlign: 'c'
                 ,moveType: 1 //拖拽模式，0或者1
-                ,content: '<div style="padding: 10px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;overflow: auto">' +
+                ,content: '<div id="errContent" class="layui-code" >' +
                     '出错了，错误码为：' +errorInfo.status+"错误信息如下："+
                     '<br>时间：' +errorInfo.timestamp +'<br>状态：' +errorInfo.status+'<br>错误内容：' +errorInfo.error   +errorInfo.trace   +
                     '<br>路径：' +errorInfo.path + '<br>数据：' +errorInfo.errorData+
                 '<br></div>'
                 ,success: function(layero){
+                    //
+                    // layui.code({
+                    //     title:"",
+                    //     elem:"#errContent",
+                    //     about:false,
+                    //     height: '300px' //请注意必须加px。如果该key不设定，则会自适应高度，且不会出现滚动条。
+                    // });
                     layer.close(last_layer_index);
                 }
             });
