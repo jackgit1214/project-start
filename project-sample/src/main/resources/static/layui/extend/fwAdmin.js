@@ -31,7 +31,7 @@ layui.define(["jquery", "element", "theme", "menu", "menuTab"], function (export
                 ,btn: ['关闭']
                 ,btnAlign: 'c'
                 ,moveType: 1 //拖拽模式，0或者1
-                ,content: '<div id="errContent" class="layui-code" >' +
+                ,content: '<div id="errContent" class="layui-code"  style="overflow-y:auto">' +
                     '出错了，错误码为：' +errorInfo.status+"错误信息如下："+
                     '<br>时间：' +errorInfo.timestamp +'<br>状态：' +errorInfo.status+'<br>错误内容：' +errorInfo.error   +errorInfo.trace   +
                     '<br>路径：' +errorInfo.path + '<br>数据：' +errorInfo.errorData+
