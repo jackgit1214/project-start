@@ -495,6 +495,10 @@ public class Context extends PropertyHolder {
         return commentGenerator;
     }
 
+    public void setCommentGenerator( CommentGenerator commentGenerator) {
+        this.commentGenerator = commentGenerator;
+    }
+
     /**
      * Gets the java formatter.
      *
