@@ -1,7 +1,11 @@
 package org.mybatis.generator.myplugins;
 
+import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -9,6 +13,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.JavaVisibility;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
+import org.springframework.util.StringUtils;
 
 public class CustomSelfModelPlugin extends PluginAdapter {
 
@@ -24,12 +29,45 @@ public class CustomSelfModelPlugin extends PluginAdapter {
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass,
                                                  IntrospectedTable introspectedTable) {
 
-        // List<GeneratedJavaFile> generatedJavaFiles = introspectedTable
-        // .getGeneratedJavaFiles();
+        //添加domain的import
+        topLevelClass.addImportedType("lombok.Data");
+        topLevelClass.addImportedType("lombok.Builder");
+        topLevelClass.addImportedType("lombok.NoArgsConstructor");
+        topLevelClass.addImportedType("lombok.AllArgsConstructor");
+        topLevelClass.addImportedType("lombok.EqualsAndHashCode");
+        topLevelClass.addImportedType("lombok.ToString");
+        topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonIgnoreProperties");
+
+        //添加domain的注解
+        topLevelClass.addAnnotation("@Data");
+        topLevelClass.addAnnotation("@Builder");
+        topLevelClass.addAnnotation("@NoArgsConstructor");
+        topLevelClass.addAnnotation("@AllArgsConstructor");
+        topLevelClass.addAnnotation("@EqualsAndHashCode(callSuper = true)");
+        topLevelClass.addAnnotation("@JsonIgnoreProperties(value = {\"handler\"})");
+        topLevelClass.addAnnotation("@ToString");
+
+
+        //添加domain的注释
+//        topLevelClass.addJavaDocLine("/**");
+//        topLevelClass.addJavaDocLine("* Created by Mybatis Generator on " + date2Str(new Date()));
+//        topLevelClass.addJavaDocLine("*/");
 
         addSuperClassMethod(introspectedTable, topLevelClass);
         return true;
     }
+    @Override
+    public boolean modelSetterMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, ModelClassType modelClassType) {
+        //不生成getter
+        return false;
+    }
+
+    @Override
+    public boolean modelGetterMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, ModelClassType modelClassType) {
+        //不生成setter
+        return false;
+    }
+
 
     //
     // @Override
@@ -74,13 +112,7 @@ public class CustomSelfModelPlugin extends PluginAdapter {
             codeLine.append("return ");
             pcolumns.forEach(keyColumn -> {
                 String tmpColumn = keyColumn.getJavaProperty();
-                List<Method> methods = topLevelClass.getMethods();
-
-                for (Method method : methods) {
-                    if (method.getName().equalsIgnoreCase("get" + tmpColumn))
-                        codeLine.append(" this." + method.getName() + "() +");
-
-                }
+                codeLine.append(" this.get" + StringUtils.capitalize(tmpColumn) + "() +");
             });
             int len = codeLine.toString().length() - 1;
             methodPrimaryKey.addBodyLine(codeLine.toString().substring(0, len) + ";");

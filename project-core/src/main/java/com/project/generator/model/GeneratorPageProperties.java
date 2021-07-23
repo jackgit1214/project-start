@@ -14,8 +14,8 @@ public class GeneratorPageProperties extends GeneratorProperties {
 
     private String publicJsName;
     private String jsDirectory;
-
-    private String targetDirectory;
+    private String pageVarName;
+    private String targetDirectory="src/main/resources/templates";
     private String templatePath;
     private String templateJSFile;
 

@@ -14,7 +14,6 @@ public class GeneratorActionProperties extends GeneratorProperties {
 
     private String servicePack;
     private String isHandleDuplicateSubmission;
-
     @Override
     public void afterPropertiesSet() throws Exception {
         //super.afterPropertiesSet();

@@ -15,6 +15,7 @@ import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.internal.util.StringUtility;
+import org.springframework.util.StringUtils;
 
 public class CustomActionPlugin extends PluginAdapter {
 
@@ -40,9 +41,11 @@ public class CustomActionPlugin extends PluginAdapter {
     private FullyQualifiedJavaType modelMapType;
     private FullyQualifiedJavaType baseController;
     private FullyQualifiedJavaType DuplicateSubmission;
+    private FullyQualifiedJavaType stringType = new FullyQualifiedJavaType("java.lang.String");
     private String servicePack;
     private String controllerPack;
     private String project;
+    private String actionName;
     private String pojoUrl;
     private boolean enableUpdate = true;
     private boolean enableDelete = true;
@@ -61,7 +64,7 @@ public class CustomActionPlugin extends PluginAdapter {
         servicePack = properties.getProperty("servicePack");
         controllerPack = properties.getProperty("targetPackage");
         project = properties.getProperty("targetProject");
-
+        actionName = properties.getProperty("actionName");
         String isHandleDS = properties.getProperty("isHandleDuplicateSubmission");
 
         if ("true".equals(isHandleDS))
@@ -157,39 +160,31 @@ public class CustomActionPlugin extends PluginAdapter {
 
     private Method generateDataListMethod(IntrospectedTable introspectedTable, String tableName) {
         Method method = new Method();
-        method.setName("dataList");
+        method.setName("data");
         method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(this.modelAndViewType);
-        method.addAnnotation("@RequestMapping(\"/list\")");
-
+        method.setReturnType(this.modelMapType);
+        method.addAnnotation("@RequestMapping(\"data\")");
+        method.addAnnotation("@ResponseBody");
+        method.addAnnotation("@QueryModelParam");
         method.addParameter(new Parameter(this.queryModelType, "queryModel"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("java.lang.Integer"), "pageNo"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("java.lang.Integer"), "pageNum"));
-        method.addBodyLine("if (pageNum == null || pageNum == 0) {");
-        method.addBodyLine("pageNum = SysConstant.SYSDEFAULTROWNUM;");
-        method.addBodyLine("}");
-        method.addBodyLine("if (pageNo == null || pageNo == 1) {");
-        method.addBodyLine("	pageNo = 1;");
-        method.addBodyLine("}");
-        method.addBodyLine("queryModel.reInitCriteria();");
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("java.lang.Integer"), "page"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("java.lang.Integer"), "limit"));
+
+        method.addBodyLine("ModelMap modelMap = new ModelMap();");
+
         StringBuffer sb = new StringBuffer();
-        sb.append("PageResult<").append(tableName).append("> page = new PageResult<").append(tableName)
-                .append(">(pageNo,pageNum);");
+        sb.append("PageResult<").append(tableName).append("> pageResult = new PageResult<").append(tableName)
+                .append(">(page,limit);");
         method.addBodyLine(sb.toString());
         sb.setLength(0);
-        sb.append("try {").append("this.").append(this.getServiceShort()).append("findObjectsByPage(queryModel,page);")
+        sb.append("try {").append("this.").append(this.getServiceShort()).append("findObjectsByPage(queryModel,pageResult);")
                 .append("} catch(Exception e) {").append("e.printStackTrace();").append("}");
         method.addBodyLine(sb.toString());
-        sb.setLength(0);
-        sb.append("ModelAndView mav = new ModelAndView(\"");
-        sb.append(tableName.toLowerCase());
-        sb.append("/listdata\"");
-        sb.append(");");
-        method.addBodyLine(sb.toString());
-        method.addBodyLine("mav.addObject(\"param\", queryModel);");
-        method.addBodyLine("mav.addObject(\"page\", page);");
 
-        method.addBodyLine("return mav;");
+        method.addBodyLine("BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), pageResult);");
+        method.addBodyLine("modelMap.addAttribute(\"status\", rtnMsg);");
+
+        method.addBodyLine("return modelMap;");
         return method;
     }
 
@@ -197,25 +192,18 @@ public class CustomActionPlugin extends PluginAdapter {
         Method method = new Method();
         method.setName("index");
         method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(this.modelAndViewType);
+        method.setReturnType(this.stringType);
         method.addAnnotation("@RequestMapping(\"/index\")");
-
-        StringBuffer sb = new StringBuffer();
-        sb.append("ModelAndView mav = new ModelAndView(\"");
-        sb.append(tableName.toLowerCase());
-        sb.append("/listindex\"");
-        sb.append(");");
-        method.addBodyLine(sb.toString());
-        method.addBodyLine("return mav;");
+        method.addBodyLine("return \""+tableName.toLowerCase()+"/index\";");
         return method;
     }
 
     private Method generateShowEditMethod(IntrospectedTable introspectedTable, String tableName) {
         Method method = new Method();
-        method.setName("showEdit");
+        method.setName("edit");
         method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(this.modelAndViewType);
-        method.addAnnotation("@RequestMapping(\"/showEdit\")");
+        method.setReturnType(this.stringType);
+        method.addAnnotation("@RequestMapping(\"/edit\")");
 
         if (this.isHandleDuplicateSubmission) {
             method.addAnnotation("@DuplicateSubmission(needSaveToken=true)");
@@ -236,9 +224,7 @@ public class CustomActionPlugin extends PluginAdapter {
             }
         }
         method.addParameter(parameter);
-
-        // method.addParameter(new Parameter(new FullyQualifiedJavaType(
-        // "java.lang.String"), "id"));
+        method.addParameter(new Parameter(modelMapType,"map"));
 
         StringBuffer sb = new StringBuffer();
         sb.append(tableName).append(" ").append(lowerTableName).append(" = this.").append(this.getServiceShort())
@@ -250,27 +236,22 @@ public class CustomActionPlugin extends PluginAdapter {
         sb.setLength(0);
         sb.append("  ").append(lowerTableName).append(" = ").append("new ").append(tableName).append("();");
         method.addBodyLine(sb.toString());
+//
         sb.setLength(0);
-        sb.append("ModelAndView mav = new ModelAndView(\"");
-        sb.append(tableName.toLowerCase());
-        sb.append("/edit\"");
-        sb.append(");");
-        method.addBodyLine(sb.toString());
-        sb.setLength(0);
-        sb.append("mav.addObject(\"").append(lowerTableName).append("\",").append(lowerTableName).append(");");
+        sb.append("map.put(\"data").append("\",").append(lowerTableName).append(");");
         method.addBodyLine(sb.toString());
 
-        method.addBodyLine("return mav;");
+        method.addBodyLine("return \""+lowerTableName+"/edit\";");
         return method;
     }
 
     private Method generateAddOrUpdateMethod(IntrospectedTable introspectedTable, String tableName) {
         Method method = new Method();
-        method.setName("addOrUpdate");
+        method.setName("save"+ StringUtils.capitalize(tableName));
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(this.modelMapType);
         method.addAnnotation("@ResponseBody");
-        method.addAnnotation("@RequestMapping(\"/update\")");
+        method.addAnnotation("@RequestMapping(\"/save\")");
         if (this.isHandleDuplicateSubmission) {
             method.addAnnotation("@DuplicateSubmission(needRemoveToken=true)");
         }
@@ -282,8 +263,8 @@ public class CustomActionPlugin extends PluginAdapter {
 
         sb.append("int rows = this.").append(this.getServiceShort()).append("save(record);");
         method.addBodyLine(sb.toString());
-        method.addBodyLine("modelMap.addAttribute(\"successRows\",rows);");
-        method.addBodyLine("modelMap.addAttribute(\"data\",record);");
+        method.addBodyLine("BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);");
+        method.addBodyLine("modelMap.addAttribute(\"status\", rtnMsg);");
 
         method.addBodyLine("return modelMap;");
 
@@ -305,11 +286,9 @@ public class CustomActionPlugin extends PluginAdapter {
             IntrospectedColumn column = pcolumns.get(0);
             String columnType = column.getJdbcTypeName();
             if ("varchar".equals(columnType.toLowerCase())) {
-                parameter = new Parameter(new FullyQualifiedJavaType("java.lang.String[]"), "ids",
-                        "@RequestParam(value = \"ids[]\", required = false)");
+                parameter = new Parameter(new FullyQualifiedJavaType("java.lang.String[]"), "ids");
             } else {
-                parameter = new Parameter(new FullyQualifiedJavaType("java.lang.Integer[]"), "ids",
-                        "@RequestParam(value = \"ids[]\", required = false)");
+                parameter = new Parameter(new FullyQualifiedJavaType("java.lang.Integer[]"), "ids");
             }
             method.addParameter(parameter);
         }
@@ -319,8 +298,8 @@ public class CustomActionPlugin extends PluginAdapter {
 
         sb.append("int rows = this.").append(this.getServiceShort()).append("delete(ids);");
         method.addBodyLine(sb.toString());
-        method.addBodyLine("modelMap.addAttribute(\"successRows\",rows);");
-
+        method.addBodyLine("BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);");
+        method.addBodyLine("modelMap.addAttribute(\"status\", rtnMsg);");
         method.addBodyLine("return modelMap;");
         return method;
     }
@@ -377,10 +356,12 @@ public class CustomActionPlugin extends PluginAdapter {
         topLevelClass.addImportedType(new FullyQualifiedJavaType(this.REQUESTMETHOD));
         topLevelClass.addImportedType(new FullyQualifiedJavaType(this.REQUESTPARAM));
         topLevelClass.addImportedType(new FullyQualifiedJavaType(this.RESPONSEBODY));
-
+        topLevelClass.addImportedType(new FullyQualifiedJavaType("com.project.core.common.response.BaseResult"));
         topLevelClass.addImportedType(new FullyQualifiedJavaType("com.project.core.common.SysConstant"));
         topLevelClass.addImportedType(new FullyQualifiedJavaType("com.project.core.mybatis.util.PageResult"));
-        //topLevelClass.addImportedType(new FullyQualifiedJavaType("com.alibaba.fastjson.JSON"));
+        topLevelClass.addImportedType(new FullyQualifiedJavaType("com.project.core.common.anaotation.QueryModelParam"));
+        topLevelClass.addImportedType(new FullyQualifiedJavaType("com.project.core.common.response.BaseResult"));
+        topLevelClass.addImportedType(new FullyQualifiedJavaType("com.project.core.common.response.ReturnCode"));
 
         topLevelClass.addImportedType(this.baseController);
         topLevelClass.addImportedType(pojoType);

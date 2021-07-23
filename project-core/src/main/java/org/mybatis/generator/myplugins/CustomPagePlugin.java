@@ -1,17 +1,9 @@
 package org.mybatis.generator.myplugins;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
+import freemarker.cache.ClassTemplateLoader;
+import freemarker.cache.URLTemplateLoader;
+import freemarker.template.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tools.ant.util.FileUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -19,29 +11,29 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.config.TableConfiguration;
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
+@Slf4j
 public class CustomPagePlugin extends PluginAdapter {
 
     private String targetDirectory;
     private String jsDirectory;
     private String publicJsName;
-    private String templatePath = "";
+    private String templatePath = "/bin";
     private String jsPackage = "$.SystemApp";
     private TableConfiguration tableConfiguration;
     private boolean isHandleDuplicateSubmission = false;
     // private String project;
     private String pojoUrl;
-    private String jsfileTemplate = "modulejs_simple.ftl";
-    private String listindexfileTemplate = "listindex.ftl";
-    private String listdatafileTemplate = "listdata.ftl";
-    private String editfileTemplate = "edit.ftl";
+    private String indexFileTemplate = "index.ftl";
+    private String editFileTemplate = "edit.ftl";
     private String tableName;
-
+    private String pageVarName;
+    private String actionName;
     public CustomPagePlugin() {
         super();
 
@@ -53,10 +45,11 @@ public class CustomPagePlugin extends PluginAdapter {
         targetDirectory = properties.getProperty("targetDirectory");
         // project = properties.getProperty("targetProject");
         templatePath = properties.getProperty("templatePath");
-        jsPackage = properties.getProperty("jsPackage");
+        //jsPackage = properties.getProperty("jsPackage");
         jsDirectory = properties.getProperty("jsDirectory");
-        publicJsName = properties.getProperty("publicJsName");
-        jsfileTemplate = properties.getProperty("templateJSFile");
+        pageVarName = properties.getProperty("pageVarName");
+        actionName = properties.getProperty("actionName");
+        //publicJsName = properties.getProperty("publicJsName");
         String isHandleDS = properties.getProperty("isHandleDuplicateSubmission");
         if ("true".equals(isHandleDS))
             this.isHandleDuplicateSubmission = true;
@@ -64,6 +57,7 @@ public class CustomPagePlugin extends PluginAdapter {
             this.isHandleDuplicateSubmission = false;
 
         pojoUrl = context.getJavaModelGeneratorConfiguration().getTargetPackage();
+
         FreemarkerUtils.setConfigurationTemplatePath(templatePath);
         return true;
     }
@@ -72,7 +66,6 @@ public class CustomPagePlugin extends PluginAdapter {
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
 
         tableConfiguration = introspectedTable.getTableConfiguration();
-
         boolean isCreateAction = tableConfiguration.isCreateActionEnabled();
         // 不创建action，即不创建页面
         if (!isCreateAction)
@@ -82,65 +75,52 @@ public class CustomPagePlugin extends PluginAdapter {
         introspectedTable.getRemarks();
         tableName = table.replaceAll(this.pojoUrl + ".", "");
 
-        this.generateJsFile();
-        this.generateListIndexFile(introspectedTable);
+        //this.generateJsFile();
+        this.generateIndexFile(introspectedTable);
         this.generateEditFile(introspectedTable);
         return introspectedTable.getGeneratedJavaFiles();
 
     }
 
-    private void generateJsFile() {
-
-        String targetFile = this.jsDirectory + "/" + this.publicJsName + ".js";
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("jsPackageName", this.jsPackage);
-        map.put("modelName", this.toLowerCase(this.tableName));
-        map.put("moduleName", this.tableName.toLowerCase()); // 子项目list
-        map.put("module_chinaese", "中文标题"); // 子项目size
-        FreemarkerUtils.createFile(this.jsfileTemplate, map, targetFile, true);
-    }
-
-    private void generateListIndexFile(IntrospectedTable introspectedTable) {
-
-        String pageListIndex = this.targetDirectory + "/" + tableName.toLowerCase() + "/" + "listindex.html";
-        String pageListData = this.targetDirectory + "/" + tableName.toLowerCase() + "/" + "listdata.html";
+    private void generateIndexFile(IntrospectedTable introspectedTable) {
+        tableConfiguration = introspectedTable.getTableConfiguration();
+        String pageIndex = this.targetDirectory + "/" + tableName.toLowerCase() + "/" + "index.html";
         List<IntrospectedColumn> columns = introspectedTable.getAllColumns();
-
         List<IntrospectedColumn> pkcolumns = introspectedTable.getPrimaryKeyColumns();
-
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("jsPackageName", this.jsPackage);
         if (pkcolumns.size() > 0) {
             IntrospectedColumn pkcolumn = pkcolumns.get(0);
             map.put("pkcolumn", pkcolumn.getJavaProperty());
         }
-        map.put("moduleName", this.tableName.toLowerCase());
-        map.put("modelName", this.toLowerCase(this.tableName));
-        map.put("module_chinaese", "中文标题");
-        map.put("publicJsName", this.publicJsName);
-        map.put("columns", columns);
 
-        FreemarkerUtils.createFile(this.listindexfileTemplate, map, pageListIndex);
-        FreemarkerUtils.createFile(this.listdatafileTemplate, map, pageListData);
+        map.put("moduleName", this.tableName.toLowerCase());
+        map.put("pageVar", tableConfiguration.getProperty("alias"));
+        map.put("actionName", tableConfiguration.getProperty("actionName"));
+        map.put("modelName", this.toLowerCase(this.tableName));
+        map.put("module_chinaese", introspectedTable.getRemarks());
+        map.put("columns", introspectedTable.getNonPrimaryKeyColumns());
+        map.put("keyColumns",introspectedTable.getPrimaryKeyColumns());
+        FreemarkerUtils.createFile(this.indexFileTemplate, map, pageIndex);
+
     }
 
     private void generateEditFile(IntrospectedTable introspectedTable) {
 
         String pageedit = this.targetDirectory + "/" + tableName.toLowerCase() + "/" + "edit.html";
-
         List<IntrospectedColumn> columns = introspectedTable.getAllColumns();
-
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put("jsPackageName", this.jsPackage);
-
+        map.put("pageVar", tableConfiguration.getProperty("alias"));
+        map.put("actionName", tableConfiguration.getProperty("actionName"));
         map.put("moduleName", this.tableName.toLowerCase());
         map.put("modelName", this.toLowerCase(this.tableName));
-        map.put("module_chinaese", "中文标题");
+        map.put("module_chinaese", introspectedTable.getRemarks());
         if (this.isHandleDuplicateSubmission)
             map.put("isHandleDS", true);
-        map.put("columns", columns);
+        map.put("columns", introspectedTable.getNonPrimaryKeyColumns());
+        map.put("keyColumns",introspectedTable.getPrimaryKeyColumns());
 
-        FreemarkerUtils.createFile(this.editfileTemplate, map, pageedit);
+        FreemarkerUtils.createFile(this.editFileTemplate, map, pageedit);
     }
 
     /**
@@ -189,13 +169,20 @@ public class CustomPagePlugin extends PluginAdapter {
         }
 
         public static void setConfigurationTemplatePath(String file) {
-            // cfg.setClassForTemplateLoading(this.getClass(), "/templates");
-            try {
-                cfg.setDirectoryForTemplateLoading(new File(file));
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+//             cfg.setClassForTemplateLoading(this.getClass(), "/templates");
+            String path = FreemarkerUtils.class.getClassLoader().getResource("bin").toString();
+            log.info(path);
+            cfg.setClassForTemplateLoading(FreemarkerUtils.class,file);
+            URLTemplateLoader classTemplateLoader = (ClassTemplateLoader)cfg.getTemplateLoader();
+
+//            try {
+//                Object obj = classTemplateLoader.findTemplateSource("bin/index.ftl");
+//
+//                log.info("======================================");
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
         }
 
         /**
@@ -205,21 +192,20 @@ public class CustomPagePlugin extends PluginAdapter {
          * @param targetFile 要生成的静态文件的路径,相对设置中的根路径,例如 "jsp/user/1.html"
          * @return
          */
-
         public static boolean createFile(String ftl, Map<String, Object> data, String targetFile) {
 
             try {
                 // 创建Template对象
                 Configuration cfg = FreemarkerUtils.getConfiguration();
-                Template template = cfg.getTemplate(ftl);
+                Template template = cfg.getTemplate("bin/"+ftl);
 
                 template.setEncoding("UTF-8");
-
-                FileUtils file1 = FileUtils.getFileUtils();
-
+                FileUtils fileUtils = FileUtils.getFileUtils();
                 File file = new File(targetFile);
+                String filePath = file.getAbsolutePath();
+                log.info(filePath);
                 if (!file.exists())
-                    file1.createNewFile(file, true);
+                    fileUtils.createNewFile(file, true);
                 // 生成静态页面
 
                 Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
@@ -243,7 +229,7 @@ public class CustomPagePlugin extends PluginAdapter {
             try {
                 // 创建Template对象
                 Configuration cfg = FreemarkerUtils.getConfiguration();
-                Template template = cfg.getTemplate(ftl);
+                Template template = cfg.getTemplate("bin/"+ftl);
 
                 template.setEncoding("UTF-8");
 

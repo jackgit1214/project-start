@@ -35,7 +35,7 @@ public class ConcreteGeneratorImpl extends Generator {
         Configuration config = new Configuration();
         Context context = this.createContext();
 
-        context.addTableConfiguration(this.getTableConfiguration(context, tableName, ""));
+        context.addTableConfiguration(this.getTableConfiguration(context, tableName, "",""));
         context.setJavaModelGeneratorConfiguration(this.getModelConfigure("", projectName, ""));
         if (projectConfig.getCode().isGenerateDao()) {
             context.setJavaClientGeneratorConfiguration(this.getDaoConfiguration("", projectName, ""));
@@ -62,7 +62,7 @@ public class ConcreteGeneratorImpl extends Generator {
         List<String> warnings = new ArrayList<String>();
         Configuration config = new Configuration();
 
-//        String classPath = (this.getClass()).getProtectionDomain().getCodeSource().getLocation().getFile();
+//      String classPath = (this.getClass()).getProtectionDomain().getCodeSource().getLocation().getFile();
 //		String classEntry = classPath+"bin/mysql-connector-java-5.1.30.jar";
 //		config.addClasspathEntry(classEntry);
 

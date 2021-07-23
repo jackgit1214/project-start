@@ -1,6 +1,7 @@
 package com.project.generator.model;
 
 import java.util.List;
+import java.util.Map;
 
 import com.project.core.web.config.ProjectConfig;
 import lombok.Data;
@@ -19,11 +20,10 @@ public class GeneratorProperties implements InitializingBean {
     private String projectName = "demo";
     private String targetPackage = "com." + projectName + ".model";
     private String targetProject = "src/main/java";
-
     private String enableSubPackages = "true";
     private String trimStrings = "true";
     private String rootClass = "com.project.core.mybatis.model.BaseModel";
-    private List<String> tableNames;
+    private List<Map<String,String>> tableNames;
     private boolean generating;
 
     @Autowired

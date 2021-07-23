@@ -80,7 +80,6 @@ public class CodeController extends BaseController {
     @RequestMapping("/generating")
     @ResponseBody
     public Object CodeGenerating(@RequestBody GenParam genParam) throws Exception {
-
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), "");
         try {
             concreteGenerator.generateCode(genParam.getModelP(), genParam.getDaoP(), genParam.getServiceP(),

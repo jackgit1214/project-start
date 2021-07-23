@@ -1,6 +1,9 @@
 package com.project.generator.service;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import com.project.core.web.config.ProjectConfig;
 import com.project.generator.model.GeneratorActionProperties;
@@ -20,7 +23,10 @@ import org.mybatis.generator.config.SqlMapGeneratorConfiguration;
 import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.exception.InvalidConfigurationException;
 
+import org.mybatis.generator.myplugins.CustomCommentGenerator;
+import org.mybatis.generator.myplugins.RemarksCommentGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 /**
  * 代码生成工具
@@ -44,6 +50,10 @@ public abstract class Generator {
 
         Context context = new Context(null);
         context.setId("CustomContext");
+
+        CustomCommentGenerator customCommentGenerator = new CustomCommentGenerator();
+        context.setCommentGenerator(customCommentGenerator);
+
         //加载缺省组件
         List<String> defaultPlugins = projectConfig.getCode().getDefaultPlugins();
         defaultPlugins.forEach(s -> {
@@ -65,21 +75,30 @@ public abstract class Generator {
 
     protected void addTableAndModelConfigurations(Context context, GeneratorProperties generatorProperties) {
         context.setJavaModelGeneratorConfiguration(this.getModelConfigure(generatorProperties));
-        List<String> tableNames = generatorProperties.getTableNames();
-        tableNames.forEach(table -> {
-            TableConfiguration tc = this.getTableConfiguration(context, table, "");
-
+        List<Map<String,String>> tableNames = generatorProperties.getTableNames();
+        tableNames.forEach((table) -> {
+            String tableName = table.get("tableName");
+            String domainName = table.get("domain");
+            String alias = table.get("alias");
+            String actionName = table.get("actionName");
+            TableConfiguration tc = this.getTableConfiguration(context, tableName, domainName,alias);
+            tc.addProperty("actionName",actionName);
+            if (StringUtils.hasLength(alias))
+                tc.addProperty("alias",StringUtils.capitalize(alias));
+            else
+                tc.addProperty("alias",tableName);
             context.addTableConfiguration(tc);
         });
 
     }
 
-    protected TableConfiguration getTableConfiguration(Context context, String tableName, String domainName) {
+    protected TableConfiguration getTableConfiguration(Context context, String tableName, String domainName,String alias) {
         //添加表配置
         TableConfiguration tc = new TableConfiguration(context);
         tc.setTableName(tableName);
-        if (domainName != null && !"".equals(domainName))
-            tc.setDomainObjectName(domainName);
+        if (StringUtils.hasLength(domainName))
+            tc.setDomainObjectName(StringUtils.capitalize(domainName));
+
         tc.setCountByExampleStatementEnabled(false);
         tc.setUpdateByExampleStatementEnabled(false);
         tc.setDeleteByExampleStatementEnabled(false);
@@ -185,12 +204,10 @@ public abstract class Generator {
         //pagePlugin.addProperty("publicJsName","system");
         //pagePlugin.addProperty("jsDirectory","src/main/webapp/resources/js");
         if (targetDirectory == null || "".equals(targetDirectory))
-            targetDirectory = "src/main/webapp/WEB-INF";
+            targetDirectory = "src/main/resources/templates";
 
         pagePlugin.addProperty("targetDirectory", targetDirectory); //"src/main/webapp/WEB-INF"
-        //pagePlugin.addProperty("templatePath","src/test/resources/template");
-        //pagePlugin.addProperty("templateJSFile","modulejs_simple.ftl");
-        //pagePlugin.addProperty("jsPackage","$.SystemApp");
+        pagePlugin.addProperty("templatePath","/");
         pagePlugin.addProperty("isHandleDuplicateSubmission", "true");
         return pagePlugin;
     }
