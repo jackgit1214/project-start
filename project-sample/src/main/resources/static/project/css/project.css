@@ -339,18 +339,17 @@
 }
 
 .layui-card-body {
-    height: 45px;
+    font-size: 12px
 }
 
 .layui-card-footer {
     position: relative;
-    height: 34px;
-    line-height: 34px;
+    line-height: 18px;
     padding: 0 15px;
     border-top: 1px solid #f6d57f;
     color: #333;
     border-radius: 2px 2px 0 0;
-    font-size: 14px
+    font-size: 10px
 }
 
 .layui-tree-box {
