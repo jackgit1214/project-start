@@ -58,7 +58,7 @@ public class LogController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/delete")
-    public Object deleteUser(String[] logs) {
+    public Object deleteLogs(String[] logs) {
         ModelMap map = new ModelMap();
         int rows = this.sysLogServiceImpl.delete(logs);
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);
