@@ -56,7 +56,8 @@ public class JavaDomUtils {
             sb.append(calculateTypeName(compilationUnit, ft));
         }
         sb.append('>');
-
+        if (fqjt.isArray())
+            sb.append("[]");
         return sb.toString();
 
     }

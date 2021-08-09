@@ -181,6 +181,8 @@ public class FullyQualifiedJavaType implements
 
             }
             sb.append('>');
+            if (isArray)
+                sb.append("[]");
         }
 
         return sb.toString();
@@ -264,7 +266,10 @@ public class FullyQualifiedJavaType implements
 
             }
             sb.append('>');
+            if (isArray)
+                sb.append("[]");
         }
+
 
         return sb.toString();
     }

@@ -284,26 +284,29 @@ public class CustomActionPlugin extends PluginAdapter {
         List<IntrospectedColumn> pcolumns = introspectedTable.getPrimaryKeyColumns();
         //String paramType = "String";
         Parameter parameter = null;
+        FullyQualifiedJavaType paramType = null;
         if (pcolumns !=null && pcolumns.size() ==1) {
             IntrospectedColumn column = pcolumns.get(0);
             String columnType = column.getJdbcTypeName();
             if ("varchar".equals(columnType.toLowerCase())) {
-                parameter = new Parameter(new FullyQualifiedJavaType("java.lang.String[]"), "ids");
+                paramType =new FullyQualifiedJavaType("java.lang.String[]");
             } else {
-                parameter = new Parameter(new FullyQualifiedJavaType("java.lang.Integer[]"), "ids");
+                paramType =new FullyQualifiedJavaType("java.lang.Integer[]");
             }
-            method.addParameter(parameter);
         }else if(pcolumns!=null && pcolumns.size()>1) {
-            parameter = new Parameter(new FullyQualifiedJavaType("Map<String,String>[]"), "ids");
-            parameter.addAnnotation("@RequestBody");
-            method.addParameter(parameter);
+            paramType =new FullyQualifiedJavaType("Map<String,String>[]");
+
         }
+        parameter = new Parameter(paramType, "ids");
+        parameter.addAnnotation("@RequestBody");
+        method.addParameter(parameter);
         StringBuffer sb = new StringBuffer();
         sb.append("int rows = this.").append(this.getServiceShort()).append("delete(ids);");
         method.addBodyLine(sb.toString());
         method.addBodyLine("BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);");
         method.addBodyLine("modelMap.addAttribute(\"status\", rtnMsg);");
         method.addBodyLine("return modelMap;");
+
         return method;
     }
 
