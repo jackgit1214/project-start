@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
+@Deprecated
 public class SessionManager implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -104,12 +104,10 @@
             let load = layer.load(0, {shade: false});
             $.ajax({
                 type: 'POST',
-                contentType: 'application/x-www-form-urlencoded',
+                contentType: 'application/json',
                 url: "/${actionName}/delete",
                 traditional: true, //指定序列化
-                data: {
-                    ids: ids, //后台数组接收
-                },
+                data: JSON.stringify(ids),
                 success: function (result) {
                     layer.close(load);
                     if (result.status.code === 1) {

@@ -25,6 +25,7 @@ public class CustomActionPlugin extends PluginAdapter {
     private final String REQUESTMETHOD = "org.springframework.web.bind.annotation.RequestMethod";
     private final String REQUESTPARAM = "org.springframework.web.bind.annotation.RequestParam";
     private final String RESPONSEBODY = "org.springframework.web.bind.annotation.ResponseBody";
+    private final String REQUESTBODY = "org.springframework.web.bind.annotation.RequestBody";
     private final String MODELANDVIEW = "org.springframework.web.servlet.ModelAndView";
     private final String BASECONTROLLER = "com.project.core.web.controller.BaseController";
     private final String DS = "com.project.core.common.anaotation.DuplicateSubmission";
@@ -278,11 +279,12 @@ public class CustomActionPlugin extends PluginAdapter {
         method.setReturnType(this.modelMapType);
         method.addAnnotation("@ResponseBody");
         method.addAnnotation("@RequestMapping(\"/delete\")");
+        method.addBodyLine("ModelMap modelMap = new ModelMap();");
 
         List<IntrospectedColumn> pcolumns = introspectedTable.getPrimaryKeyColumns();
-        String paramType = "String";
+        //String paramType = "String";
         Parameter parameter = null;
-        if (pcolumns.size() > 0) {
+        if (pcolumns !=null && pcolumns.size() ==1) {
             IntrospectedColumn column = pcolumns.get(0);
             String columnType = column.getJdbcTypeName();
             if ("varchar".equals(columnType.toLowerCase())) {
@@ -291,11 +293,12 @@ public class CustomActionPlugin extends PluginAdapter {
                 parameter = new Parameter(new FullyQualifiedJavaType("java.lang.Integer[]"), "ids");
             }
             method.addParameter(parameter);
+        }else if(pcolumns!=null && pcolumns.size()>1) {
+            parameter = new Parameter(new FullyQualifiedJavaType("Map<String,String>[]"), "ids");
+            parameter.addAnnotation("@RequestBody");
+            method.addParameter(parameter);
         }
-
-        method.addBodyLine("ModelMap modelMap = new ModelMap();");
         StringBuffer sb = new StringBuffer();
-
         sb.append("int rows = this.").append(this.getServiceShort()).append("delete(ids);");
         method.addBodyLine(sb.toString());
         method.addBodyLine("BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);");
@@ -356,6 +359,7 @@ public class CustomActionPlugin extends PluginAdapter {
         topLevelClass.addImportedType(new FullyQualifiedJavaType(this.REQUESTMETHOD));
         topLevelClass.addImportedType(new FullyQualifiedJavaType(this.REQUESTPARAM));
         topLevelClass.addImportedType(new FullyQualifiedJavaType(this.RESPONSEBODY));
+        topLevelClass.addImportedType(new FullyQualifiedJavaType(this.REQUESTBODY));
         topLevelClass.addImportedType(new FullyQualifiedJavaType("com.project.core.common.response.BaseResult"));
         topLevelClass.addImportedType(new FullyQualifiedJavaType("com.project.core.common.SysConstant"));
         topLevelClass.addImportedType(new FullyQualifiedJavaType("com.project.core.mybatis.util.PageResult"));
@@ -368,6 +372,8 @@ public class CustomActionPlugin extends PluginAdapter {
         topLevelClass.addImportedType(listType);
         topLevelClass.addImportedType(this.controller);
         topLevelClass.addImportedType(autowired);
+        topLevelClass.addImportedType("java.util.HashMap");
+        topLevelClass.addImportedType("java.util.Map");
 
     }
 

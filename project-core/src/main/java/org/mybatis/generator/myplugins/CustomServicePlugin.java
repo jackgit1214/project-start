@@ -2,6 +2,7 @@ package org.mybatis.generator.myplugins;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -16,6 +17,7 @@ import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.Parameter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.internal.util.StringUtility;
+import org.springframework.util.StringUtils;
 
 public class CustomServicePlugin extends PluginAdapter {
 
@@ -174,7 +176,6 @@ public class CustomServicePlugin extends PluginAdapter {
     protected void addServiceImpl(TopLevelClass topLevelClass,
                                   IntrospectedTable introspectedTable, String tableName,
                                   List<GeneratedJavaFile> files) {
-
         StringBuffer sb = new StringBuffer();
         sb.append(this.ABSTRACTBUSINESSSERVICE);
         sb.append("<");
@@ -198,9 +199,7 @@ public class CustomServicePlugin extends PluginAdapter {
         this.addSuperMethod(topLevelClass);
         if (enableDelete) {
             Method method = this.deleteMethod(introspectedTable, tableName);
-
             topLevelClass.addMethod(method);
-
             method = this.deletesMethod(introspectedTable, tableName);
             topLevelClass.addMethod(method);
         }
@@ -208,10 +207,8 @@ public class CustomServicePlugin extends PluginAdapter {
         if (enableUpdate) {
             Method method = this.generateSaveMethod(introspectedTable,
                     tableName);
-
             topLevelClass.addMethod(method);
         }
-
         // 生成文件
         GeneratedJavaFile file = new GeneratedJavaFile(topLevelClass, project,
                 context.getJavaFormatter());
@@ -253,8 +250,8 @@ public class CustomServicePlugin extends PluginAdapter {
         List<IntrospectedColumn> pcolumns = introspectedTable
                 .getPrimaryKeyColumns();
 
-        // 仅支持单主键
-        if (pcolumns.size() > 0) {
+        // 单主键
+        if (pcolumns.size() == 1) {
             IntrospectedColumn column = pcolumns.get(0);
             String columnType = column.getJdbcTypeName();
             if ("varchar".equals(columnType.toLowerCase())) {
@@ -264,6 +261,8 @@ public class CustomServicePlugin extends PluginAdapter {
                 method.addParameter(new Parameter(new FullyQualifiedJavaType(
                         "java.lang.Integer"), "recordId"));
             }
+        }else if (pcolumns.size() >1){
+            method.addParameter(new Parameter(new FullyQualifiedJavaType("Map<String,String>"), "recordId"));
         }
 
         method.setVisibility(JavaVisibility.PUBLIC);
@@ -281,7 +280,7 @@ public class CustomServicePlugin extends PluginAdapter {
     }
 
     /**
-     * 根据 参数条件删除记录的方法 删除仅支持针对ID,删除，复合主键删除不支持
+     * 根据 参数条件删除记录的方法 删除仅支持针对ID
      *
      * @param introspectedTable
      * @param tableName
@@ -293,42 +292,30 @@ public class CustomServicePlugin extends PluginAdapter {
         method.setName("delete");
 
         method.setReturnType(FullyQualifiedJavaType.getIntInstance());
-        // 仅支持单主键
+        // 单主键
         List<IntrospectedColumn> pcolumns = introspectedTable
                 .getPrimaryKeyColumns();
         String paramType = "String";
-        if (pcolumns.size() > 0) {
+        FullyQualifiedJavaType tmpType=null;
+        if (pcolumns.size() ==1) {
             IntrospectedColumn column = pcolumns.get(0);
             String columnType = column.getJdbcTypeName();
             if ("varchar".equals(columnType.toLowerCase())) {
-                method.addParameter(new Parameter(new FullyQualifiedJavaType(
-                        "java.lang.String[]"), "recordIds"));
+                tmpType = new FullyQualifiedJavaType("java.lang.String[]");
             } else {
-                method.addParameter(new Parameter(new FullyQualifiedJavaType(
-                        "java.lang.Integer[]"), "recordIds"));
+                tmpType =new FullyQualifiedJavaType("java.lang.Integer[]");
                 paramType = "Integer";
             }
-        }
+        }else if (pcolumns.size() >1){
+            tmpType =new FullyQualifiedJavaType("Map<String,String>[]");
 
+            paramType = "Map<String,String>";
+        }
+        method.addParameter(new Parameter(tmpType, "recordIds"));
         method.setVisibility(JavaVisibility.PUBLIC);
         method.addBodyLine("int rows=0;");
-        method.addBodyLine("QueryModel queryModel = new QueryModel();");
-
         method.addBodyLine("for (" + paramType + " id : recordIds){");
-        method.addBodyLine("QueryModel.Criteria criteria = queryModel.createCriteria();");
         StringBuilder sb = new StringBuilder();
-
-
-        sb.append("criteria.andEqualTo(");
-        if (introspectedTable.getPrimaryKeyColumns().size() > 0) {
-            IntrospectedColumn introspectedColumn = introspectedTable
-                    .getPrimaryKeyColumns().get(0);
-            sb.append("\"");
-            sb.append(introspectedColumn.getActualColumnName());
-            sb.append("\",");
-            sb.append("id);");
-        }
-
         method.addBodyLine(sb.toString());
         sb.setLength(0);
         sb.append("rows = rows + this.");
@@ -336,25 +323,7 @@ public class CustomServicePlugin extends PluginAdapter {
         sb.append("deleteByPrimaryKey(id);");
         sb.append("}");
         method.addBodyLine(sb.toString());
-
         sb.setLength(0);
-
-        // 复合主键 时
-        // if (introspectedTable.getRules().generatePrimaryKeyClass()) {
-        // FullyQualifiedJavaType type = new FullyQualifiedJavaType(
-        // introspectedTable.getPrimaryKeyType());
-        // method.addParameter(new Parameter(type, "key"));
-        // } else {
-        // for (IntrospectedColumn introspectedColumn : introspectedTable
-        // .getPrimaryKeyColumns()) {
-        // FullyQualifiedJavaType type = introspectedColumn
-        // .getFullyQualifiedJavaType();
-        //
-        // method.addParameter(new Parameter(type, introspectedColumn
-        // .getJavaProperty()));
-        // }
-        // }
-
         method.addBodyLine("this.logger.debug(\"rows: {}\",rows);");
         method.addBodyLine("return rows;");
         return method;
@@ -370,42 +339,26 @@ public class CustomServicePlugin extends PluginAdapter {
         method.addParameter(new Parameter(modelClass, "record"));
         method.setVisibility(JavaVisibility.PUBLIC);
         method.addBodyLine("int rows=0;");
+        method.addBodyLine("String uuid = UUIDUtil.getUUID();");
         StringBuilder sb = new StringBuilder();
-        sb.append("if (record.");
+        sb.append("if (record.isNew()) {");
+        method.addBodyLine(sb.toString());
         List<IntrospectedColumn> pcolumns = introspectedTable
                 .getPrimaryKeyColumns();
 
-        // 仅支持单主键
-        if (pcolumns.size() > 0) {
-            IntrospectedColumn column = pcolumns.get(0);
-            String columnType = column.getJdbcTypeName();
-
-            String columnName = column.getJavaProperty();// column.getActualColumnName();
-
-            sb.append("get");
-            sb.append(this.toUpperCase(columnName));
-            sb.append("()==null || ");
-            sb.append("record.get");
-
-            sb.append(this.toUpperCase(columnName));
-            if ("varchar".equals(columnType.toLowerCase()))
-                sb.append("()==\"\") {");
-            else
-                sb.append("()==0) {");
-
-            method.addBodyLine(sb.toString());
-
-            if ("varchar".equals(columnType.toLowerCase()))
-                method.addBodyLine("String uuid = UUIDUtil.getUUID();");
+        pcolumns.forEach(keyColumn->{
             sb.setLength(0);
-            sb.append("record.set");
-            sb.append(this.toUpperCase(columnName));
+            String columnType = keyColumn.getJdbcTypeName();
+            String columnName = keyColumn.getJavaProperty();
+            sb.append("if (!StringUtils.hasLength(record.get"+ StringUtils.capitalize(columnName)+"()))  ");
+            sb.append("record.set"+StringUtils.capitalize(columnName));
             if ("varchar".equals(columnType.toLowerCase()))
                 sb.append("(uuid);");
             else
                 sb.append("(0);");
             method.addBodyLine(sb.toString());
-        }
+        });
+
         sb.setLength(0);
         sb.append("rows = this.");
         sb.append(this.getDaoShort());
@@ -526,6 +479,11 @@ public class CustomServicePlugin extends PluginAdapter {
         interfaces.addImportedType(listType);
         interfaces.addImportedType(new FullyQualifiedJavaType(
                 this.IBUSINESSSERVICE));
+        interfaces.addImportedType(new FullyQualifiedJavaType(
+                "java.util.HashMap"));
+        interfaces.addImportedType(new FullyQualifiedJavaType(
+                "java.util.Map"));
+
         topLevelClass.addImportedType(daoType);
         topLevelClass.addImportedType(this.QUERYMODEL);
         topLevelClass.addImportedType(new FullyQualifiedJavaType(
@@ -542,6 +500,9 @@ public class CustomServicePlugin extends PluginAdapter {
             topLevelClass.addImportedType(service);
             topLevelClass.addImportedType(autowired);
         }
+        topLevelClass.addImportedType("java.util.HashMap");
+        topLevelClass.addImportedType("java.util.Map");
+        topLevelClass.addImportedType("org.springframework.util.StringUtils");
     }
 
     private String getDaoShort() {

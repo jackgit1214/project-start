@@ -30,6 +30,9 @@ public class CustomSelfModelPlugin extends PluginAdapter {
                                                  IntrospectedTable introspectedTable) {
 
         //添加domain的import
+        topLevelClass.addImportedType("java.util.HashMap");
+        topLevelClass.addImportedType("java.util.Map");
+        topLevelClass.addImportedType("org.springframework.util.StringUtils");
         topLevelClass.addImportedType("lombok.Data");
         topLevelClass.addImportedType("lombok.Builder");
         topLevelClass.addImportedType("lombok.NoArgsConstructor");
@@ -107,16 +110,29 @@ public class CustomSelfModelPlugin extends PluginAdapter {
         context.getCommentGenerator().addGeneralMethodComment(methodPrimaryKey,
                 introspectedTable);
 
-        if (pcolumns.size() > 0) {
+        if (pcolumns.size() == 1) { //单主键时，字符串处理
             final StringBuffer codeLine = new StringBuffer();
+            IntrospectedColumn keyColumn = pcolumns.get(0);
+            String tmpColumn = keyColumn.getJavaProperty();
+            //methodPrimaryKey.addBodyLine("if (null==this.get"+StringUtils.capitalize(tmpColumn) + "()) return null;");
             codeLine.append("return ");
+            codeLine.append(" this.get" + StringUtils.capitalize(tmpColumn) + "();");
+            methodPrimaryKey.addBodyLine(codeLine.toString());
+        } else if(pcolumns.size()>1 ){ //多主键时，map对象处理
+            methodPrimaryKey.addBodyLine("Map<String,String> primaryKey = new HashMap<>();");
+            StringBuffer sb = new StringBuffer();
+            sb.append("if (");
             pcolumns.forEach(keyColumn -> {
                 String tmpColumn = keyColumn.getJavaProperty();
-                codeLine.append(" this.get" + StringUtils.capitalize(tmpColumn) + "() +");
+                sb.append("!StringUtils.hasLength(this.get"+StringUtils.capitalize(tmpColumn)+ "()) ||");
+                methodPrimaryKey.addBodyLine(" primaryKey.put(\""+tmpColumn+"\",this.get"+StringUtils.capitalize(tmpColumn)+ "());");
             });
-            int len = codeLine.toString().length() - 1;
-            methodPrimaryKey.addBodyLine(codeLine.toString().substring(0, len) + ";");
-        } else {
+            sb.setLength(sb.length() - 2);
+            sb.append(") return null;");
+            methodPrimaryKey.addBodyLine(sb.toString());
+            methodPrimaryKey.addBodyLine("return primaryKey;");
+        }
+        else {
             methodPrimaryKey.addBodyLine("return null;");
         }
         topLevelClass.addMethod(methodPrimaryKey);
