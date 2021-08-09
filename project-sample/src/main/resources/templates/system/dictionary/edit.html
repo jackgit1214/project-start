@@ -1,0 +1,167 @@
+<div style="padding: 10px;" id="Dictionary-win" data-index="" data-edit="false">
+    <form class="layui-form" action="" lay-filter="Dictionary">
+                <input type="hidden" name="codeid"  value="${data.codeid!''}"/>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="codetype" lay-verify="required" autocomplete="off" placeholder="请输入类型"
+                                           class="layui-input" value="${data.codetype!''}" />
+                            </div>
+                        </div>
+                    
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">描述：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="content" lay-verify="required" autocomplete="off" placeholder="请输入描述"
+                                           class="layui-input" value="${data.content!''}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型值代码：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="code" lay-verify="required" autocomplete="off" placeholder="请输入类型值代码"
+                                           class="layui-input" value="${data.code!''}" />
+                            </div>
+                        </div>
+                    
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">代码名：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="codename" lay-verify="required" autocomplete="off" placeholder="请输入代码名"
+                                           class="layui-input" value="${data.codename!''}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">上级代码：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="superid" lay-verify="required" autocomplete="off" placeholder="请输入上级代码"
+                                           class="layui-input" value="${data.superid!''}" />
+                            </div>
+                        </div>
+                    
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">级别：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="leve" lay-verify="required" autocomplete="off" placeholder="请输入级别"
+                                           class="layui-input" value="${(data.leve?string('#'))!}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">排列顺序 ：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="orderby" lay-verify="required" autocomplete="off" placeholder="请输入排列顺序 "
+                                           class="layui-input" value="${(data.orderby?string('#'))!}" />
+                            </div>
+                        </div>
+                    
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">applyto：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="applyto" lay-verify="required" autocomplete="off" placeholder="请输入applyto"
+                                           class="layui-input" value="${(data.applyto?string('#'))!}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">REMARK：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入REMARK"
+                                           class="layui-input" value="${data.remark!''}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+        <div class="layui-btn-container" style="text-align: center;margin-bottom: 0px">
+            <div class="layui-inline">
+                <button class="layui-btn" lay-submit="" lay-filter="addDictionary">保存</button>
+                <button class="layui-btn" type="reset">重置</button>
+                <button class="layui-btn" id="DictionaryWinClose">关闭</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form,
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+
+        });
+
+        $(".layui-input").on("input", function (ele) {
+            $("#Dictionary-win").data("edit", true);
+        })
+
+        //监听提交
+        form.on('submit(addDictionary)', function (data) {
+            let load = layer.load(0, {shade: false});
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                url: "/dictionary/save",
+                data: data.field,
+                success: function (result) {
+                    layer.close(load);
+                    $("#DictionaryList").data("refresh", true);
+                    let winIndex = $("#Dictionary-win").data("index");
+                    if (result.status.code === 1) {
+                        $("#Dictionary-win").data("edit", false);
+                        layer.close(winIndex);//关闭当前页
+                        layer.msg('保存成功', {icon: 1, time: 3000});
+                        return false;
+                    } else {
+                        layer.msg(result.status.message, {icon: 2, time: 3000});
+                    }
+                    return false;
+                }
+            });
+            return false;
+        });
+
+        $("#DictionaryWinClose").click(function () {
+            let winIndex = $("#Dictionary-win").data("index");
+            let editStatus = $("#Dictionary-win").data("edit");
+            if (editStatus === false) {
+                layer.close(winIndex);//关闭当前页
+                return false;
+            } else {
+                layer.confirm('数据已经修改，是否确认关闭?', {icon: 3, title: '提示'}, function (index) {
+                    layer.close(index);
+                    layer.close(winIndex);//关闭当前页
+                });
+                return false;
+            }
+        });
+    });
+
+</script>

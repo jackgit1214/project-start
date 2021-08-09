@@ -1,0 +1,211 @@
+<div style="padding: 10px;" id="Indexitem-win" data-index="" data-edit="false">
+    <form class="layui-form" action="" lay-filter="Indexitem">
+
+                <input type="hidden" name="id"  value="${data.id!''}"/>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">指标ID：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="indexid" lay-verify="required" autocomplete="off" placeholder="请输入结束ID"
+                                       class="layui-input" value="${data.indexid!''}" />
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">指标名称：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="indexname" lay-verify="required" autocomplete="off" placeholder="请输入指标名称"
+                                           class="layui-input" value="${data.indexname!''}" />
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">指标数据：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="idatatype" lay-verify="required" autocomplete="off" placeholder="请输入指标数据类型"
+                                       class="layui-input" value="${data.idatatype!''}" />
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">是否可选：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="iseltype" lay-verify="required" autocomplete="off" placeholder="请输入是否可选择"
+                                           class="layui-input" value="${data.iseltype!''}" />
+                            </div>
+                        </div>
+                    
+
+
+
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">上级指标：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="superid" lay-verify="required" autocomplete="off" placeholder="请输入上级指标ID"
+                                           class="layui-input" value="${data.superid!''}" />
+                            </div>
+                        </div>
+                    
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">排序ID：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="sortid" lay-verify="required" autocomplete="off" placeholder="请输入排序ID，由用户维护的、用于控制指标显示顺序的字母、数字组成的字符串，不能重复。"
+                                           class="layui-input" value="${data.sortid!''}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">取值为：：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="isSingleLevel" lay-verify="required" autocomplete="off" placeholder="请输入取值为：1:是单级结构，2:非单级结构。表示是否可以在第一级结点下继续增加下级结点，若取值为'1'，则不能在该结点下继续增加下级结点（执行增加下级结点操作时将提示错误信息）。若取值为'2'，则可以在该结点下继续增加下级结点（但对于从第二级结点开始的各级下级结点，不提供设置"是否单级结构代码"的操作选项）。"
+                                           class="layui-input" value="${data.isSingleLevel!''}" />
+                            </div>
+                        </div>
+                    
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">是否是核：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="iscore" lay-verify="required" autocomplete="off" placeholder="请输入是否是核心指标"
+                                           class="layui-input" value="${data.iscore!''}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">是否必填：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="isrequired" lay-verify="required" autocomplete="off" placeholder="请输入是否必填"
+                                           class="layui-input" value="${data.isrequired!''}" />
+                            </div>
+                        </div>
+                    
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">宽度：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="indexwidth" lay-verify="required" autocomplete="off" placeholder="请输入宽度"
+                                           class="layui-input" value="${(data.indexwidth?string('#'))!}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">验证格式：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="dataformat" lay-verify="required" autocomplete="off" placeholder="请输入验证格式"
+                                           class="layui-input" value="${data.dataformat!''}" />
+                            </div>
+                        </div>
+                    
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">摘要：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="breviary" lay-verify="required" autocomplete="off" placeholder="请输入摘要"
+                                           class="layui-input" value="${data.breviary!''}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">rema：</label>
+                            <div class="layui-input-inline">
+                                    <input type="text" name="remark" lay-verify="required" autocomplete="off" placeholder="请输入remark"
+                                           class="layui-input" value="${data.remark!''}" />
+                            </div>
+                        </div>
+                    </div>
+
+
+        <div class="layui-btn-container" style="text-align: center;margin-bottom: 0px">
+            <div class="layui-inline">
+                <button class="layui-btn" lay-submit="" lay-filter="addIndexitem">保存</button>
+                <button class="layui-btn" type="reset">重置</button>
+                <button class="layui-btn" id="IndexitemWinClose">关闭</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+    layui.use(['form', 'layer'], function () {
+        let form = layui.form,
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+
+        });
+
+        $(".layui-input").on("input", function (ele) {
+            $("#Indexitem-win").data("edit", true);
+        })
+
+        //监听提交
+        form.on('submit(addIndexitem)', function (data) {
+            let load = layer.load(0, {shade: false});
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                url: "/indexitem/save",
+                data: data.field,
+                success: function (result) {
+                    layer.close(load);
+                    $("#IndexitemList").data("refresh", true);
+                    let winIndex = $("#Indexitem-win").data("index");
+                    if (result.status.code === 1) {
+                        $("#Indexitem-win").data("edit", false);
+                        layer.close(winIndex);//关闭当前页
+                        layer.msg('保存成功', {icon: 1, time: 3000});
+                        return false;
+                    } else {
+                        layer.msg(result.status.message, {icon: 2, time: 3000});
+                    }
+                    return false;
+                }
+            });
+            return false;
+        });
+
+        $("#IndexitemWinClose").click(function () {
+            let winIndex = $("#Indexitem-win").data("index");
+            let editStatus = $("#Indexitem-win").data("edit");
+            if (editStatus === false) {
+                layer.close(winIndex);//关闭当前页
+                return false;
+            } else {
+                layer.confirm('数据已经修改，是否确认关闭?', {icon: 3, title: '提示'}, function (index) {
+                    layer.close(index);
+                    layer.close(winIndex);//关闭当前页
+                });
+                return false;
+            }
+        });
+    });
+
+</script>

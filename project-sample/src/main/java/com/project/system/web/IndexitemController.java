@@ -7,23 +7,26 @@ import com.project.core.common.response.ReturnCode;
 import com.project.core.mybatis.model.QueryModel;
 import com.project.core.mybatis.util.PageResult;
 import com.project.core.web.controller.BaseController;
-import com.project.system.model.Dictionary;
-import com.project.system.service.DictionaryService;
+import com.project.system.model.Indexitem;
+import com.project.system.service.IndexitemService;
+
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/dictionary")
-public class DictionaryController extends BaseController {
+@RequestMapping("/indexitem")
+public class IndexitemController extends BaseController {
     @Autowired
-    private DictionaryService dictionaryServiceImpl;
+    private IndexitemService indexitemServiceImpl;
 
     @RequestMapping("/index")
     public String index() {
-        return "system/dictionary/index";
+        return "system/indexitem/index";
     }
 
     @RequestMapping("data")
@@ -31,8 +34,8 @@ public class DictionaryController extends BaseController {
     @QueryModelParam
     public ModelMap data(QueryModel queryModel, Integer page, Integer limit) {
         ModelMap modelMap = new ModelMap();
-        PageResult<Dictionary> pageResult = new PageResult<Dictionary>(page,limit);
-        try {this.dictionaryServiceImpl.findObjectsByPage(queryModel,pageResult);} catch(Exception e) {e.printStackTrace();}
+        PageResult<Indexitem> pageResult = new PageResult<Indexitem>(page,limit);
+        try {this.indexitemServiceImpl.findObjectsByPage(queryModel,pageResult);} catch(Exception e) {e.printStackTrace();}
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), pageResult);
         modelMap.addAttribute("status", rtnMsg);
         return modelMap;
@@ -41,19 +44,19 @@ public class DictionaryController extends BaseController {
     @RequestMapping("/edit")
     @DuplicateSubmission(needSaveToken=true)
     public String edit(String id, ModelMap map) {
-        Dictionary dictionary = this.dictionaryServiceImpl.findObjectById(id);
-        if (dictionary == null)
-          dictionary = new Dictionary();
-        map.put("data",dictionary);
-        return "system/dictionary/edit";
+        Indexitem indexitem = this.indexitemServiceImpl.findObjectById(id);
+        if (indexitem == null)
+          indexitem = new Indexitem();
+        map.put("data",indexitem);
+        return "system/indexitem/edit";
     }
 
     @ResponseBody
     @RequestMapping("/save")
     @DuplicateSubmission(needRemoveToken=true)
-    public ModelMap saveDictionary(Dictionary record) {
+    public ModelMap saveIndexitem(Indexitem record) {
         ModelMap modelMap = new ModelMap();
-        int rows = this.dictionaryServiceImpl.save(record);
+        int rows = this.indexitemServiceImpl.save(record);
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);
         modelMap.addAttribute("status", rtnMsg);
         return modelMap;
@@ -61,9 +64,9 @@ public class DictionaryController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/delete")
-    public ModelMap delete(String[] ids) {
+    public ModelMap delete(@RequestBody Map<String, String>[] ids) {
         ModelMap modelMap = new ModelMap();
-        int rows = this.dictionaryServiceImpl.delete(ids);
+        int rows = this.indexitemServiceImpl.delete(ids);
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);
         modelMap.addAttribute("status", rtnMsg);
         return modelMap;
