@@ -1,4 +1,4 @@
-package com.example.ssoclient2;
+package com.project.ssoclient2;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.example.ssoclient2.config;
+package com.project.ssoclient2.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +19,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
 @Slf4j

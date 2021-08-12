@@ -1,4 +1,4 @@
-package com.example.ssoclient2.config;
+package com.project.ssoclient2.config;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -14,11 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-
-import java.nio.charset.Charset;
 
 @Configuration
 public class RestTemplateConfig {

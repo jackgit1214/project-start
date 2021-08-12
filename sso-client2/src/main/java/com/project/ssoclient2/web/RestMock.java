@@ -1,4 +1,4 @@
-package com.example.ssoclient2.web;
+package com.project.ssoclient2.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;

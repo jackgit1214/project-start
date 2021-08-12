@@ -1,4 +1,4 @@
-package com.example.ssoclient2.config;
+package com.project.ssoclient2.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

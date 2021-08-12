@@ -1,4 +1,4 @@
-package com.example.ssoclient2;
+package com.project.ssoclient2;
 
 
 import org.junit.jupiter.api.Test;
@@ -54,4 +54,6 @@ public class TestResServer {
         ResponseEntity<String> entity = restTemplate.exchange("http://localhost:7002/sec/vvvv", HttpMethod.GET, httpEntity, String.class);
         System.out.println(entity.getBody());
     }
+
+
 }
