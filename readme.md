@@ -8,10 +8,13 @@
 
 ## project-core 
    架构核心，主要是对以前项目中用到的工具进行了整合，包含了mybatis分页工具，查询的封装，代码生成工具、异常的处理、项目通用配置、数据库版本管理、security配置以及部分工具类等。
+
+## project-sso
+  单点登录框架依
    
 ## project-sample
    项目实例，实现单点登录客户端管理、人员的管理、模块管理、部门管理、角色授权管理
-   
+   依赖于project-sso
 ## sso-client
    单点客户端，简单实现，依赖于spring-security-oauth2
    
