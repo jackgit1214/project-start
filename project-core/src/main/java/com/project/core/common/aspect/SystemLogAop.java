@@ -35,6 +35,7 @@ import java.util.Map;
 @Slf4j
 @Aspect
 @Component
+@ConditionalOnBean(LogDetailService.class)
 public class SystemLogAop {
 
     private final LogDetailService logDetailService;
