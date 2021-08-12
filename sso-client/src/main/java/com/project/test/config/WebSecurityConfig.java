@@ -1,6 +1,6 @@
-package com.example.test.config;
+package com.project.test.config;
 
-import com.example.test.util.EnvironmentUtils;
+import com.project.test.util.EnvironmentUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;

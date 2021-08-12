@@ -1,4 +1,4 @@
-package com.example.test.controller;
+package com.project.test.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

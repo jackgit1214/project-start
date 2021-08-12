@@ -28,25 +28,26 @@ security:
       client-secret: user123
       access-token-uri: http://localhost:9001/oauth/token
       user-authorization-uri: http://localhost:9001/oauth/authorize
+      grant-type: authorization_code
 
     resource:
       user-info-uri: http://localhost:9001/user
       token-info-uri: http://localhost:9001/oauth/check_token
       prefer-token-info: true
-      jwt:
-        key-uri: http://localhost:9001/oauth/token_key
+#      jwt:
+#        key-uri: http://localhost:9001/oauth/token_key
 #    authorization:
 #      check-token-access: http://localhost:9001/oauth/check_token
 #      user-info-uri:
 #        key-value: testA
-#    sso:
-#      login-path: /login # 默认单点登录页
+    sso:
+      login-path: /login # 默认单点登录页
 
 
-#logging:
-#  level:
-#    root: INFO
-#    org.springframework.web: INFO
-#    org.springframework.security: INFO
-#    org.springframework.security.oauth2: INFO
-#    org.springframework.boot.autoconfigure: DEBUG
+logging:
+  level:
+    root: Debug
+    org.springframework.web: error
+    org.springframework.security: Debug
+    org.springframework.security.oauth2: Debug
+    org.springframework.boot.autoconfigure: error

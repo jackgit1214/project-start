@@ -1,4 +1,4 @@
-package com.example.test.util;
+package com.project.test.util;
 
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
