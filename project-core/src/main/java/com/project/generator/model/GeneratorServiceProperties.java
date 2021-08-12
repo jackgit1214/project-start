@@ -1,15 +1,18 @@
 package com.project.generator.model;
 
+import com.project.core.common.GeneratorCondition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Data
 @Component
 @EqualsAndHashCode(callSuper = false)
+@Conditional({GeneratorCondition.class})
 public class GeneratorServiceProperties extends GeneratorProperties {
 
     private boolean enabledUpdate = true;

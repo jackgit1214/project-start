@@ -1,4 +1,4 @@
-package com.project.core.security.model;
+package com.project.core.mybatis.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -1,14 +1,13 @@
-package com.project.core.flyway;
-
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
+package com.project.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 
 /**
  * @author lilj

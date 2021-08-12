@@ -5,6 +5,7 @@ import java.util.List;
 
 //import com.project.generator.model.MysqlTables;
 //import com.project.generator.service.MysqlTablesService;
+import com.project.core.common.GeneratorCondition;
 import com.project.core.common.response.BaseResult;
 import com.project.core.common.response.ReturnCode;
 import com.project.core.web.controller.BaseController;
@@ -20,6 +21,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Base64Utils;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/code")
 @Slf4j
+@Conditional({GeneratorCondition.class})
 public class CodeController extends BaseController {
 
     private final MysqlTablesService mysqlTablesServiceImpl;

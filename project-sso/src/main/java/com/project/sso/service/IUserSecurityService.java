@@ -1,6 +1,6 @@
-package com.project.core.mybatis.service;
+package com.project.sso.service;
 
-import com.project.core.security.model.UserInfo;
+import com.project.core.mybatis.model.UserInfo;
 
 public interface IUserSecurityService {
 

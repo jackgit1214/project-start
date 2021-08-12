@@ -3,17 +3,20 @@ package com.project.generator.model;
 import java.util.List;
 import java.util.Map;
 
+import com.project.core.common.GeneratorCondition;
 import com.project.core.web.config.ProjectConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Data
 @Component
+@Conditional({GeneratorCondition.class})
 public class GeneratorProperties implements InitializingBean {
 
     private String projectDirector;

@@ -1,8 +1,9 @@
-package com.project.core.mybatis.service;
+package com.project.sso.service;
+
+import com.project.core.mybatis.model.FunModule;
 
 import java.util.List;
 
-import com.project.core.security.model.FunModule;
 
 /**
  * 模块接口Service ,目的是取得所有可用资源

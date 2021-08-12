@@ -5,8 +5,9 @@ import com.power.common.util.IpUtil;
 import com.project.core.common.anaotation.SystemLog;
 import com.project.core.common.util.UUIDUtil;
 import com.project.core.mybatis.model.SysLog;
+import com.project.core.mybatis.model.UserInfo;
 import com.project.core.mybatis.service.LogDetailService;
-import com.project.core.security.model.UserInfo;
+
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;

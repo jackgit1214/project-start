@@ -52,7 +52,6 @@ src
 │  │  │      │  │  │          SimpleModuleSecurityServiceImpl.java 结合security使用
 │  │  │      │  │  │          SimpleUserSecurityServiceImpl.java 结合security使用
 │  │  │      │  │  └─util mybatis基本工具包，包含clob处理，分页拦截器及其配置及分页模型
-│  │  │      │  ├─security 结合security使用，实现security权限管理的基本配置及错误失败处理
 │  │  │      │  └─web
 │  │  │      │      ├─advice
 │  │  │      │      │      GlobalExceptionHandler.java  web请求异常处理

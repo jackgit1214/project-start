@@ -1,12 +1,11 @@
-package com.project.core.security.model;
+package com.project.core.mybatis.model;
 
-import java.util.List;
-import java.util.Set;
-
-import com.project.core.mybatis.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.List;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = false)

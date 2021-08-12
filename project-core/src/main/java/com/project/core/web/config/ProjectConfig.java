@@ -1,14 +1,8 @@
 package com.project.core.web.config;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import com.project.core.common.util.PinYinUtil;
-import com.project.core.security.model.FunModule;
 import lombok.Data;
-import sun.security.pkcs11.Secmod;
-
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 

@@ -45,6 +45,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		if (projectConfig.getConfigure()==null) return ;
 		List<String> excludeLinks = projectConfig.getConfigure().getStaticResources();
 		excludeLinks.addAll(projectConfig.getConfigure().getPermitRequest());
 		registry.addInterceptor(new DuplicateSubmissionInterceptor()).excludePathPatterns(excludeLinks);

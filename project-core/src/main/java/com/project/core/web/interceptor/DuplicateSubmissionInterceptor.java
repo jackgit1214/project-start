@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.project.core.security.model.UserInfo;
+import com.project.core.mybatis.model.UserInfo;
 import com.project.core.web.util.SessionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;

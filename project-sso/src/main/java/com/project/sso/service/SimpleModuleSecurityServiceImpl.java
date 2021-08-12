@@ -1,20 +1,15 @@
-package com.project.core.mybatis.service.impl;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+package com.project.sso.service;
 
 import com.project.core.mybatis.dao.Base.BaseDao;
+import com.project.core.mybatis.model.DataUtils;
+import com.project.core.mybatis.model.FunModule;
 import com.project.core.mybatis.service.AbstractBusinessService;
-import com.project.core.mybatis.service.IModuleSecurityService;
-import com.project.core.security.model.DataUtils;
-import com.project.core.security.model.FunModule;
-import com.project.core.security.model.SysRole;
 import com.project.core.web.config.ProjectConfig;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lilj

@@ -1,20 +1,17 @@
-package com.project.core.mybatis.service.impl;
+package com.project.sso.service;
+
+import com.project.core.mybatis.dao.Base.BaseDao;
+import com.project.core.mybatis.model.DataUtils;
+import com.project.core.mybatis.model.SysRole;
+import com.project.core.mybatis.model.UserInfo;
+import com.project.core.mybatis.service.AbstractBusinessService;
+
+import com.project.core.web.config.ProjectConfig;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import com.project.core.mybatis.dao.Base.BaseDao;
-import com.project.core.mybatis.service.AbstractBusinessService;
-import com.project.core.mybatis.service.IUserSecurityService;
-import com.project.core.security.model.DataUtils;
-import com.project.core.security.model.SysRole;
-import com.project.core.security.model.UserInfo;
-import com.project.core.web.config.ProjectConfig;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * @author lilj
