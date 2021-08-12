@@ -1,17 +1,12 @@
 package com.project.config;
 
 import com.project.core.common.util.ApplicationContextUtil;
-import com.project.core.mybatis.model.SysLog;
-import com.project.core.mybatis.service.IModuleSecurityService;
-import com.project.core.mybatis.service.IUserSecurityService;
-import com.project.core.mybatis.service.LogDetailService;
+import com.project.sso.service.IModuleSecurityService;
+import com.project.sso.service.IUserSecurityService;
 import com.project.system.service.impl.SysModuleServiceImpl;
 import com.project.system.service.impl.SysUserServiceImpl;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
 
 @Configuration

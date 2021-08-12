@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.project.core.mybatis.dao.Base.BaseDao;
+import com.project.core.mybatis.model.FunModule;
 import com.project.core.mybatis.model.QueryModel;
-import com.project.core.mybatis.service.impl.SimpleModuleSecurityServiceImpl;
-import com.project.core.security.model.FunModule;
+
+import com.project.sso.service.SimpleModuleSecurityServiceImpl;
 import com.project.system.dao.SysModuleMapper;
 import com.project.system.model.SysModule;
 import com.project.system.service.SysModuleService;

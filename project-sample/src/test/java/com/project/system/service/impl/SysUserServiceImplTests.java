@@ -1,6 +1,6 @@
 package com.project.system.service.impl;
 
-import com.project.core.security.model.UserInfo;
+import com.project.core.mybatis.model.UserInfo;
 import com.project.system.model.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

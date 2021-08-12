@@ -1,6 +1,6 @@
 package com.project.client.dao;
 
-import com.project.client.model.OauthClientDetails;
+import com.project.system.model.OauthClientDetails;
 import com.project.core.mybatis.dao.Base.IDataMapperByPage;
 import com.project.core.mybatis.dao.Base.IDataMapperCRUD;
 import com.project.core.mybatis.dao.Base.IDataMapperWithBlob;

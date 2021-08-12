@@ -1,7 +1,6 @@
 package com.project.api;
 
 import com.project.core.common.exception.BusinessException;
-import com.project.core.security.model.UserInfo;
 import com.project.system.model.SysUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

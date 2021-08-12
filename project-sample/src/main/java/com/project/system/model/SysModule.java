@@ -3,7 +3,8 @@ package com.project.system.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.core.mybatis.model.BaseModel;
-import com.project.core.security.model.FunModule;
+
+import com.project.core.mybatis.model.FunModule;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

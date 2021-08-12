@@ -2,9 +2,9 @@ package com.project.system.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.core.mybatis.model.BaseModel;
-import com.project.core.security.model.FunModule;
-import com.project.core.security.model.SysRole;
-import com.project.core.security.model.UserInfo;
+
+import com.project.core.mybatis.model.FunModule;
+import com.project.core.mybatis.model.UserInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

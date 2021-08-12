@@ -1,7 +1,8 @@
 package com.project.system.model;
 
 import com.project.core.mybatis.model.BaseModel;
-import com.project.core.security.model.SysRole;
+
+import com.project.core.mybatis.model.SysRole;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

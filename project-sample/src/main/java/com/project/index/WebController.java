@@ -5,11 +5,12 @@ import com.project.core.common.exception.BusinessException;
 import com.project.core.common.response.BaseResult;
 import com.project.core.common.response.ReturnCode;
 import com.project.core.common.util.UUIDUtil;
-import com.project.core.security.ProjectUserDetailsService;
-import com.project.core.security.model.FunModule;
-import com.project.core.security.model.UserInfo;
+
+import com.project.core.mybatis.model.FunModule;
+import com.project.core.mybatis.model.UserInfo;
 import com.project.core.web.controller.BaseController;
 import com.project.core.web.util.VerifyCodeUtil;
+import com.project.sso.ProjectUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

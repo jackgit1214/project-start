@@ -1,7 +1,7 @@
 package com.project.projectsample;
 
 import com.project.core.common.util.ApplicationContextUtil;
-import com.project.core.security.handler.CustomLogoutHandler;
+import com.project.sso.handler.CustomLogoutHandler;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;

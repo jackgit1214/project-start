@@ -2,14 +2,14 @@ package com.project.system.service.impl;
 
 import java.util.List;
 
-import com.project.core.common.SysConstant;
 import com.project.core.common.util.UUIDUtil;
 import com.project.core.mybatis.dao.Base.BaseDao;
 import com.project.core.mybatis.model.QueryModel;
-import com.project.core.mybatis.service.impl.SimpleUserSecurityServiceImpl;
+import com.project.core.mybatis.model.UserInfo;
 import com.project.core.mybatis.util.PageResult;
-import com.project.core.security.model.UserInfo;
+
 import com.project.core.web.config.ProjectConfig;
+import com.project.sso.service.SimpleUserSecurityServiceImpl;
 import com.project.system.dao.SysRoleUserMapper;
 import com.project.system.dao.SysUserMapper;
 import com.project.system.model.SysUser;
