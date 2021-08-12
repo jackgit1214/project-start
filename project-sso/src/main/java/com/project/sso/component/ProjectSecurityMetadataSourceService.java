@@ -42,6 +42,7 @@ public class ProjectSecurityMetadataSourceService implements FilterInvocationSec
     @PostConstruct
     public void init() {
         List<FunModule> modules = sysModuleService.getSysModules();
+        if (modules==null) return;
         modules.forEach(item -> {
             Set<SysRole> roles = item.getRoles();
             if (roles != null) {
