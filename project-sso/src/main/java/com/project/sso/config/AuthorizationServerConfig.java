@@ -3,6 +3,8 @@ package com.project.sso.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.builders.JdbcClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -23,6 +25,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final String SIGNING_KEY="ATTK-KEY";
 
     @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
     ClientDetailsService clientDetailsService;
 
     @Autowired
@@ -40,13 +45,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
-//        new ClientDetailsServiceBuilder().build();
         ClientDetailsService cds = new JdbcClientDetailsServiceBuilder().dataSource(dataSource).build();
         clients.jdbc(dataSource);
-
     }
 
-//    @Bean
+
+    //    @Bean
 //    public PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder();
 //    }
@@ -54,6 +58,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.accessTokenConverter(jwtAccessTokenConverter());
         endpoints.tokenStore(jwtTokenStore());
+        endpoints.authenticationManager(authenticationManager);
 //        endpoints.tokenServices(tokenServices());
 //        endpoints.tokenServices(defaultTokenServices());
     }
@@ -91,5 +96,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         jwtAccessTokenConverter.setSigningKey(SIGNING_KEY);   //  Sets the JWT signing key
         return jwtAccessTokenConverter;
     }
+
 
 }
