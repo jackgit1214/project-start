@@ -1,0 +1,54 @@
+{
+  "name": "project-vue",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "core-js": "^3.6.5",
+    "element-plus": "1.0.2-beta.52",
+    "lodash.chunk": "^4.2.0",
+    "sass-loader": "^12.1.0",
+    "scss": "^0.2.4",
+    "style-resources-loader": "^1.4.1",
+    "vue": "^3.1.2",
+    "vue-cropperjs": "^5.0.0",
+    "vue-i18n": "^9.0.0",
+    "vue-router": "^4.0.10",
+    "vue-schart": "^2.0.0",
+    "vuex": "^4.0.2",
+    "wangeditor": "^4.7.4"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.5",
+    "@vitejs/plugin-vue": "^1.2.3",
+    "@vue/compiler-sfc": "^3.1.2",
+    "node-sass": "^6.0.1",
+    "sass": "^1.38.1",
+    "typescript": "^4.4.2",
+    "vite": "2.3.7"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
