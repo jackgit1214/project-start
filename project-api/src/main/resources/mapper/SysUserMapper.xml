@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.system.dao.SysUserMapper">
+    <cache eviction="LRU" readOnly="true" size="1024"></cache>
+    <resultMap id="BaseResultMap" type="com.project.system.model.SysUser">
+        <id column="USERID" jdbcType="VARCHAR" property="userId"/>
+        <result column="LOGINCODE" jdbcType="VARCHAR" property="userName"/>
+        <result column="VALID" jdbcType="TINYINT" property="valid"/>
+        <result column="username" jdbcType="VARCHAR" property="name"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="gender" jdbcType="TINYINT" property="gender"/>
+        <result column="age" jdbcType="TINYINT" property="age"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="userOrder" jdbcType="TINYINT" property="userOrder"/>
+        <result column="USERSTATUS" jdbcType="TINYINT" property="userStatus"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.project.system.model.SysUser">
+        <result column="avatar" jdbcType="LONGVARBINARY" property="avatar"/>
+    </resultMap>
+
+    <resultMap id="UserResultMapPlus" type="com.project.system.model.SysUser">
+        <id column="USERID" jdbcType="VARCHAR" property="userId"/>
+        <result column="LOGINCODE" jdbcType="VARCHAR" property="userName"/>
+        <result column="VALID" jdbcType="TINYINT" property="valid"/>
+        <result column="username" jdbcType="VARCHAR" property="name"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="gender" jdbcType="TINYINT" property="gender"/>
+        <result column="age" jdbcType="TINYINT" property="age"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="userOrder" jdbcType="TINYINT" property="userOrder"/>
+        <result column="USERSTATUS" jdbcType="TINYINT" property="userStatus"/>
+        <result column="avatar" jdbcType="LONGVARBINARY" property="avatar"/>
+        <collection property="departments"
+                    column="userid" select="com.project.system.dao.SysDeptMapper.getDepartmentsByUserId"/>
+        <collection property="roles" resultMap="com.project.system.dao.SysRoleMapper.ResultMapIncludeFunc"/>
+
+    </resultMap>
+
+    <resultMap id="UserResultMapPlus1" type="com.project.system.model.SysUser">
+        <id column="USERID" jdbcType="VARCHAR" property="userId"/>
+        <result column="LOGINCODE" jdbcType="VARCHAR" property="userName"/>
+        <result column="VALID" jdbcType="TINYINT" property="valid"/>
+        <result column="username" jdbcType="VARCHAR" property="name"/>
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password"/>
+        <result column="gender" jdbcType="TINYINT" property="gender"/>
+        <result column="age" jdbcType="TINYINT" property="age"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="userOrder" jdbcType="TINYINT" property="userOrder"/>
+        <result column="USERSTATUS" jdbcType="TINYINT" property="userStatus"/>
+        <result column="avatar" jdbcType="LONGVARBINARY" property="avatar"/>
+
+        <collection property="departments" fetchType="lazy"
+                    column="userid" select="com.project.system.dao.SysDeptMapper.getDepartmentsByUserId"/>
+        <collection property="roles" fetchType="lazy" column="userid"
+                    select="com.project.system.dao.SysRoleMapper.getRolesByUserId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        USERID, LOGINCODE, VALID, username, PASSWORD, gender, age, birthday, qq, email, address,
+    phone, userOrder, USERSTATUS
+    </sql>
+    <sql id="Blob_Column_List">
+        avatar
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="UserResultMapPlus">
+        SELECT a.USERID,
+               a.LOGINCODE,
+               a.VALID,
+               a.username,
+               a.PASSWORD,
+               a.gender,
+               a.age,
+               a.birthday,
+               a.qq,
+               a.email,
+               a.address,
+               a.phone,
+               a.userOrder,
+               a.USERSTATUS,
+               a.avatar,
+               c.ROLEID,
+               c.ROLENAME,
+               c.roledesc,
+               m.funcid,
+               m.funcname,
+               m.funtype,
+               m.moddesc,
+               m.IsInUse,
+               m.SuperModID,
+               m.funicon,
+               m.funorder,
+               m.urllink,
+               m.targetdiv,
+               m.SYSTEM
+        FROM sys_user a
+                 left join sys_role_user b on a.userid = b.userid
+                 left join sys_role c on b.ROLEID = c.roleid
+                 left join sys_role_func d on c.roleid = d.roleid
+                 left join sys_module m on d.funcid = m.funcid
+        where a.userid = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from sys_user
+        where USERID = #{userId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.project.system.model.SysUser">
+
+        insert into sys_user (USERID, LOGINCODE, VALID,
+                              username, PASSWORD, gender,
+                              age, birthday, qq, email,
+                              address, phone, userOrder,
+                              USERSTATUS, avatar)
+        values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{valid,jdbcType=TINYINT},
+                #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT},
+                #{age,jdbcType=TINYINT}, #{birthday,jdbcType=DATE}, #{qq,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+                #{address,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{userOrder,jdbcType=TINYINT},
+                #{userStatus,jdbcType=TINYINT}, #{avatar,jdbcType=LONGVARBINARY})
+    </insert>
+    <insert id="insertSelective" parameterType="com.project.system.model.SysUser">
+
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                USERID,
+            </if>
+            <if test="userName != null">
+                LOGINCODE,
+            </if>
+            <if test="valid != null">
+                VALID,
+            </if>
+            <if test="name != null">
+                username,
+            </if>
+            <if test="password != null">
+                PASSWORD,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+            <if test="birthday != null">
+                birthday,
+            </if>
+            <if test="qq != null">
+                qq,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="userOrder != null">
+                userOrder,
+            </if>
+            <if test="userStatus != null">
+                USERSTATUS,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="valid != null">
+                #{valid,jdbcType=TINYINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=TINYINT},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=TINYINT},
+            </if>
+            <if test="birthday != null">
+                #{birthday,jdbcType=DATE},
+            </if>
+            <if test="qq != null">
+                #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="userOrder != null">
+                #{userOrder,jdbcType=TINYINT},
+            </if>
+            <if test="userStatus != null">
+                #{userStatus,jdbcType=TINYINT},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=LONGVARBINARY},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.project.system.model.SysUser">
+
+        update sys_user
+        <set>
+            <if test="userName != null">
+                LOGINCODE = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="valid != null">
+                VALID = #{valid,jdbcType=TINYINT},
+            </if>
+            <if test="name != null">
+                username = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                PASSWORD = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=TINYINT},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=TINYINT},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=DATE},
+            </if>
+            <if test="qq != null">
+                qq = #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="userOrder != null">
+                userOrder = #{userOrder,jdbcType=TINYINT},
+            </if>
+            <if test="userStatus != null">
+                USERSTATUS = #{userStatus,jdbcType=TINYINT},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=LONGVARBINARY},
+            </if>
+        </set>
+        where USERID = #{userId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.project.system.model.SysUser">
+
+        update sys_user
+        set LOGINCODE  = #{userName,jdbcType=VARCHAR},
+            VALID      = #{valid,jdbcType=TINYINT},
+            username   = #{name,jdbcType=VARCHAR},
+            PASSWORD   = #{password,jdbcType=VARCHAR},
+            gender     = #{gender,jdbcType=TINYINT},
+            age        = #{age,jdbcType=TINYINT},
+            birthday   = #{birthday,jdbcType=DATE},
+            qq         = #{qq,jdbcType=VARCHAR},
+            email      = #{email,jdbcType=VARCHAR},
+            address    = #{address,jdbcType=VARCHAR},
+            phone      = #{phone,jdbcType=VARCHAR},
+            userOrder  = #{userOrder,jdbcType=TINYINT},
+            USERSTATUS = #{userStatus,jdbcType=TINYINT},
+            avatar     = #{avatar,jdbcType=LONGVARBINARY}
+        where USERID = #{userId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.project.system.model.SysUser">
+
+        update sys_user
+        set LOGINCODE  = #{userName,jdbcType=VARCHAR},
+            VALID      = #{valid,jdbcType=TINYINT},
+            username   = #{name,jdbcType=VARCHAR},
+            PASSWORD   = #{password,jdbcType=VARCHAR},
+            gender     = #{gender,jdbcType=TINYINT},
+            age        = #{age,jdbcType=TINYINT},
+            birthday   = #{birthday,jdbcType=DATE},
+            qq         = #{qq,jdbcType=VARCHAR},
+            email      = #{email,jdbcType=VARCHAR},
+            address    = #{address,jdbcType=VARCHAR},
+            phone      = #{phone,jdbcType=VARCHAR},
+            userOrder  = #{userOrder,jdbcType=TINYINT},
+            USERSTATUS = #{userStatus,jdbcType=TINYINT}
+        where USERID = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectByLoginCodePlus" parameterType="java.lang.String" resultMap="UserResultMapPlus">
+        SELECT a.USERID,
+               a.LOGINCODE,
+               a.VALID,
+               a.username,
+               a.PASSWORD,
+               a.gender,
+               a.age,
+               a.birthday,
+               a.qq,
+               a.email,
+               a.address,
+               a.phone,
+               a.userOrder,
+               a.USERSTATUS,
+               a.avatar,
+               c.ROLEID,
+               c.ROLENAME,
+               c.roledesc,
+               m.funcid,
+               m.funcname,
+               m.funtype,
+               m.moddesc,
+               m.IsInUse,
+               m.SuperModID,
+               m.funicon,
+               m.funorder,
+               m.urllink,
+               m.targetdiv,
+               m.SYSTEM
+        FROM sys_user a
+                 left join sys_role_user b on a.userid = b.userid
+                 left join sys_role c on b.ROLEID = c.roleid
+                 left join sys_role_func d on c.roleid = d.roleid
+                 left join sys_module m on d.funcid = m.funcid and m.funtype = 1 and m.SuperModID = '0'
+        where a.LOGINCODE = #{userName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="testLazyLoad" parameterType="java.lang.String" resultMap="UserResultMapPlus1">
+        SELECT a.USERID,
+               a.LOGINCODE,
+               a.VALID,
+               a.username,
+               a.PASSWORD,
+               a.gender,
+               a.age,
+               a.birthday,
+               a.qq,
+               a.email,
+               a.address,
+               a.phone,
+               a.userOrder,
+               a.USERSTATUS,
+               a.avatar
+        FROM sys_user a
+        where a.LOGINCODE like #{userName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByCondition" resultMap="UserResultMapPlus1" flushCache="true">
+
+        select
+        <if test="queryModel != null and queryModel.distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from sys_user
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+        <if test="queryModel != null and queryModel.orderByClause != null">
+            order by ${queryModel.orderByClause}
+        </if>
+    </select>
+    <delete id="deleteByCondition">
+
+        delete from sys_user
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+    </delete>
+    <select id="countByCondition" resultType="java.lang.Integer">
+
+        select count(*) from sys_user
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByConditionSelective">
+
+        update sys_user
+        <set>
+            <if test="record.userId != null">
+                USERID = #{record.userId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.name != null">
+                LOGINCODE = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.valid != null">
+                VALID = #{record.valid,jdbcType=TINYINT},
+            </if>
+            <if test="record.name != null">
+                username = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.password != null">
+                PASSWORD = #{record.password,jdbcType=VARCHAR},
+            </if>
+            <if test="record.gender != null">
+                gender = #{record.gender,jdbcType=TINYINT},
+            </if>
+            <if test="record.age != null">
+                age = #{record.age,jdbcType=TINYINT},
+            </if>
+            <if test="record.birthday != null">
+                birthday = #{record.birthday,jdbcType=DATE},
+            </if>
+            <if test="record.qq != null">
+                qq = #{record.qq,jdbcType=VARCHAR},
+            </if>
+            <if test="record.email != null">
+                email = #{record.email,jdbcType=VARCHAR},
+            </if>
+            <if test="record.address != null">
+                address = #{record.address,jdbcType=VARCHAR},
+            </if>
+            <if test="record.phone != null">
+                phone = #{record.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userOrder != null">
+                userOrder = #{record.userOrder,jdbcType=TINYINT},
+            </if>
+            <if test="record.userStatus != null">
+                USERSTATUS = #{record.userStatus,jdbcType=TINYINT},
+            </if>
+            <if test="record.avatar != null">
+                avatar = #{record.avatar,jdbcType=LONGVARBINARY},
+            </if>
+        </set>
+        <if test="queryModel != null">
+            <include refid="public.Update_By_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByCondition">
+
+        update sys_user
+        set USERID = #{record.userId,jdbcType=VARCHAR},
+        LOGINCODE = #{record.name,jdbcType=VARCHAR},
+        VALID = #{record.valid,jdbcType=TINYINT},
+        username = #{record.name,jdbcType=VARCHAR},
+        PASSWORD = #{record.password,jdbcType=VARCHAR},
+        gender = #{record.gender,jdbcType=TINYINT},
+        age = #{record.age,jdbcType=TINYINT},
+        birthday = #{record.birthday,jdbcType=DATE},
+        qq = #{record.qq,jdbcType=VARCHAR},
+        email = #{record.email,jdbcType=VARCHAR},
+        address = #{record.address,jdbcType=VARCHAR},
+        phone = #{record.phone,jdbcType=VARCHAR},
+        userOrder = #{record.userOrder,jdbcType=TINYINT},
+        USERSTATUS = #{record.userStatus,jdbcType=TINYINT},
+        avatar = #{record.avatar,jdbcType=LONGVARBINARY}
+        <if test="queryModel != null">
+            <include refid="public.Update_By_Where_Clause"/>
+        </if>
+    </update>
+    <select id="selectByConditionWithBLOBs" resultMap="UserResultMapPlus1" flushCache="true">
+
+        select
+        <if test="queryModel != null and queryModel.distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from sys_user
+        <if test="queryModel != null">
+            <include refid="public.Where_Clause"/>
+        </if>
+        <if test="queryModel != null and queryModel.orderByClause != null">
+            order by ${queryModel.orderByClause}
+        </if>
+    </select>
+</mapper>

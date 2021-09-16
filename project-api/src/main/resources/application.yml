@@ -1,0 +1,53 @@
+server:
+  port: 9002
+  servlet:
+    context-path: /res
+  path:
+    globalPrefix: /api/v1
+    packageName: com.project.resources
+  max-http-header-size: 102400
+spring:
+  mvc:
+    dispatch-options-request: true
+  application:
+    name: sso-res
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/commondb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+
+security:
+  oauth2:
+#    client:
+#      client-id: UserManagement
+#      client-secret: user123
+#      access-token-uri: http://localhost:9001/oauth/token
+#      user-authorization-uri: http://localhost:9001/oauth/authorize
+#      grant-type: authorization_code
+#    authorization:
+#      check-token-access: http://localhost:9001/oauth/check_token
+#    resource:
+#      user-info-uri: http://localhost:9001/user
+#      token-info-uri: http://localhost:9001/oauth/check_token
+#      prefer-token-info: true
+#    resource:
+#      jwt:
+#        key-uri: http://localhost:9001/oauth/token_key
+#        token-info-uri: http://localhost:9001/oauth/check_token
+#        user-info-uri: http://localhost:9001/user
+##        key-value: testA
+##    sso:
+##      login-path: /login # 默认单点登录页
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: debug
+    org.springframework.security.oauth2: debug
+    org.springframework.boot.autoconfigure: DEBUG
+    com.project.system.dao: debug
