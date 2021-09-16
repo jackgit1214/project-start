@@ -31,5 +31,5 @@ project:
     moduleName: project-sample
     project-name: 基础平台
     project-short-name: system
-    csrf: true
+    csrf: false
     code-tool: true
