@@ -14,7 +14,7 @@ const config = {
 async function resetConfig(type) {
 	const token = await getToken();
 
-	let requestConfig = Object.assign({}, config);
+	let requestConfig = JSON.parse(JSON.stringify(config));
 	requestConfig.method = type;
 	requestConfig.headers["Authorization"] = token;
 	return requestConfig;
@@ -58,6 +58,7 @@ export default async(url = '', data = {}, type = 'GET',isFormData=false, method 
 		}
 	}
 	if (window.fetch && method == 'fetch') {
+		console.log(requestConfig)
 		try {
 			const response = await fetch(url, requestConfig);
 			const responseJson = await response.json();
