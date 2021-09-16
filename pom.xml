@@ -11,6 +11,8 @@
 
     <modules>
         <module>project-core</module>
+        <module>project-sso</module>
+        <module>project-api</module>
         <module>project-sample</module>
         <module>sso-client</module>
         <module>sso-client2</module>
