@@ -20,27 +20,27 @@ spring:
     enabled: true
     template-loader-path: classpath:/templates/
     charset: utf-8
-  security:
-    oauth2:
-      client:
-        registration:
-          myclient:
-            provider: myProvider1
-            client-id: UserManagement
-            client-name: spring security5的客户端
-            client-secret: user123
-            client-authentication-method: post
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            scope: all
-        provider:
-          myProvider1:
-            authorization-uri: http://localhost:9001/oauth/authorize
-            token-uri: http://localhost:9001/oauth/token
-            jwk-set-uri: http://localhost:9001/oauth/token_key
-            user-info-uri: http://localhost:9001/api/user
-#            http://localhost:9001/oauth/check_token
-            user-name-attribute: user_name
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          myclient:
+#            provider: myProvider1
+#            client-id: UserManagement
+#            client-name: spring security5的客户端
+#            client-secret: user123
+#            client-authentication-method: post
+#            authorization-grant-type: authorization_code
+#            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            scope: all
+#        provider:
+#          myProvider1:
+#            authorization-uri: http://localhost:9001/oauth/authorize
+#            token-uri: http://localhost:9001/oauth/token
+#            jwk-set-uri: http://localhost:9001/oauth/token_key
+#            user-info-uri: http://localhost:9001/api/user
+##            http://localhost:9001/oauth/check_token
+#            user-name-attribute: user_name
             #user-info-authentication-method: header
 logging:
   level:
