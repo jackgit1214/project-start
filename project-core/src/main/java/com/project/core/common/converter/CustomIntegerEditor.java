@@ -17,7 +17,7 @@ public class CustomIntegerEditor extends PropertyEditorSupport {
     @Override
     public void setAsText(String _text) throws IllegalArgumentException {
 
-        if (_text == null || !StringUtils.hasLength(_text)) {
+        if (_text == null || !StringUtils.hasLength(_text) || _text.trim().equals("null")) {
             _text = "0";
         }
         setValue(Integer.parseInt(_text));

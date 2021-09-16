@@ -18,7 +18,7 @@ public class CustomLongEditor extends PropertyEditorSupport {
     public void setAsText(String _text) throws IllegalArgumentException {
 
         Object o = this.getSource();
-        if (_text == null || !StringUtils.hasLength(_text)) {
+        if (_text == null || !StringUtils.hasLength(_text) || _text.trim().equals("null")) {
             _text = "0";
         }
         setValue(Long.parseLong(_text));
