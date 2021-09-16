@@ -26,7 +26,8 @@
 ## project-vue
    结合后端api,基于vue框架的用户权限管理，
 
-<iframe height=498 width=510 src="https://github.com/jackgit1214/project-start/blob/master/vue.mp4" frameborder=0 allowfullscreen></iframe>
+<iframe height=498 width=510 src="http://player.youku.com/embed/XNjcyMDU4Njg0">
+ 
       
 ##相关资源
 
