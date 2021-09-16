@@ -44,7 +44,7 @@ public class DuplicateSubmissionInterceptor implements HandlerInterceptor {
 
         if ( handler instanceof HandlerMethod) {
 
-            UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+//            UserInfo userInfo = (UserInfo) authentication.getPrincipal();
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
 
@@ -62,9 +62,10 @@ public class DuplicateSubmissionInterceptor implements HandlerInterceptor {
                 boolean needRemoveSession = annotation.needRemoveToken();
                 if (needRemoveSession) {
                     if (isRepeatSubmit(request, annotation.tokenName())) {
-                        log.warn("请不要重复提交,[用户:"
-                                + userInfo.getUsername() + ",url:"
-                                + request.getServletPath() + "]");
+                        log.warn("请不要重复提交!!!");
+//                        log.warn("请不要重复提交,[用户:"
+//                                + userInfo.getUsername() + ",url:"
+//                                + request.getServletPath() + "]");
                         return false;
                     }
                     // request.getSession(false).removeAttribute("token");
