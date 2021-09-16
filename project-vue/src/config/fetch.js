@@ -58,7 +58,6 @@ export default async(url = '', data = {}, type = 'GET',isFormData=false, method 
 		}
 	}
 	if (window.fetch && method == 'fetch') {
-		console.log(requestConfig)
 		try {
 			const response = await fetch(url, requestConfig);
 			const responseJson = await response.json();

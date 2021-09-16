@@ -24,25 +24,24 @@
 ## project-api
    前后端分离api, 用户、角色、权限、组织结构等
 ## project-vue
-   结合后端api,基于vue框架的用户权限管理，
-   
- ![image](https://github.com/jackgit1214/project-start/blob/master/resources/login.jpg)
+   结合后端api,基于vue框架的用户权限管理，  
+   [![Watch the video](https://github.com/jackgit1214/project-start/blob/master/resources/login.jpg)](https://github.com/jackgit1214/project-start/blob/master/vue.mp4)
 
-![image](https://github.com/jackgit1214/project-start/blob/master/resources/first.jpg) 
-
-![image](https://github.com/jackgit1214/project-start/blob/master/resources/user.jpg) 
+![image](https://github.com/jackgit1214/project-start/blob/master/resources/login.jpg)  
+![image](https://github.com/jackgit1214/project-start/blob/master/resources/first.jpg)  
+![image](https://github.com/jackgit1214/project-start/blob/master/resources/user.jpg)   
       
 ##相关资源
 
-  QQ：19707910 <br/>
-  spring: https://spring.io/ <br/>
-  elementUi-plus: https://element-plus.org/#/zh-CN <br/>
-  layUi: https://www.layui.com/ <br/>
-  vue.js 官网：https://v3.vuejs.org/ <br/>
-  vue-router 文档：http://router.vuejs.org/zh-cn/index.html/ <br/>
-  vuex 文档：http://vuex.vuejs.org/ <br/>
-  webpack 文档：https://webpack.github.io/docs/ <br/>
-  ES2015 入门教程：http://es6.ruanyifeng.com/ <br/>
-  scss 文档：http://sass-lang.com/documentation/file.SASS_REFERENCE.html <br/>
-  mocha 文档: http://mochajs.org/ <br/>
+  QQ：19707910   
+  spring: https://spring.io/    
+  elementUi-plus: https://element-plus.org/#/zh-CN  
+  layUi: https://www.layui.com/     
+  vue.js 官网：https://v3.vuejs.org/   
+  vue-router 文档：http://router.vuejs.org/zh-cn/index.html/   
+  vuex 文档：http://vuex.vuejs.org/    
+  webpack 文档：https://webpack.github.io/docs/    
+  ES2015 入门教程：http://es6.ruanyifeng.com/    
+  scss 文档：http://sass-lang.com/documentation/file.SASS_REFERENCE.html   
+  mocha 文档: http://mochajs.org/ 
 
