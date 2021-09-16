@@ -1,0 +1,79 @@
+/** 弹出窗口样式 对 element ui 样式重写**/
+.el-dialog__footer {
+    text-align: center;
+    padding: 10px 10px;
+}
+
+.el-dialog__header {
+    padding: 5px 10px 5px 10px;
+}
+
+.el-dialog__headerbtn {
+    top: 5px;
+}
+
+.el-dialog__body {
+    padding: 5px 5px;
+}
+
+/** 表单内容通用样式 */
+.el-form--inline .el-form-item {
+    margin-right: 2px;
+}
+
+.el-form-item {
+    margin-bottom: 20px;
+}
+.el-form-item__error {
+    color: #f50909;
+    font-size: 8px;
+    /*line-height: 1;*/
+    padding-top: 1px;
+    /*position: absolute;*/
+    /*top: 100%;*/
+    /*left: 0;*/
+}
+.el-form-item .el-form-item__label {
+    padding-right: 5px;
+}
+
+.el-form-item .el-form-item__content {
+    margin-left: 0px !important;
+}
+.el-date-editor {
+    width: 140px !important;
+}
+.el-input__inner {
+    padding-left:5px;
+}
+
+.el-form {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.el-switch {
+    padding-top: 10px;
+}
+
+.el-tabs__item {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.el-transfer__buttons {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
+.el-transfer-panel    .el-transfer-panel__header {
+        height: 40px;
+    }
+
+.el-transfer-panel   .el-transfer-panel__body {
+        height: 210px;
+    }
+
+.el-transfer-panel    .el-transfer-panel__list {
+        height: 200px ;
+    }
