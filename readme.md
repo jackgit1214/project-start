@@ -24,8 +24,21 @@
 ## project-api
    前后端分离api, 用户、角色、权限、组织结构等
 ## project-vue
-
    结合后端api,基于vue框架的用户权限管理，
-   
-##联系
-  qq:19707910,phone:13683675552
+
+
+
+##相关资源
+
+  QQ：19707910 <br/>
+  spring: https://spring.io/ <br/>
+  elementUi-plus: https://element-plus.org/#/zh-CN <br/>
+  layUi: https://www.layui.com/ <br/>
+  vue.js 官网：https://v3.vuejs.org/ <br/>
+  vue-router 文档：http://router.vuejs.org/zh-cn/index.html/ <br/>
+  vuex 文档：http://vuex.vuejs.org/ <br/>
+  webpack 文档：https://webpack.github.io/docs/ <br/>
+  ES2015 入门教程：http://es6.ruanyifeng.com/ <br/>
+  scss 文档：http://sass-lang.com/documentation/file.SASS_REFERENCE.html <br/>
+  mocha 文档: http://mochajs.org/ <br/>
+
