@@ -25,8 +25,6 @@
    前后端分离api, 用户、角色、权限、组织结构等
 ## project-vue
    结合后端api,基于vue框架的用户权限管理，
-
-<iframe height=498 width=510 src="http://player.youku.com/embed/XNjcyMDU4Njg0">
    
  ![image](https://github.com/jackgit1214/project-start/blob/master/resources/login.jpg)
 
