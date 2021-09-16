@@ -20,3 +20,9 @@
    
 ## sso-client2
    单点客户端，简单实现，依赖于spring-boot-starter-oauth2-client
+
+## project-api
+   前后端分离api, 用户、角色、权限、组织结构等
+## project-vue
+
+   基于vue框架的用户权限管理模块，
