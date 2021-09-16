@@ -26,8 +26,10 @@
 ## project-vue
    结合后端api,基于vue框架的用户权限管理，
 
-![测试图](https://github.com/jackgit1214/project-start/blob/master/etl1.png)
-
+<video id="video" controls="" preload="none" poster="http://img.blog.fandong.me/2017-08-26-Markdown-Advance-Video.jpg">
+      <source id="mp4" src="https://github.com/jackgit1214/project-start/blob/master/vue.mp4" type="video/mp4">
+      </video>
+      
 ##相关资源
 
   QQ：19707910 <br/>
