@@ -22,6 +22,7 @@ import org.springframework.util.Base64Utils;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
+@JsonIgnoreProperties(value = {"handler"})
 @ToString
 public class SysUser extends UserInfo implements Serializable {
 
