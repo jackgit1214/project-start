@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface SysDeptMapper extends IDataMapperByPage<SysDept>, IDataMapperCRUD<SysDept> {
+    SysDept getDepartmentsByUserId(Object userId);
 }

@@ -12,4 +12,5 @@ public interface SysRoleMapper extends IDataMapperByPage<SystemRole>, IDataMappe
 
     public SystemRole selectByPrimaryKeyPlus(Object id);
 
+    SystemRole getRolesByUserId(Object userId);
 }
