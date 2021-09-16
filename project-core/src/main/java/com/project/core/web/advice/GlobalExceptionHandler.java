@@ -131,6 +131,7 @@ public class GlobalExceptionHandler {
         // 注册int,float,long,double类型转换
 
         binder.registerCustomEditor(int.class, new CustomIntegerEditor());
+        binder.registerCustomEditor(Integer.class, new CustomIntegerEditor());
         binder.registerCustomEditor(float.class, new CustomFloatEditor());
         binder.registerCustomEditor(double.class, new CustomDoubleEditor());
         binder.registerCustomEditor(long.class, new CustomLongEditor());
