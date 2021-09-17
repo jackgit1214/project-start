@@ -39,12 +39,11 @@
                             </el-col>
                         </el-row>
                         <el-row :gutter="5">
-
                             <el-col :span="12">
                                 <div>
                                     <el-form-item label="所属部门：">
-                                    <el-cascader v-model="userDepartments"  size="small"
-                                                 ref="selectDept" :props="deptProps"  collapse-tags clearable ></el-cascader>
+                                    <el-cascader v-model="userData.dept"  size="small"
+                                                 ref="selectDept" :props="deptProps" :show-all-levels="false"  collapse-tags ></el-cascader>
                                     </el-form-item>
                                 </div>
                             </el-col>
@@ -415,6 +414,7 @@ export default defineComponent({
                     dataMap.user.roles = selectRoles.value.targetData;
                     props.dialogParam.show = false;
                     dataMap.user.userId= result.data.userId;
+                    dataMap.user.departments= result.data.departments;
                     ctx.emit('CloseD', dataMap.user);
                 }
             },
@@ -438,12 +438,17 @@ export default defineComponent({
                 dataMap.userDepartments.length = 0; //清空数组
                 dataMap.user = props.userData;
                 // dataMap.user.departments.forEach((obj,index)=>{
-                //     dataMap.userDepartments.push([obj]);
+                //     let tmpDept =[];
+                //     function concatDeptId(paramObj){
+                //         if (paramObj.superDept && paramObj.superDept!="null"){
+                //             concatDeptId(paramObj.superDept);
+                //         }
+                //         tmpDept.push(paramObj.deptId);
+                //     }
+                //     concatDeptId(obj);
+                //     dataMap.userDepartments.push(tmpDept);
                 // })
-                dataMap.userDepartments =   [
-                   ["1","9594298122ab492693b7dd580aa23caa"],
-                        ["1","e55b9950872040d6bb15bc888944e729"]
-                    ]
+
                 dataMap.user.roles　&& dataMap.user.roles.forEach(function(obj,index){
                     dataMap.userRoles.push(obj.roleId);
                 })

@@ -7,9 +7,11 @@ import com.project.core.mybatis.model.UserInfo;
 import com.project.core.mybatis.service.AbstractBusinessService;
 import com.project.core.mybatis.util.PageResult;
 import com.project.core.web.config.ProjectConfig;
+import com.project.system.dao.SysDeptMapper;
 import com.project.system.dao.SysRoleUserMapper;
 import com.project.system.dao.SysUserMapper;
 import com.project.system.model.SysUser;
+import com.project.system.service.SysDeptService;
 import com.project.system.service.SysDeptUserService;
 import com.project.system.service.SysRoleUserService;
 import com.project.system.service.SysUserService;
@@ -29,13 +31,17 @@ public class SysUserServiceImpl extends AbstractBusinessService<SysUser> impleme
     private final SysRoleUserMapper sysRoleUserMapper;
     private final SysUserMapper sysUserMapper;
     private final SysDeptUserService sysDeptUserServiceImpl;
+    private final SysDeptMapper sysDeptMapper;
 
-    public SysUserServiceImpl(SysRoleServiceImpl sysRoleServiceImpl, SysRoleUserService sysRoleUserServiceImpl, SysUserMapper sysUserMapper, ProjectConfig projectConfig, SysRoleUserMapper sysRoleUserMapper, SysDeptUserService sysDeptUserServiceImpl) {
+    public SysUserServiceImpl(SysRoleServiceImpl sysRoleServiceImpl, SysRoleUserService sysRoleUserServiceImpl,
+                              SysUserMapper sysUserMapper, ProjectConfig projectConfig, SysRoleUserMapper sysRoleUserMapper,
+                              SysDeptUserService sysDeptUserServiceImpl,SysDeptMapper sysDeptMapper) {
         this.sysRoleServiceImpl = sysRoleServiceImpl;
         this.sysRoleUserServiceImpl = sysRoleUserServiceImpl;
         this.sysUserMapper = sysUserMapper;
         this.sysRoleUserMapper = sysRoleUserMapper;
         this.sysDeptUserServiceImpl = sysDeptUserServiceImpl;
+        this.sysDeptMapper = sysDeptMapper;
     }
 
     @Override
@@ -120,6 +126,7 @@ public class SysUserServiceImpl extends AbstractBusinessService<SysUser> impleme
     public int saveWithBlob(SysUser record, String[] roleIds, String[] departments) {
         int rows = this.saveWithBlob(record, roleIds);
         rows = rows + this.sysDeptUserServiceImpl.save(departments, record.getUserId());
+        record.setDepartments(this.sysDeptMapper.getDepartmentsByUserId(record.getUserId()));
         return rows;
     }
 

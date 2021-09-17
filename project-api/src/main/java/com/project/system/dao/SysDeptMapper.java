@@ -6,8 +6,10 @@ import com.project.system.model.SysDept;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
+
 @Mapper
 @Repository
 public interface SysDeptMapper extends IDataMapperByPage<SysDept>, IDataMapperCRUD<SysDept> {
-    SysDept getDepartmentsByUserId(Object userId);
+    Set<SysDept> getDepartmentsByUserId(Object userId);
 }

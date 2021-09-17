@@ -152,6 +152,19 @@ export default {
             handleEdit(index: any, rowData: any, isEdit: boolean) {
                 dataMap.editData = Object.assign({}, rowData);
                 dialogParam.edit = isEdit;
+                let dept = []
+                rowData.departments.forEach((obj,index)=>{
+                    let tmpDept =[];
+                    function concatDeptId(paramObj){
+                        if (paramObj.superDept && paramObj.superDept!="null"){
+                            concatDeptId(paramObj.superDept);
+                        }
+                        tmpDept.push(paramObj.deptId);
+                    }
+                    concatDeptId(obj);
+                    dept.push(tmpDept);
+                })
+                dataMap.editData.dept = dept;
                 dialogParam.show = true;
             },
             handleClose(user: any) {
@@ -202,6 +215,8 @@ export default {
                 dataMap.editData = Object.assign({},DefaultUserModel);
                 dialogParam.edit = true;
                 dialogParam.show = true;
+
+
             },
             handleFilter() {
                 dataMap.listQuery.page = 1
