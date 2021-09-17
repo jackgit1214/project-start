@@ -25,7 +25,6 @@ public interface ModuleApi {
 
     @Operation(summary = "模块数据", description = "取得所有模块数据，")
     @GetMapping(value = "/modules",produces = {"application/json", "application/xml"})
-    @QueryModelParam
     ResponseEntity<BaseResult> findModules(
             @Parameter(in = ParameterIn.DEFAULT, description = "map类型参数", required = false) QueryModel queryModel);
 
@@ -37,20 +36,17 @@ public interface ModuleApi {
 
 
     @DeleteMapping("/modules")
-    @SystemLog(moduleId = "模块管理", description = "删除模块数据", opeType = SystemLog.OpeType.DEL)
     @Operation(summary = "删除用户模块数据", description = "模块维护管理，删除指定的模块数据")
     ResponseEntity<BaseResult> deleteModule(
             @Parameter(in = ParameterIn.DEFAULT, description = "删除的模块id数组", required = true )String[] moduleIds);
 
     @PostMapping("/modules")
-    @SystemLog(moduleId = "模块管理", description = "保存模块数据", opeType = SystemLog.OpeType.EDIT)
     @DuplicateSubmission(needRemoveToken = true, tokenName = UUID_TOKEN)
     @Operation(summary = "保存或更新用户模块数据", description = "模块维护管理，保存或更新用户模块数据")
     ResponseEntity<BaseResult> addOrUpdate(
             @Parameter(in = ParameterIn.DEFAULT, description = "要更改的模块", required = true ) SysModule record);
 
     @PostMapping("/status")
-    @SystemLog(moduleId = "模块管理", description = "修改模块数据状态", opeType = SystemLog.OpeType.EDIT)
     @Operation(summary = "更新用户模块状态", description = "模块维护管理，更新用户模块状态")
     ResponseEntity<BaseResult> handleSimpleOperation(
             @Parameter(in = ParameterIn.DEFAULT, description = "要更改的模块", required = true) @RequestBody ModuleController.ModuleRequestParam param);

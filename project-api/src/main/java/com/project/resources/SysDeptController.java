@@ -26,12 +26,14 @@ public class SysDeptController extends AbstractController implements DepartmentA
     @Autowired
     private SysDeptService sysDeptServiceImpl;
 
+    @SystemLog(moduleId = "组织结构管理", description = "保存组织结构数据", opeType = SystemLog.OpeType.EDIT)
     public ResponseEntity<BaseResult> saveDepartment(SysDept department) {
         int rows = this.sysDeptServiceImpl.save(department);
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), department);
        return ResponseEntity.ok(rtnMsg);
     }
 
+    @SystemLog(moduleId = "组织结构管理", description = "删除组织结构数据", opeType = SystemLog.OpeType.DEL)
     public ResponseEntity<BaseResult> deleteDepartment(String[] deptIds, String superId) {
         int rows = this.sysDeptServiceImpl.delete(deptIds, superId);
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);
@@ -40,6 +42,7 @@ public class SysDeptController extends AbstractController implements DepartmentA
     }
     @Override
     @QueryModelParam
+    @SystemLog(moduleId = "组织结构管理", description = "查询组织结构数据", opeType = SystemLog.OpeType.DISPLAY)
     public ResponseEntity<BaseResult> getDepartments(QueryModel queryModel,String superId, boolean includeSelf) {
         List<SysDept> departments = this.sysDeptServiceImpl.getDepartmentsBySuperId(queryModel,superId,includeSelf);
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), departments);

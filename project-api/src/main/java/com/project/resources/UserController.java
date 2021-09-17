@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.api.UserApi;
 import com.project.core.common.SysConstant;
 import com.project.core.common.anaotation.QueryModelParam;
+import com.project.core.common.anaotation.SystemLog;
 import com.project.core.common.response.BaseResult;
 import com.project.core.common.response.ReturnCode;
 import com.project.core.mybatis.model.QueryModel;
@@ -34,6 +35,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@SystemLog(moduleId = "用户管理")
 public class UserController extends AbstractController implements UserApi {
 
     private final HttpServletRequest request;
@@ -60,6 +62,7 @@ public class UserController extends AbstractController implements UserApi {
     }
 
     @Override
+    @SystemLog(description = "查询当前登录用户",opeType= SystemLog.OpeType.DISPLAY)
     public ResponseEntity<SysUser> currentUser() {
         SysUser userInfo =(SysUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(userInfo);
@@ -67,6 +70,7 @@ public class UserController extends AbstractController implements UserApi {
 
     @Override
     @QueryModelParam
+    @SystemLog(description = "查询用户数据",opeType= SystemLog.OpeType.DISPLAY)
     public ResponseEntity<BaseResult> findUsers(QueryModel queryModel, int page, int limit,String departmentId) {
         PageResult pageResult = new PageResult<SysUser>(page, limit);
         try {
@@ -79,12 +83,14 @@ public class UserController extends AbstractController implements UserApi {
     }
 
     @Override
+    @SystemLog(description = "查询用户数据",opeType= SystemLog.OpeType.DISPLAY)
     public ResponseEntity<SysUser> findUser(String userId) {
         SysUser sysUser = this.sysUserServiceImpl.findObjectById(userId);
         return ResponseEntity.ok(sysUser);
     }
 
     @Override
+    @SystemLog(description = "删除用户数据",opeType= SystemLog.OpeType.DEL)
     public ResponseEntity<BaseResult> deleteUsers(String[] userIds) {
         int rows = this.sysUserServiceImpl.delete(userIds);
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);
@@ -92,17 +98,20 @@ public class UserController extends AbstractController implements UserApi {
     }
 
     @Override
+    @SystemLog(description = "修改用户",opeType= SystemLog.OpeType.EDIT)
     public ResponseEntity<BaseResult> updateUser(String userId, SysUser record, String[] userRoles, String[] departmentIds, MultipartFile file) {
         return this.createOrUpdateUser( userId,  record, userRoles,  departmentIds, file);
     }
 
 
     @Override
+    @SystemLog(description = "创建新用户",opeType= SystemLog.OpeType.EDIT)
     public ResponseEntity<BaseResult> createUser(SysUser record, String[] userRoles, String[] departmentIds, MultipartFile file) {
         return this.createOrUpdateUser( null,  record, userRoles,  departmentIds, file);
     }
 
     @Override
+    @SystemLog(description = "激活或禁用用户数据，修改密码等，",opeType= SystemLog.OpeType.EDIT)
     public ResponseEntity<SysUser> updateUserStatus(String userId, UserRequestParam param) {
         SysUser user = param.getUser();
         ModelMap modelMap = new ModelMap();

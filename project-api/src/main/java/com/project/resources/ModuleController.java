@@ -2,6 +2,7 @@ package com.project.resources;
 
 import com.project.api.ModuleApi;
 import com.project.core.common.anaotation.QueryModelParam;
+import com.project.core.common.anaotation.SystemLog;
 import com.project.core.common.response.BaseResult;
 import com.project.core.common.response.ReturnCode;
 import com.project.core.mybatis.model.FunModule;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @RestController
+@SystemLog(moduleId = "模块管理")
 public class ModuleController implements ModuleApi {
 
     private final SysModuleServiceImpl sysModuleServiceImpl;
@@ -41,6 +43,7 @@ public class ModuleController implements ModuleApi {
 
 
     @Override
+    @SystemLog(moduleId = "模块管理", description = "查询模块数据", opeType = SystemLog.OpeType.DISPLAY)
     public ResponseEntity<BaseResult> findModulesByUser(String userId) {
         SysUser userInfo = (SysUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<FunModule> modules = new ArrayList<>();
@@ -71,6 +74,7 @@ public class ModuleController implements ModuleApi {
 
 
     @Override
+    @SystemLog(moduleId = "模块管理", description = "删除模块数据", opeType = SystemLog.OpeType.DEL)
     public ResponseEntity<BaseResult> deleteModule(String[] moduleIds) {
         int rows = this.sysModuleServiceImpl.delete(moduleIds);
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);
@@ -78,6 +82,7 @@ public class ModuleController implements ModuleApi {
     }
 
     @Override
+    @SystemLog(moduleId = "模块管理", description = "保存模块数据", opeType = SystemLog.OpeType.EDIT)
     public ResponseEntity<BaseResult> addOrUpdate(SysModule record) {
         int rows = this.sysModuleServiceImpl.save(record);
         BaseResult rtnMsg = new BaseResult(ReturnCode.SUCCESS.getCode(), ReturnCode.SUCCESS.getMessage(), rows);
@@ -86,6 +91,7 @@ public class ModuleController implements ModuleApi {
     }
 
     @Override
+    @SystemLog(moduleId = "模块管理", description = "修改模块数据状态", opeType = SystemLog.OpeType.EDIT)
     public ResponseEntity<BaseResult> handleSimpleOperation(@RequestBody ModuleRequestParam param) {
         SysModule module = param.getModule();
         int rows = this.sysModuleServiceImpl.save(module);

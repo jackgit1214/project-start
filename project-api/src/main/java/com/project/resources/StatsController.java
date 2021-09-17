@@ -1,6 +1,8 @@
 package com.project.resources;
 
 import com.project.api.StatsApi;
+import com.project.core.common.anaotation.SystemLog;
+import com.project.core.mybatis.model.QueryModel;
 import com.project.core.mybatis.model.SysLog;
 import com.project.core.mybatis.util.PageResult;
 import com.project.system.model.SysUser;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@SystemLog(moduleId = "首页")
 public class StatsController implements StatsApi {
 
     private SysUserService sysUserServiceImpl;
@@ -35,6 +38,7 @@ public class StatsController implements StatsApi {
     }
 
     @Override
+    @SystemLog(moduleId = "首页", description = "首页统计表数据",opeType= SystemLog.OpeType.DISPLAY)
     public ResponseEntity<Map<String, StatsInfo>> tableCount() {
         Map<String, StatsInfo> mapCount = new HashMap<>();
 
@@ -55,9 +59,11 @@ public class StatsController implements StatsApi {
 
 
         PageResult pageResult = new PageResult<SysLog>(1, 10);
+        QueryModel qm = new QueryModel();
+        qm.setOrderByClause("logTime desc");
         List<SysLog> logs = null;
         try {
-            this.sysLogServiceImpl.findObjectsByPage(null,pageResult);
+            this.sysLogServiceImpl.findObjectsByPage(qm,pageResult);
             logs = pageResult.getPageDatas();
         } catch (Exception e) {
             e.printStackTrace();
