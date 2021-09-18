@@ -84,7 +84,8 @@
                         </el-table-column>
                         <el-table-column>
                             <template #default="scope">
-                                <div class="todo-item" >{{ scope.row.modelName }}[{{scope.row.logTime}}]</div>
+                                <div class="todo-item" >{{ scope.row.modelName }}[{{dataFormat(scope.row.logTime)}}]</div>
+
                             </template>
                         </el-table-column>
                         <el-table-column>
@@ -131,7 +132,7 @@
 import Schart from "vue-schart";
 import { reactive,onMounted,toRefs } from "vue";
 import {getStatsInfo,getStatsLog} from "../api/getData";
-
+import moment from 'moment';
 export default {
     name: "dashboard",
     components: { Schart },
@@ -142,7 +143,6 @@ export default {
         onMounted(() => {
             operatorMap.initData();
         });
-
         let userInfo = Object.assign({},{
             loginName:user.username,
             name:user.name,
@@ -251,6 +251,10 @@ export default {
 
                 };
             },
+
+            dataFormat:(logDate)=>{
+                return moment(logDate).format("YYYY-MM-DD HH:mm:ss");
+            }
         })
         return {
             userInfo,
