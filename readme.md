@@ -4,28 +4,38 @@
    过程中单点登录由于版本的变化参考了很多资料，主要来源于官网，以及百度收集的资料，很多坑。填坑的过程，也学习了很多。
 ## 技术特点
    spring 系列，权限框架加入security，单点登录采用spring-security-oauth2实现，集成了代码生成工具
-    数据库采用mysql8
-
+    数据库采用mysql8 
 ## project-core 
-   架构核心，主要是对以前项目中用到的工具进行了整合，包含了mybatis分页工具，查询的封装，代码生成工具、异常的处理、项目通用配置、数据库版本管理、security配置以及部分工具类等。
-
+   架构核心，主要是对以前项目中用到的工具进行了整合，包含了mybatis分页工具，查询的封装，代码生成工具、异常的处理、项目通用配置、数据库版本管理、security配置以及部分工具类等。    
 ## project-sso
-  单点登录框架依
-   
+  单点登录框架依   
 ## project-sample
-   项目实例，实现单点登录客户端管理、人员的管理、模块管理、部门管理、角色授权管理
+   项目实例，实现单点登录客户端管理、人员的管理、模块管理、部门管理、角色授权管理      
    依赖于project-sso
+   用户管理：完成      
+   权限管理：完成      
+   角色管理：完成      
+   组织结构管理：完成   
+   数据字典管理：完成    
+   数据指标管理：完成    
+   模块管理：完成  
+   基本代码生成工具：完成  
+
 ## sso-client
-   单点客户端，简单实现，依赖于spring-security-oauth2
-   
+   单点客户端，简单实现，依赖于spring-security-oauth2   
 ## sso-client2
    单点客户端，简单实现，依赖于spring-boot-starter-oauth2-client
-
 ## project-api
    前后端分离api, 用户、角色、权限、组织结构等
 ## project-vue
-   结合后端api,基于vue框架的用户权限管理，  
+   结合后端api,基于vue框架的用户权限管理，
+    用户管理：完成
+    权限管理：完成
+    角色管理：完成
+    组织结构管理：完成
+    数据字典：完成 ，vuex实现
    [![Watch the video](https://github.com/jackgit1214/project-start/blob/master/resources/login.jpg)](https://github.com/jackgit1214/project-start/blob/master/vue.mp4)
+ 
 
 ![image](https://github.com/jackgit1214/project-start/blob/master/resources/login.jpg)  
 ![image](https://github.com/jackgit1214/project-start/blob/master/resources/first.jpg)  
