@@ -73,10 +73,11 @@ export default {
         });
         const store = useStore();
         const roles = ref(null);
-        const collapse = computed(() => store.state.collapse);
+        const collapse = computed(() => store.state.navi.collapse);
         // 侧边栏折叠
         const collapseCharge = () => {
-            store.commit("handleCollapse", !collapse.value);
+            //store.dispatch('navi/handleCollapse', !collapse.value)
+            store.commit("navi/handleCollapse", !collapse.value);
         };
         onMounted(() => {
             operatorMap.initData();

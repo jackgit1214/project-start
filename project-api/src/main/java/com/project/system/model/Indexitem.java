@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 系统指标表，定义系统数据指标
@@ -20,6 +21,7 @@ import java.util.Map;
 @JsonIgnoreProperties(value = {"handler"})
 @ToString
 public class Indexitem extends BaseModel implements Serializable {
+
     /**
      * 指标ID
      *
@@ -109,6 +111,9 @@ public class Indexitem extends BaseModel implements Serializable {
      *
      */
     private String remark;
+
+    private Indexitem superIndex;
+    private Set<Indexitem> children;
 
     /**
      */

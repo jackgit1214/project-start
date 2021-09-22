@@ -38,13 +38,13 @@ export default {
         };
 
         const store = useStore();
-        const tagsList = computed(() => store.state.tagsList);
+        const tagsList = computed(() => store.state.navi.tagsList);
         const showTags = computed(() => tagsList.value.length > 0);
 
         // 关闭单个标签
         const closeTags = (index) => {
             const delItem = tagsList.value[index];
-            store.commit("delTagsItem", { index });
+            store.commit("navi/delTagsItem", { index });
             const item = tagsList.value[index]
                 ? tagsList.value[index]
                 : tagsList.value[index - 1];
@@ -62,9 +62,9 @@ export default {
             });
             if (!isExist) {
                 if (tagsList.value.length >= 8) {
-                    store.commit("delTagsItem", { index: 0 });
+                    store.commit("navi/delTagsItem", { index: 0 });
                 }
-                store.commit("setTagsItem", {
+                store.commit("navi/setTagsItem", {
                     name: route.name,
                     title: route.meta.title,
                     path: route.fullPath,
@@ -78,7 +78,7 @@ export default {
 
         // 关闭全部标签
         const closeAll = () => {
-            store.commit("clearTags");
+            store.commit("navi/clearTags");
             router.push("/");
         };
         // 关闭其他标签
@@ -86,7 +86,7 @@ export default {
             const curItem = tagsList.value.filter((item) => {
                 return item.path === route.fullPath;
             });
-            store.commit("closeTagsOther", curItem);
+            store.commit("navi/closeTagsOther", curItem);
         };
         const handleTags = (command) => {
             command === "other" ? closeOther() : closeAll();

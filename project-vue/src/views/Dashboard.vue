@@ -132,12 +132,21 @@
 import Schart from "vue-schart";
 import { reactive,onMounted,toRefs } from "vue";
 import {getStatsInfo,getStatsLog} from "../api/getData";
+import { useRouter, useRoute } from 'vue-router'
 import moment from 'moment';
 export default {
     name: "dashboard",
     components: { Schart },
 
+    mounted() {
+        console.log(this.$router)
+        this.$nextTick(function () {
+            // 仅在整个视图都被渲染之后才会运行的代码
+        })
+    },
     setup(props, ctx) {
+        const router = useRouter()
+        const route = useRoute()
         const user = JSON.parse(localStorage.getItem("curUser"));
 
         onMounted(() => {

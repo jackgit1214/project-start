@@ -42,15 +42,15 @@ const routes = [
                     title: '角色管理'
                 },
                 component: () => import ( "../views/role/Index.vue")
-             },
-            // , {
-            //     path: "/tabs",
-            //     name: "tabs",
-            //     meta: {
-            //         title: 'tab标签'
-            //     },
-            //     component: () => import ( /* webpackChunkName: "tabs" */ "../views/Tabs.vue")
-            // }, {
+             }, {
+                path: "/dictionary/index",
+                name: "数据字典",
+                meta: {
+                    title: '数据字典'
+                },
+                component: () => import ( /* webpackChunkName: "tabs" */ "../views/dictionary/Index.vue")
+            },
+            // {
             //     path: "/donate",
             //     name: "donate",
             //     meta: {

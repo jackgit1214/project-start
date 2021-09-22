@@ -5,6 +5,7 @@ import com.project.core.mybatis.model.BaseModel;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * 字典数据
@@ -76,6 +77,10 @@ public class Dictionary extends BaseModel implements Serializable {
      *
      */
     private String remark;
+
+    private Dictionary superDictionary;
+
+    private Set<Dictionary> children;
 
     /**
      */

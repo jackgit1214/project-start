@@ -66,7 +66,7 @@ export default {
             return route.path;
         });
         const store = useStore();
-        const collapse = computed(() => store.state.collapse);
+        const collapse = computed(() => store.state.navi.collapse);
         return {
             items,
             onRoutes,

@@ -38,5 +38,4 @@ public interface DepartmentApi {
     @Operation(summary = "取得部门树结构信息", description = "取得部门树结构信息")
     ResponseEntity<BaseResult> getDepartment();
 
-
 }
