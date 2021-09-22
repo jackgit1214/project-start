@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "element-plus": "1.0.2-beta.52",
     "lodash.chunk": "^4.2.0",
+    "moment": "^2.29.1",
     "sass-loader": "^12.1.0",
     "scss": "^0.2.4",
     "style-resources-loader": "^1.4.1",
