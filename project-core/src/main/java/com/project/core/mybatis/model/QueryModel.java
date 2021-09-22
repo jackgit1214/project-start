@@ -412,23 +412,13 @@ public class QueryModel {
             String key = entry.getKey();
             String val = entry.getValue();
             if (val != null && !"".equals(val)) {// 空值不作处理
-
-                int pos = val.indexOf(",");
-                if (pos <= 0)
+                int pos = val.indexOf("/=/"); //包含这个符号则为等于，否则like
+                if (pos < 0)
                     criteria.andLike(key, "%" + val + "%");
                 else
                     criteria.andEqualTo(key, val.substring(0, pos));
             }
         }
     }
-    // public class ParamListener implements PropertyChangeListener{
-    //
-    // @Override
-    // public void propertyChange(PropertyChangeEvent evt) {
-    // if(evt.getPropertyName().equals("param"))
-    // System.out.println("BeanTest 的 name 属性变化！");
-    // }
-    //
-    // }
 
 }
