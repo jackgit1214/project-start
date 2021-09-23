@@ -73,13 +73,6 @@ const routes = [
             //     },
             //     component: () => import ( /* webpackChunkName: "i18n" */ "../views/I18n.vue")
             // }, {
-            //     path: "/upload",
-            //     name: "upload",
-            //     meta: {
-            //         title: '上传插件'
-            //     },
-            //     component: () => import ( /* webpackChunkName: "upload" */ "../views/Upload1111.vue")
-            // }, {
             //     path: "/icon",
             //     name: "icon",
             //     meta: {
