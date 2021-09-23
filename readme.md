@@ -37,9 +37,9 @@
    [![Watch the video](https://github.com/jackgit1214/project-start/blob/master/resources/login.jpg)](https://github.com/jackgit1214/project-start/blob/master/vue.mp4)
  
 
-![image](https://github.com/jackgit1214/project-start/blob/master/resources/login.jpg)  
-![image](https://github.com/jackgit1214/project-start/blob/master/resources/first.jpg)  
-![image](https://github.com/jackgit1214/project-start/blob/master/resources/user.jpg)   
+![image](https://github.com/jackgit1214/resource/blob/main/image/login.jpg)  
+![image](https://github.com/jackgit1214/resource/blob/main/image/first.jpg)  
+![image](https://github.com/jackgit1214/resource/blob/main/image/user.jpg)   
       
 ##相关资源
 
