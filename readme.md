@@ -34,8 +34,8 @@
     角色管理：完成
     组织结构管理：完成
     数据字典：完成 ，vuex实现
-   [![Watch the video](https://github.com/jackgit1214/resource/blob/main/image/login.jpg)](https://github.com/jackgit1214/resource/blob/main/video/vue.mp4)
- 
+
+![image](https://github.com/jackgit1214/resource/blob/main/image/vue.gif)
 
 ![image](https://github.com/jackgit1214/resource/blob/main/image/login.jpg)  
 ![image](https://github.com/jackgit1214/resource/blob/main/image/first.jpg)  
