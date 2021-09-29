@@ -53,7 +53,7 @@ export default {
             ],
         };
         const store = useStore();
-        store.commit("clearTags");
+        store.commit("navi/clearTags");
         const login = ref(null);
         const submitForm = () => {
             login.value.validate(async (valid) => {
