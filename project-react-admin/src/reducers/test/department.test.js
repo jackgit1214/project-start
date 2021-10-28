@@ -1,0 +1,2 @@
+import {watchDepartment} from "../department";
+
