@@ -34,12 +34,13 @@
     角色管理：完成
     组织结构管理：完成
     数据字典：完成 ，vuex实现
-
-    ![image](https://github.com/jackgit1214/resource/blob/main/image/vue.gif)
-    
     ![image](https://github.com/jackgit1214/resource/blob/main/image/login.jpg)  
     ![image](https://github.com/jackgit1214/resource/blob/main/image/first.jpg)  
     ![image](https://github.com/jackgit1214/resource/blob/main/image/user.jpg)   
+
+![image](https://github.com/jackgit1214/resource/blob/main/image/vue.gif)
+    
+
 
 ## project-react-admin
     利用后端API，基于react框架（redux,sagga等），结合element-ui react框架的用户权限管理。          
