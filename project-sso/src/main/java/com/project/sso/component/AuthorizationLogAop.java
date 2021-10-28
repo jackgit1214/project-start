@@ -76,10 +76,11 @@ public class AuthorizationLogAop {
         SysLog sysLog = new SysLog() ;
         try {
             sysLog = this.generateLogData(joinPoint,request,methodSignature);
-            rs = joinPoint.proceed();
+            System.out.println(sysLog);
         } finally {
             long exeT = System.currentTimeMillis() - startTime;
             sysLog.setExecuteTime((int)exeT);
+            rs = joinPoint.proceed();
             this.logDetailService.saveLogInfo(sysLog);
         }
         return rs;

@@ -12,4 +12,5 @@ import java.util.Set;
 @Repository
 public interface SysDeptMapper extends IDataMapperByPage<SysDept>, IDataMapperCRUD<SysDept> {
     Set<SysDept> getDepartmentsByUserId(Object userId);
+    Set<SysDept> getDepartmentsBySuperId(Object deptId);
 }

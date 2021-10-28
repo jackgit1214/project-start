@@ -18,6 +18,9 @@
                      select="com.project.system.dao.SysDeptMapper.selectByPrimaryKey"
                      javaType="com.project.system.model.SysDept">
         </association>
+<!--        <collection property="child"-->
+<!--                    select="com.project.system.dao.SysDeptMapper.getDepartmentsBySuperId"-->
+<!--                    column="DEPTID"  fetchType="lazy"/>-->
     </resultMap>
     <sql id="Base_Column_List">
 
@@ -29,6 +32,12 @@
         from Sys_dept a
                  inner join sys_dept_user b on a.DeptID = b.DeptID
         where b.UserID = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getDepartmentsBySuperId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select a.*
+        from Sys_dept a
+        where a.SUPERID = #{deptId,jdbcType=VARCHAR}
     </select>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">

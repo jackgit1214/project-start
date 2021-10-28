@@ -10,6 +10,7 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -27,6 +28,8 @@ public class SysDept extends BaseModel implements Serializable, DTreeData {
     private int endFlag;
     private String deptDesc;
 
+    private Set<SysDept> child;
+    
     public boolean getLeaf(){
         return endFlag==1;
     }
