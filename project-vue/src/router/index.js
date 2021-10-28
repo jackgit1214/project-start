@@ -49,65 +49,22 @@ const routes = [
                     title: '数据字典'
                 },
                 component: () => import ( /* webpackChunkName: "tabs" */ "../views/dictionary/Index.vue")
+            },{
+                path: '/404',
+                name: '404',
+                meta: {
+                    title: '找不到页面'
+                },
+                component: () => import (/* webpackChunkName: "404" */ '../views/error/404.vue')
             },
-            // {
-            //     path: "/donate",
-            //     name: "donate",
-            //     meta: {
-            //         title: '鼓励作者'
-            //     },
-            //     component: () => import ( /* webpackChunkName: "donate" */ "../views/Donate.vue")
-            // }, {
-            //     path: "/permission",
-            //     name: "permission",
-            //     meta: {
-            //         title: '权限管理',
-            //         permission: true
-            //     },
-            //     component: () => import ( /* webpackChunkName: "permission" */ "../views/Permission.vue")
-            // }, {
-            //     path: "/i18n",
-            //     name: "i18n",
-            //     meta: {
-            //         title: '国际化语言'
-            //     },
-            //     component: () => import ( /* webpackChunkName: "i18n" */ "../views/I18n.vue")
-            // }, {
-            //     path: "/icon",
-            //     name: "icon",
-            //     meta: {
-            //         title: '自定义图标'
-            //     },
-            //     component: () => import ( /* webpackChunkName: "icon" */ "../views/Icon.vue")
-            // }, {
-            //     path: '/404',
-            //     name: '404',
-            //     meta: {
-            //         title: '找不到页面'
-            //     },
-            //     component: () => import (/* webpackChunkName: "404" */ '../views/404.vue')
-            // }, {
-            //     path: '/403',
-            //     name: '403',
-            //     meta: {
-            //         title: '没有权限'
-            //     },
-            //     component: () => import (/* webpackChunkName: "403" */ '../views/403.vue')
-            // }, {
-            //     path: '/user',
-            //     name: 'user',
-            //     meta: {
-            //         title: '个人中心'
-            //     },
-            //     component: () => import (/* webpackChunkName: "user" */ '../views/User.vue')
-            // }, {
-            //     path: '/editor',
-            //     name: 'editor',
-            //     meta: {
-            //         title: '富文本编辑器'
-            //     },
-            //     component: () => import (/* webpackChunkName: "editor" */ '../views/Editor.vue')
-            // }
+            {
+                path: '/403',
+                name: '403',
+                meta: {
+                    title: '没有权限'
+                },
+                component: () => import (/* webpackChunkName: "404" */ '../views/error/403.vue')
+            }
         ]
     }, {
         path: "/login",
