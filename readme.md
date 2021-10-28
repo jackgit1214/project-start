@@ -22,24 +22,29 @@
    基本代码生成工具：完成  
 
 ## sso-client
-   单点客户端，简单实现，依赖于spring-security-oauth2   
+    单点客户端，简单实现，依赖于spring-security-oauth2   
 ## sso-client2
-   单点客户端，简单实现，依赖于spring-boot-starter-oauth2-client
+    单点客户端，简单实现，依赖于spring-boot-starter-oauth2-client
 ## project-api
-   前后端分离api, 用户、角色、权限、组织结构等
-## project-vue
-   结合后端api,基于vue框架的用户权限管理，
+    前后端分离api, 用户、角色、权限、组织结构等
+## project-vue      
+    结合后端api,基于vue框架的用户权限管理，
     用户管理：完成
     权限管理：完成
     角色管理：完成
     组织结构管理：完成
     数据字典：完成 ，vuex实现
 
-![image](https://github.com/jackgit1214/resource/blob/main/image/vue.gif)
+    ![image](https://github.com/jackgit1214/resource/blob/main/image/vue.gif)
+    
+    ![image](https://github.com/jackgit1214/resource/blob/main/image/login.jpg)  
+    ![image](https://github.com/jackgit1214/resource/blob/main/image/first.jpg)  
+    ![image](https://github.com/jackgit1214/resource/blob/main/image/user.jpg)   
 
-![image](https://github.com/jackgit1214/resource/blob/main/image/login.jpg)  
-![image](https://github.com/jackgit1214/resource/blob/main/image/first.jpg)  
-![image](https://github.com/jackgit1214/resource/blob/main/image/user.jpg)   
+## project-react-admin
+    利用后端API，基于react框架（redux,sagga等），结合element-ui react框架的用户权限管理。          
+    基本框架：完成     
+    用户管理：完成     
       
 ##相关资源
 
